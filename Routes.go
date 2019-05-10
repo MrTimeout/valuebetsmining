@@ -1,6 +1,10 @@
 package main
  
-import "net/http"
+import ( 
+    "net/http"
+
+    "./Handlers"
+)
  
 type Route struct {
     Name        string
@@ -16,18 +20,18 @@ var routes = Routes{
         "Index",
         "GET",
         "/",
-        Index,
+        Handlers.GetAllteams,
     },
     Route{
         "TodoIndex",
         "GET",
         "/todos",
-        TodoIndex,
+        Handlers.GetTeamByName,
     },
     Route{
         "TodoShow",
         "GET",
         "/todos/{todoId}",
-        TodoShow,
+        Handlers.TodoShow,
     },
 }

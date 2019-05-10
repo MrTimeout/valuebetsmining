@@ -10,11 +10,11 @@ import (
     "../Interfaces"
 )
  
-func getAllteams(w http.ResponseWriter, r *http.Request) {
+func GetAllteams(w http.ResponseWriter, r *http.Request) {
     
 }
  
-func getTeamByName(w http.ResponseWriter, r *http.Request) {
+func GetTeamByName(w http.ResponseWriter, r *http.Request) {
     teams := Interfaces.Teams {
         Interfaces.Team { Name: "Barcelona", League: "Española" },
         Interfaces.Team { Name: "Madrid", League: "Española" },
