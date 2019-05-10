@@ -6,8 +6,6 @@ import (
     "net/http"
     
     "github.com/gorilla/mux"
-
-    "../Interfaces"
 )
  
 func getAllteams(w http.ResponseWriter, r *http.Request) {
