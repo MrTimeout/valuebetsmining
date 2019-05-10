@@ -1,4 +1,4 @@
-package main
+package Handlers
  
 import (
     "encoding/json"
@@ -6,6 +6,8 @@ import (
     "net/http"
     
     "github.com/gorilla/mux"
+
+    "../Interfaces"
 )
  
 func getAllteams(w http.ResponseWriter, r *http.Request) {
@@ -13,12 +15,12 @@ func getAllteams(w http.ResponseWriter, r *http.Request) {
 }
  
 func getTeamByName(w http.ResponseWriter, r *http.Request) {
-    teams := Teams{
-        Team { "Barcelona", "Española" },
-        Team { "Madrid", "Española" },
+    teams := Interfaces.Teams {
+        Interfaces.Team { Name: "Barcelona", League: "Española" },
+        Interfaces.Team { Name: "Madrid", League: "Española" },
     }
  
-    if err := json.NewEncoder(w).Encode(Teams); err != nil {
+    if err := json.NewEncoder(w).Encode(teams); err != nil {
         panic(err)
     }
 }
