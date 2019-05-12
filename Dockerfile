@@ -1,10 +1,21 @@
+#Golang compiling program
 ARG CODE_VERSION=latest
 FROM golang:${CODE_VERSION} AS golang_and_go
 ARG CODE_VERSION
 
-RUN ["/bin/sh", "-c", "echo we are running the ${CODE_VERSION} version of golang"]
+WORKDIR /my
+COPY ./src/main.go ./
 
-WORKDIR /my/app
-COPY ./src ./
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-ENTRYPOINT ["./run.sh"]
+# Alpine deploying service
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /my
+COPY --from=golang_and_go /my/app .
+
+EXPOSE 80
+
+CMD ["./app"]
