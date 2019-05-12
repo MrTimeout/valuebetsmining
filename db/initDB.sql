@@ -14,3 +14,4 @@ INSERT INTO users VALUES
   (4, 'becky', 67, 'retired', false),
   (5, 'kevin', 15, 'in school', true),
   (6, 'frankie', 45, 'teller', true);
+  
