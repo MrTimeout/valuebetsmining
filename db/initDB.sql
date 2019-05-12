@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS viewnext;
-CREATE DATABASE viewnext;
-USE viewnext;
 
 CREATE TABLE users (
   id serial PRIMARY KEY,
