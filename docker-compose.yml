@@ -3,7 +3,10 @@ services:
   db:
     image: postgres:latest
     ports:
-      - '5000-6000:5432'
+      - target: 5432
+        published: 5000-6000
+        protocol: tcp
+        mode: host
     volumes:
       - type: volume
         source: data
@@ -11,6 +14,16 @@ services:
     networks: 
       - golang_postgreSQL
   web_service:
-    build: ./
+    build: 
+      context: .
+      labels:
+        "golang.go.goal=Run the main program an access to the database viewnext to get data"
+    ports:
+      - target: 80
+        published: 8080
+        protocol: tcp
+        mode: host
+    networks: 
+      - golang_postgreSQL
 volumes:
   data: db/
