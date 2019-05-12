@@ -4,10 +4,12 @@ ARG CODE_VERSION
 
 RUN ["/bin/sh", "-c", "echo We are running the ${CODE_VERSION} of postgreSQL"]
 
-ENV POSTGRES_DB viewnext
-ENV POSTGRES_PASSWORD_FILE= 
-
 WORKDIR /docker-entrypoint-initdb.d/
-COPY ./initDB.sql ./
+VOLUME ["./initDB.sql", "$PWD"]
+VOLUME ["$HOME/valuebetsmining/secrets/db/postgres-passwd", "$PWD"]
+VOLUME ["$HOME/valuebetsmining/db/entrypoint.sh", "$PWD"]
+
+ENV POSTGRES_DB viewnext
+ENV POSTGRES_PASSWORD_FILE=$PWD/postgres-passwd
 
 EXPOSE 5432
