@@ -6,3 +6,5 @@ RUN ["/bin/sh", "-c", "echo We are running the ${CODE_VERSION} of postgreSQL"]
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY ./initDB.sql ./
+
+EXPOSE 5432
