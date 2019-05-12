@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - '5000-6000:5432'
+    volumes:
+      - type: volume
+        source: data
+        target: /docker-entrypoint-initdb.d/
+    networks: 
+      - golang_postgreSQL
+  web_service:
+    build: ./
+volumes:
+  data: db/

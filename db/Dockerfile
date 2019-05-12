@@ -1,0 +1,9 @@
+ARG CODE_VERSION=latest
+FROM postgres:${CODE_VERSION} AS postgreSQL
+ARG CODE_VERSION
+
+RUN ["/bin/sh", "-c", "echo We are running the ${CODE_VERSION} of postgreSQL"]
+
+WORKDIR /docker-entrypoint-initdb.d/
+COPY ./initDB.sql ./
+
