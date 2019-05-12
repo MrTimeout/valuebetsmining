@@ -13,8 +13,15 @@ services:
       - type: volume
         source: data
         target: /docker-entrypoint-initdb.d/
+      - type: volume
+        source: passwd
+        target: /docker-entrypoint-initdb.d/secrets
     networks: 
       - golang_postgreSQL
+    env:
+      - POSTGRES_DB viewnext
+      - POSTGRES_USER root
+      - POSTGRES_PASSWORD_FILE=/docker-entrypoint-initdb.d/secrets/postgres-passwd
   web_service:
     build: 
       context: .
@@ -28,4 +35,5 @@ services:
     networks: 
       - golang_postgreSQL
 volumes:
-  data: db/
+  data: db/initDB.sql
+  passwd: secrets/postgres-passwd
