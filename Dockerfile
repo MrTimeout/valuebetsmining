@@ -3,8 +3,8 @@ ARG CODE_VERSION=latest
 FROM golang:${CODE_VERSION} AS golang_and_go
 ARG CODE_VERSION
 
-WORKDIR /my
-COPY ./src/main.go ./
+WORKDIR /go/src/
+COPY ./src/ ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 

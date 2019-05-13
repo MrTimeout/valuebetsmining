@@ -27,7 +27,7 @@ func initializeAPI() (*chi.Mux, *postgres.Db) {
 	router := chi.NewRouter()
 
 	db, err := postgres.New(
-		postgres.ConnString("localhost", 5432, "root", "viewnext", "hereMyPassword"),
+		postgres.ConnString("localhost", 5432, "root", "viewnext", "mypassword"),
 	)
 	if err != nil {
 		log.Fatal(err)

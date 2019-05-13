@@ -7,7 +7,7 @@ ENV POSTGRES_USER root
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY ./initDB.sql /docker-entrypoint-initdb.d/
-COPY ./secrets/db/postgres-passwd /docker-entrypoint-initdb.d/secrets/
+COPY ./secrets/postgres-passwd /docker-entrypoint-initdb.d/secrets/
 
 ENV POSTGRES_PASSWORD_FILE=/docker-entrypoint-initdb.d/secrets/postgres-passwd
 

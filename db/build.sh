@@ -15,5 +15,5 @@ fi
 docker build --tag $IMAGE:$TAG --no-cache --rm .
 
 if [ $(docker image ls --all --filter "reference=$IMAGE:$TAG" --format "{{.Repository}}:{{.Tag}}" | grep -w -c $IMAGE:$TAG) -eq 1 ]; then
-    docker run -d --name $CONTAINER --network $NETWORK -p 5000-6000:5432 $IMAGE:$TAG
+    docker run -d --name $CONTAINER --network $NETWORK -p 5432:5432 $IMAGE:$TAG
 fi
