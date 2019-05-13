@@ -28,9 +28,9 @@ func New(connString string) (*Db, error) {
 }
 
 //postgresql://[user[:password]@][netloc][:port][,...][/dbname][?param1=value1&...]
-func ConnString(host string, port int, user string, dbName string, password string) string {
+func ConnString(host string, port string, user string, dbName string, password string) string {
 	return fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=disabled",
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
 		user, password, host, port, dbName,
 	)
 }

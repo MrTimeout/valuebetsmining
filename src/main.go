@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"valuebetsmining/src/gql"
 	"valuebetsmining/src/postgres"
@@ -19,7 +20,7 @@ func main() {
 	router, db := initializeAPI()
 	defer db.Close()
 
-	log.Fatal(http.ListenAndServe(":4000", router))
+	log.Fatal(http.ListenAndServe(":80", router))
 }
 
 func initializeAPI() (*chi.Mux, *postgres.Db) {
@@ -27,7 +28,7 @@ func initializeAPI() (*chi.Mux, *postgres.Db) {
 	router := chi.NewRouter()
 
 	db, err := postgres.New(
-		postgres.ConnString("localhost", 5432, "root", "viewnext", "mypassword"),
+		postgres.ConnString(os.Getenv("IP"), os.Getenv("PORT"), os.Getenv("USER"), os.Getenv("DBNAME"), os.Getenv("POSTGRES_PASSWD")),
 	)
 	if err != nil {
 		log.Fatal(err)

@@ -3,9 +3,19 @@ ARG CODE_VERSION=latest
 FROM golang:${CODE_VERSION} AS golang_and_go
 ARG CODE_VERSION
 
-WORKDIR /go/src/
-COPY ./src/ ./
+#Copy project
+WORKDIR $GOPATH/src/valuebetsmining/src/
+COPY ./src/ .
 
+#Set variables of enviroment
+RUN secrets/setEnviromentVariables.sh
+
+#Download dependencies and install them
+RUN go get -u github.com/golang/dep/cmd/dep
+COPY ./src/Gopkg.lock ./src/Gopkg.toml ./
+RUN dep ensure
+
+#Build
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
 # Alpine deploying service
@@ -14,7 +24,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /my
-COPY --from=golang_and_go /my/app .
+COPY --from=golang_and_go /go/src/valuebetsmining/src/ .
 
 EXPOSE 80
 
