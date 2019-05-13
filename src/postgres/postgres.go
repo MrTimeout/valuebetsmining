@@ -18,7 +18,6 @@ func New(connString string) (*Db, error) {
 		return nil, err
 	}
 
-	// Check that our connection is good
 	err = db.Ping()
 	if err != nil {
 		return nil, err

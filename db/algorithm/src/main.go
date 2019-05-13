@@ -1,0 +1,6 @@
+package algorithm
+
+func main() {
+
+}
+
