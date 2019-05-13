@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/estenoesmiputonombre/valuebetsmining/tree/testingGraphQL/src/gql"
-	"github.com/estenoesmiputonombre/valuebetsmining/tree/testingGraphQL/src/postgres"
-	"github.com/estenoesmiputonombre/valuebetsmining/tree/testingGraphQL/src/server"
+	"./gql"
+	"./postgres"
+	"./server"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
@@ -27,7 +27,7 @@ func initializeAPI() (*chi.Mux, *postgres.Db) {
 	router := chi.NewRouter()
 
 	db, err := postgres.New(
-		postgres.ConnString("localhost", 5432, "root", "viewnext"),
+		postgres.ConnString("localhost", 5432, "root", "viewnext", "hereMyPassword"),
 	)
 	if err != nil {
 		log.Fatal(err)
