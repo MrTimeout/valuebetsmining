@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"./gql"
-	"./postgres"
-	"./server"
+	"valuebetsmining/src/gql"
+	"valuebetsmining/src/postgres"
+	"valuebetsmining/src/server"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"

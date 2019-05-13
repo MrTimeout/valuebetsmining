@@ -1,7 +1,7 @@
 package gql
 
 import (
-	"../postgres"
+	"valuebetsmining/src/postgres"
 	"github.com/graphql-go/graphql"
 )
 
