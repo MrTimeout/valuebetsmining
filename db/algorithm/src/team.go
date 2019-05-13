@@ -1,5 +1,7 @@
 package algorithm
 
 type Team struct {
-	name string `json`
+	Name string `json:"name"`
+	Goals []int `json:goals`
+	
 }
