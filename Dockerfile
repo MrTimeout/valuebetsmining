@@ -7,12 +7,8 @@ ARG CODE_VERSION
 WORKDIR $GOPATH/src/valuebetsmining/src/
 COPY ./src/ .
 
-#Set variables of enviroment
-RUN secrets/setEnviromentVariables.sh
-
 #Download dependencies and install them
 RUN go get -u github.com/golang/dep/cmd/dep
-COPY ./src/Gopkg.lock ./src/Gopkg.toml ./
 RUN dep ensure
 
 #Build

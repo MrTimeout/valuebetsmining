@@ -2,5 +2,4 @@ web/**
 README.md
 enviroment.sh
 db/Dockerfile
-src/vendor/**
 src/run.sh

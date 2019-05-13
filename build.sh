@@ -16,5 +16,5 @@ fi
 docker build --tag $IMAGE:$TAG --rm .
 
 if [ $(docker image ls --all --filter "reference=$IMAGE:$TAG" --format "{{.Repository}}:{{.Tag}}" | grep -w -c $IMAGE:$TAG) -eq 1 ]; then
-    docker run -d --name $CONTAINER --network $NETWORK -p 3000-4000:80 $IMAGE:$TAG
+    docker run -d --name $CONTAINER --env-file ./src/secrets/setEnviromentVariables --network $NETWORK -p 3000-4000:80 $IMAGE:$TAG
 fi
