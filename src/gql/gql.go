@@ -19,11 +19,19 @@ func NewRoot(db *postgres.Db) *Root {
 				Name:   "Query",
 				Fields: graphql.Fields{
 					"users": &graphql.Field{
-						
-					}
+						Type: graphql.NewList(User),
+						Args: graphql.FieldConfigArgument{
+							"name": &graphql.ArgumentConfig{
+								Type: graphql.String,
+							},
+						},
+						Resolve: resolv.UserResolv,
+					},
 				},
 			},
 		),
 	}
+
+	return &root
 
 }
