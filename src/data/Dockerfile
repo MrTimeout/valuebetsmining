@@ -11,4 +11,3 @@ RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of mongo"]
 WORKDIR /docker-entrypoint-initdb.d
 
 EXPOSE 27017
-
