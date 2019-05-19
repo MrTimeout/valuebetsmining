@@ -31,15 +31,3 @@ func TestNoExistingFileReadFile(t *testing.T) {
 		t.Errorf("Expected-> %#v\n\tGet-> %s\n\t", nil, err)
 	}
 }
-
-//TestErrorInJSONReadFile ... We are trying to test two JSON: the first one contains errors and the second one is correct
-func TestErrorInJSONReadFile(t *testing.T) {
-	failedJSON := "config_test_1.json"
-	successJSON := "config.json"
-	if _, err := ReadFile(failedJSON); err == nil {
-		t.Errorf("Expected-> %s\n\tGet-> %s\n\t", "Error parsing file because of failed JSON", err)
-	}
-	if _, err := ReadFile(successJSON); err != nil {
-		t.Errorf("Expected-> %#v\n\tGet-> %s\n\t", nil, err)
-	}
-}

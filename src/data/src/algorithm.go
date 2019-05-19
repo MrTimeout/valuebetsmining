@@ -1,1 +1,5 @@
 package data
+
+func processData() {
+
+}
