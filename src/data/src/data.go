@@ -1,7 +1,7 @@
 package data
 
-//Path ... Struct created to parse JSON config.json and get information
-type Path struct {
+//Config ... Struct created to parse JSON config.json and get information
+type Config struct {
 	Path     string    `json:"Path"`
 	Endpoint []Country `json:"Endpoints"`
 }
