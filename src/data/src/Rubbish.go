@@ -77,3 +77,41 @@ func SortMapByValue(m map[int]int, reverse bool) ([]int, error) {
 	}
 	return result, nil
 }
+
+//WhoIsBigger ... returns -1|0|1 if a < b|a == b|a > b
+func WhoIsBigger(a, b int) int {
+	if a > b {
+		return 1
+	} else if a == b {
+		return 0
+	} else {
+		return -1
+	}
+}
+
+//HowManyTimes ... Returns how many times a value or an array of values are inside an amount of data
+func HowManyTimes(data []int, values ...int) (int, error) {
+	if len(data) == 0 || len(values) == 0 {
+		return -1, errors.New("Error parsing array of integers")
+	}
+	hmt := -1
+	for index := 0; index < len(data); index++ {
+
+	}
+	return hmt, nil
+}
+
+/*
+//DisorderAMap ... Disorder a map of integers
+func DisorderAMap(m map[int]int) (map[int]int, error) {
+	if len(m) == 0 {
+		return m, errors.New("Error parsing map of integers")
+	}
+	temp := []int{}
+	for _
+	for index := 0; index <= len(m)/2; index++ {
+		m[index:]
+	}
+	return m, nil
+}
+*/

@@ -12,20 +12,19 @@ type Goal struct {
 	GoalsReceivedMode    []int   `json:"goals received mode"`
 }
 
-//NewGoal ... This is the 'constructor of the struct goal'
-func (g *Goal) NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
+//New ... This is the 'constructor of the struct goal'
+func (g *Goal) New(goalsTucked int, goalsReceived int) (Goal, error) {
 	if goalsTucked < 0 || goalsReceived < 0 {
 		return Goal{}, errors.New("Error parsing goals")
 	}
-	goal := Goal{
+	return Goal{
 		GoalsTucked:          []int{goalsTucked},
 		GoalsReceived:        []int{goalsReceived},
 		GoalsTuckedAverage:   float64(goalsTucked),
 		GoalsReceivedAverage: float64(goalsReceived),
 		GoalsTuckedMode:      []int{goalsTucked},
 		GoalsReceivedMode:    []int{goalsReceived},
-	}
-	return goal, nil
+	}, nil
 }
 
 //AppendGoalsTucked ... Append to the GoalsTucked array a new goal.

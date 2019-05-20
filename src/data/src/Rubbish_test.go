@@ -1,6 +1,7 @@
 package data
 
 import (
+	"sort"
 	"testing"
 )
 
@@ -66,11 +67,14 @@ func TestEmptyArrSortMapByValue(t *testing.T) {
 func TestArrSortMapByValue(t *testing.T) {
 	orderedMap := make(map[int]int)
 	reverseOrderedMap := make(map[int]int)
-	for index := 10; index >= 0; index-- {
+	for index := 10; index >= 1; index-- {
 		orderedMap[index] = -index
 		reverseOrderedMap[index] = index
 	}
-	if _, err := SortMapByValue(orderedMap, false); err == nil {
-		t.Errorf("Expected-> %v\n\tGet-> %s\n\t", orderedMap, err)
+	if result, _ := SortMapByValue(orderedMap, true); sort.IsSorted(sort.IntSlice(result)) {
+		t.Errorf("Expected-> %v\n\tGet-> %v\n\t", orderedMap, result)
+	}
+	if result, _ := SortMapByValue(reverseOrderedMap, false); sort.IsSorted(sort.Reverse(sort.IntSlice(result))) {
+		t.Errorf("Expected-> %v\n\tGet-> %v\n\t", reverseOrderedMap, result)
 	}
 }
