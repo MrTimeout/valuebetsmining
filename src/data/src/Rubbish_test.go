@@ -53,3 +53,24 @@ func TestMixtArrAverage(t *testing.T) {
 		t.Errorf("Expected-> %s\n\tGet-> %f\n\t", "5.5", avg)
 	}
 }
+
+//TestEmptyArrSortMapByValue ... test that if we pass an empty map, it will trigger an error.
+func TestEmptyArrSortMapByValue(t *testing.T) {
+	emptyMap := make(map[int]int)
+	if _, err := SortMapByValue(emptyMap, true); err == nil {
+		t.Errorf("Expected-> %s\n\tGet-> %s\n\t", "Error parsing map of integers", err)
+	}
+}
+
+//TestArgsArrSortMapByValue ... test that if we pass a specific map, it will be equal to the order arr
+func TestArrSortMapByValue(t *testing.T) {
+	orderedMap := make(map[int]int)
+	reverseOrderedMap := make(map[int]int)
+	for index := 10; index >= 0; index-- {
+		orderedMap[index] = -index
+		reverseOrderedMap[index] = index
+	}
+	if _, err := SortMapByValue(orderedMap, false); err == nil {
+		t.Errorf("Expected-> %v\n\tGet-> %s\n\t", orderedMap, err)
+	}
+}

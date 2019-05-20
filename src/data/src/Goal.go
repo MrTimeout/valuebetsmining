@@ -73,3 +73,23 @@ func (g *Goal) CalculateGoalsReceivedAverage() error {
 	g.GoalsReceivedAverage = average
 	return nil
 }
+
+//CalculateGoalsTuckedMode ... Calculates the mode of the goals tucked
+func (g *Goal) CalculateGoalsTuckedMode() error {
+	mode, err := Mode(g.GoalsTucked...)
+	if err != nil {
+		return err
+	}
+	g.GoalsTuckedMode = mode
+	return nil
+}
+
+//CalculateGoalsReceivedMode ... Calculates the mode of the goals received
+func (g *Goal) CalculateGoalsReceivedMode() error {
+	mode, err := Mode(g.GoalsReceived...)
+	if err != nil {
+		return err
+	}
+	g.GoalsReceivedMode = mode
+	return nil
+}

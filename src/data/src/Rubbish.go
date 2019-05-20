@@ -3,7 +3,26 @@ package data
 import (
 	"errors"
 	"math"
+	"sort"
 )
+
+//Pair ... Custom pair of values: key=value
+type Pair struct {
+	Key   int
+	Value int
+}
+
+//PairList ... Custom list of Pairs
+type PairList []Pair
+
+//Len ... Returns length og the PairList
+func (p PairList) Len() int { return len(p) }
+
+//Less ... Returns if second value is greater than first or not
+func (p PairList) Less(i, j int) bool { return p[i].Value < p[j].Value }
+
+//Swap ... Swap two elements inside PairList
+func (p PairList) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
 
 //Average ... Calculate average of an array of integers.\n arr[] int is the sequence of numbers.\n negative is true, when you want to count negative numbers like negative numbers, and false otherwise.
 func Average(arr []int, negative bool) (float64, error) {
@@ -23,6 +42,38 @@ func Average(arr []int, negative bool) (float64, error) {
 	return sum / float64(len(arr)), nil
 }
 
-func Mode(nums ...int) {
+//Mode ... Calculate the mode of a range of numbers
+func Mode(nums ...int) ([]int, error) {
+	if len(nums) == 0 {
+		return []int{}, errors.New("Error parsing array of integers")
+	}
+	m := make(map[int]int)
 
+	for _, value := range nums {
+		m[value]++
+	}
+
+	result, err := SortMapByValue(m, false)
+	if err != nil {
+		return []int{}, err
+	}
+
+	return result, nil
+}
+
+//SortMapByValue ... Order a map by its values
+func SortMapByValue(m map[int]int, reverse bool) ([]int, error) {
+	if len(m) == 0 {
+		return []int{}, errors.New("Error parsing map of integers")
+	}
+	result := []int{}
+	for _, key := range m {
+		result = append(result, key)
+	}
+	if reverse {
+		sort.Sort(sort.Reverse(sort.IntSlice(result)))
+	} else {
+		sort.Sort(sort.IntSlice(result))
+	}
+	return result, nil
 }
