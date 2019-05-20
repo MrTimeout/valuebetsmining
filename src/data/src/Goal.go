@@ -6,8 +6,10 @@ import "errors"
 type Goal struct {
 	GoalsTucked          []int   `json:"goals tucked"`
 	GoalsReceived        []int   `json:"goals received"`
-	GoalsTuckedAverage   float32 `json:"goals tucked average"`
-	GoalsReceivedAverage float32 `json:"goals received average"`
+	GoalsTuckedAverage   float64 `json:"goals tucked average"`
+	GoalsReceivedAverage float64 `json:"goals received average"`
+	GoalsTuckedMode      []int   `json:"goals tucked mode"`
+	GoalsReceivedMode    []int   `json:"goals received mode"`
 }
 
 //NewGoal ... This is the 'constructor of the struct goal'
@@ -18,8 +20,10 @@ func (g *Goal) NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
 	goal := Goal{
 		GoalsTucked:          []int{goalsTucked},
 		GoalsReceived:        []int{goalsReceived},
-		GoalsTuckedAverage:   float32(goalsTucked),
-		GoalsReceivedAverage: float32(goalsReceived),
+		GoalsTuckedAverage:   float64(goalsTucked),
+		GoalsReceivedAverage: float64(goalsReceived),
+		GoalsTuckedMode:      []int{goalsTucked},
+		GoalsReceivedMode:    []int{goalsReceived},
 	}
 	return goal, nil
 }
@@ -52,6 +56,20 @@ func (g *Goal) AppendGoalsReceived(goals int) error {
 
 //CalculateGoalsTuckedAverage ... Calculates the average of the goals tucked
 func (g *Goal) CalculateGoalsTuckedAverage() error {
+	average, err := Average(g.GoalsTucked, false)
+	if err != nil {
+		return err
+	}
+	g.GoalsTuckedAverage = average
+	return nil
+}
 
+//CalculateGoalsReceivedAverage ... Calculates the average of the goals received
+func (g *Goal) CalculateGoalsReceivedAverage() error {
+	average, err := Average(g.GoalsReceived, false)
+	if err != nil {
+		return err
+	}
+	g.GoalsReceivedAverage = average
 	return nil
 }

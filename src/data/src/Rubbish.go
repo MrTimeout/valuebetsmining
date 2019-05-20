@@ -22,3 +22,7 @@ func Average(arr []int, negative bool) (float64, error) {
 	}
 	return sum / float64(len(arr)), nil
 }
+
+func Mode(nums ...int) {
+
+}
