@@ -22,6 +22,39 @@ func (r Result) New(goalsTucked, goalsReceived int) (Result, error) {
 	}, nil
 }
 
+//InsertMatch ... Insert a new match
+func (r Result) InsertMatch(goalsTucked, goalsReceived int) error {
+	if goalsTucked < 0 || goalsReceived < 0 {
+		return errors.New("Error parsing goals of result")
+	}
+	if len(r.Matchs) == 10 {
+		r.Matchs = append(r.Matchs[1:], WhoIsBigger(goalsTucked, goalsReceived))
+		err := r.CalStreackLosing()
+		if err != nil {
+			return err
+		}
+		err = r.CalStreackNoLosing()
+		if err != nil {
+			return err
+		}
+		err = r.CalStreackNoWinning()
+		if err != nil {
+			return err
+		}
+		err = r.CalStreackTieding()
+		if err != nil {
+			return err
+		}
+		err = r.CalStreackWinning()
+		if err != nil {
+			return err
+		}
+	} else {
+		r.Matchs = append(r.Matchs, WhoIsBigger(goalsTucked, goalsReceived))
+	}
+	return nil
+}
+
 //CalStreackWinning ...Calculates the streack winning of the team
 func (r Result) CalStreackWinning() error {
 	res, err := HowManyTimes(r.Matchs, 1)

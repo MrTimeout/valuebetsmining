@@ -34,6 +34,14 @@ func (g *Goal) AppendGoalsTucked(goals int) error {
 	}
 	if len(g.GoalsTucked) == 10 {
 		g.GoalsTucked = append(g.GoalsTucked[1:len(g.GoalsTucked)], goals)
+		err := g.CalculateGoalsTuckedAverage()
+		if err != nil {
+			return err
+		}
+		err = g.CalculateGoalsTuckedMode()
+		if err != nil {
+			return err
+		}
 	} else {
 		g.GoalsTucked = append(g.GoalsTucked, goals)
 	}
@@ -47,6 +55,14 @@ func (g *Goal) AppendGoalsReceived(goals int) error {
 	}
 	if len(g.GoalsReceived) == 10 {
 		g.GoalsReceived = append(g.GoalsReceived[1:len(g.GoalsReceived)], goals)
+		err := g.CalculateGoalsReceivedAverage()
+		if err != nil {
+			return err
+		}
+		err = g.CalculateGoalsReceivedMode()
+		if err != nil {
+			return err
+		}
 	} else {
 		g.GoalsReceived = append(g.GoalsReceived, goals)
 	}
