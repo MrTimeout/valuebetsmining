@@ -94,11 +94,32 @@ func HowManyTimes(data []int, values ...int) (int, error) {
 	if len(data) == 0 || len(values) == 0 {
 		return -1, errors.New("Error parsing array of integers")
 	}
-	hmt := -1
+	hmt := 0
 	for index := 0; index < len(data); index++ {
-
+		b, err := AmIHere(values, data[index])
+		if err != nil {
+			return -1, err
+		}
+		if !b {
+			break
+		} else {
+			hmt++
+		}
 	}
 	return hmt, nil
+}
+
+//AmIHere ... Returns bool is a element exists in an array
+func AmIHere(data []int, value int) (bool, error) {
+	if len(data) == 0 {
+		return false, errors.New("Error parsing array of integers")
+	}
+	for _, val := range data {
+		if value == val {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 /*

@@ -23,6 +23,51 @@ func (r Result) New(goalsTucked, goalsReceived int) (Result, error) {
 }
 
 //CalStreackWinning ...Calculates the streack winning of the team
-func (r Result) CalStreackWinning() {
+func (r Result) CalStreackWinning() error {
+	res, err := HowManyTimes(r.Matchs, 1)
+	if err != nil {
+		return err
+	}
+	r.StreackWinning = res
+	return nil
+}
 
+//CalStreackNoLosing ...Calculates the streack without losin of the team
+func (r Result) CalStreackNoLosing() error {
+	res, err := HowManyTimes(r.Matchs, 1, 0)
+	if err != nil {
+		return err
+	}
+	r.StreackNoLosing = res
+	return nil
+}
+
+//CalStreackTieding ...Calculates the streack tieding of the team
+func (r Result) CalStreackTieding() error {
+	res, err := HowManyTimes(r.Matchs, 0)
+	if err != nil {
+		return err
+	}
+	r.StreackTieding = res
+	return nil
+}
+
+//CalStreackLosing ...Calculates the streack losing of the team
+func (r Result) CalStreackLosing() error {
+	res, err := HowManyTimes(r.Matchs, -1)
+	if err != nil {
+		return err
+	}
+	r.StreackLosing = res
+	return nil
+}
+
+//CalStreackNoWinning ...Calculates the streack no winning of the team
+func (r Result) CalStreackNoWinning() error {
+	res, err := HowManyTimes(r.Matchs, -1, 0)
+	if err != nil {
+		return err
+	}
+	r.StreackNoWinning = res
+	return nil
 }
