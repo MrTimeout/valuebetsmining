@@ -22,14 +22,10 @@ func (t Team) InsertMatch(a int) error {
 
 //TeamLocal ... This is the object where we will store and calculate the data to insert in mongodb(local)
 type TeamLocal struct {
-	Name  string `json:"name"`
-	Goals []int  `json:"goals"`
-	Match []int  `json:"matchs"`
+	Team
 }
 
 //TeamAway ... This is the object where we will store and calculate the data to insert in mongodb(away)
 type TeamAway struct {
-	Name  string `json:"name"`
-	Goals []int  `json:"goals"`
-	Match []int  `json:"matchs"`
+	Team
 }

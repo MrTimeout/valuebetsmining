@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-//ReadFile ...
+//ReadFile ... Read a file to parse the json
 func ReadFile(file string) (Config, error) {
 	if strings.Trim(file, " ") == "" || len(file) == 0 {
 		return Config{}, errors.New("Error parsing file name")
