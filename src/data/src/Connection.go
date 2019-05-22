@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -12,7 +13,8 @@ type Connection struct {
 
 //Get ... Download the content of an endpoint
 func (c Connection) Get() (string, error) {
-	res, err := http.Get("%s/")
+	fmt.Println(fmt.Sprintf("%s/%s/%s.csv", c.Path, c.Year.GetYears()[0], c.Endpoint[0].Keys[0]))
+	res, err := http.Get(fmt.Sprintf("%s/%s/%s.csv", c.Path, c.Year.GetYears()[0], c.Endpoint[0].Keys[0]))
 	if err != nil {
 		return "", err
 	}

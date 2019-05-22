@@ -29,7 +29,7 @@ func (y Year) GetYears() []string {
 		if index == 19 {
 			break
 		}
-		res = append(res, fmt.Sprintf("%d%d", index, index+1))
+		res = append(res, fmt.Sprintf("%d%d", y.From+index, y.From+index+1))
 		index++
 	}
 	return res

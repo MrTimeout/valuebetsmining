@@ -1,6 +1,7 @@
 package data
 
 import (
+	"log"
 	"testing"
 )
 
@@ -29,5 +30,13 @@ func TestNoExistingFileReadFile(t *testing.T) {
 	}
 	if _, err := ReadFile(existingFile); err != nil {
 		t.Errorf("Expected-> %#v\n\tGet-> %s\n\t", nil, err)
+	}
+}
+
+//TestValueOfJSON ... Execute a simple Readfile testing if it trigger an error or not.
+func TestValueOfJSON(t *testing.T) {
+	_, err := ReadFile("config.json")
+	if err != nil {
+		log.Fatal(err)
 	}
 }
