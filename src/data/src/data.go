@@ -68,8 +68,10 @@ func (c Config) ExistsDivision(division string) (bool, error) {
 		if index >= len(c.Endpoint) {
 			break
 		}
-		if match, _ := regexp.MatchString("^"+division+"$", c.Endpoint[index].Keys); match {
-			return true, nil
+		for _, value := range c.Endpoint[index].Keys {
+			if match, _ := regexp.MatchString("^"+division+"$", value); match {
+				return true, nil
+			}
 		}
 		index++
 	}
