@@ -26,3 +26,9 @@ func (c Connection) Get() (string, error) {
 	}
 	return string(body), nil
 }
+
+//GetAllByCountryDiv ... Download all the content of all years of a country/div
+func (c Connection) GetAllByCountryDiv(country, div string) (string, error) {
+
+	return "", nil
+}

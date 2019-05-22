@@ -1,6 +1,11 @@
 package data
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"regexp"
+	"strings"
+)
 
 //Config ... Struct created to parse JSON config.json and get information
 type Config struct {
@@ -33,4 +38,40 @@ func (y Year) GetYears() []string {
 		index++
 	}
 	return res
+}
+
+//ExistsCountry ... Determinates if exists a specific country
+func (c Config) ExistsCountry(country string) (bool, error) {
+	if strings.Trim(country, " ") == "" || len(strings.Trim(country, " ")) == 0 {
+		return false, errors.New("Error parsing country")
+	}
+	index := 0
+	for {
+		if index >= len(c.Endpoint) {
+			break
+		}
+		if match, _ := regexp.MatchString("^"+country+"$", c.Endpoint[index].Name); match {
+			return true, nil
+		}
+		index++
+	}
+	return false, nil
+}
+
+//ExistsDivision ... Determinates if exists a specific division
+func (c Config) ExistsDivision(division string) (bool, error) {
+	if strings.Trim(division, " ") == "" || len(strings.Trim(division, " ")) == 0 {
+		return false, errors.New("Error parsing division")
+	}
+	index := 0
+	for {
+		if index >= len(c.Endpoint) {
+			break
+		}
+		if match, _ := regexp.MatchString("^"+division+"$", c.Endpoint[index].Keys); match {
+			return true, nil
+		}
+		index++
+	}
+	return false, nil
 }
