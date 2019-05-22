@@ -78,3 +78,37 @@ func TestArrSortMapByValue(t *testing.T) {
 		t.Errorf("Expected-> %v\n\tGet-> %v\n\t", reverseOrderedMap, result)
 	}
 }
+
+//TestAmIHere ... Testing if the functions works well passing corret params
+func TestAmIHere(t *testing.T) {
+	ints := []int{
+		1,
+		3,
+		4,
+		5,
+	}
+	testInts := []int{
+		1,
+		6,
+		3,
+		10,
+	}
+	wants := []bool{
+		true,
+		false,
+		true,
+		false,
+	}
+	index := 0
+	for {
+		if index >= len(ints) {
+			break
+		}
+		if resul, err := AmIHere(ints, testInts[index]); err != nil {
+			t.Errorf("Error:%#v", err)
+		} else if resul != wants[index] {
+			t.Errorf("\nCase:%d\nWant:\n\t%t\nGot:\n\t%t", testInts[index], wants[index], resul)
+		}
+		index++
+	}
+}
