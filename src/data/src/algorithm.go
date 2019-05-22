@@ -1,20 +1,28 @@
 package data
 
-import "log"
-
-func main() {
+//ProcessData ... Processing all files from the path endpoints and years
+func ProcessData() error {
 	config, err := ReadFile("config.json")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	connection := &Connection{config}
-	res, err := connection.Get()
-	if err != nil {
-		log.Fatal(err)
+	for _, country := range connection.Endpoint {
+		for _, key := range country.Keys {
+			data, err := connection.GetAllByCountryDiv(country.Name, key)
+			if err != nil {
+				return err
+			}
+			err = ParseData(data)
+			if err != nil {
+				return err
+			}
+		}
 	}
-	log.Print(res)
+	return nil
 }
 
-func processData() {
-
+//ParseData ... Parsing data to create new files and insert into the database
+func ParseData([]string) error {
+	return nil
 }

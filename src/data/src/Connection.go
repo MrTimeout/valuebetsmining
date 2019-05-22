@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -13,7 +14,6 @@ type Connection struct {
 
 //Get ... Download the content of an endpoint
 func (c Connection) Get() (string, error) {
-	fmt.Println(fmt.Sprintf("%s/%s/%s.csv", c.Path, c.Year.GetYears()[0], c.Endpoint[0].Keys[0]))
 	res, err := http.Get(fmt.Sprintf("%s/%s/%s.csv", c.Path, c.Year.GetYears()[0], c.Endpoint[0].Keys[0]))
 	if err != nil {
 		return "", err
@@ -28,7 +28,30 @@ func (c Connection) Get() (string, error) {
 }
 
 //GetAllByCountryDiv ... Download all the content of all years of a country/div
-func (c Connection) GetAllByCountryDiv(country, div string) (string, error) {
+func (c Connection) GetAllByCountryDiv(country, div string) ([]string, error) {
+	if resul, err := c.ExistsCountry(country); err != nil {
+		return []string{}, err
+	} else if !resul {
+		return []string{}, errors.New("Errors getting country")
+	}
+	if resul, err := c.ExistsDivision(div); err != nil {
+		return []string{}, err
+	} else if !resul {
+		return []string{}, errors.New("Errors getting division")
+	}
+	result := []string{}
+	for _, value := range c.Year.GetYears() {
+		res, err := http.Get(fmt.Sprintf("%s/%s/%s.csv", c.Path, value, div))
+		if err != nil {
+			return []string{}, err
+		}
+		defer res.Body.Close()
 
-	return "", nil
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return []string{}, err
+		}
+		result = append(result, string(body))
+	}
+	return result, nil
 }
