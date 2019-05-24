@@ -15,7 +15,7 @@ func NewTeam(name string, goalTucked, goalReceived int) (Team, error) {
 	}
 	results, err := NewResults(goalTucked, goalReceived)
 	if err != nil {
-
+		return Team{}, err
 	}
 	return Team{
 		Name:    name,
