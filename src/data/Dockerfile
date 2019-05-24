@@ -1,12 +1,22 @@
 ARG CODE_VERSION=latest
-FROM mongo:${CODE_VERSION} AS mongo
+FROM golang:${CODE_VERSION} AS golang
 ARG CODE_VERSION
 
-ENV MONGO_INITDB_ROOT_USERNAME something
-ENV MONGO_INITDB_ROOT_PASSWORD something
+RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of golang"]
 
-RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of mongo"]
+WORKDIR $GOPATH/src
+COPY ./src ./
 
-WORKDIR /docker-entrypoint-initdb.d
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o data .
 
-EXPOSE 27017
+FROM alpine:${CODE_VERSION}
+ARG CODE_VERSION
+
+RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of alpine"]
+
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /my
+COPY --from=golang /go/src/ .
+
+CMD ["./data"]
