@@ -12,8 +12,8 @@ type Goal struct {
 	GoalsReceivedMode    []int   `json:"goals received mode"`
 }
 
-//New ... This is the 'constructor of the struct goal'
-func (g *Goal) New(goalsTucked int, goalsReceived int) (Goal, error) {
+//NewGoal ... This is the 'constructor of the struct goal'
+func NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
 	if goalsTucked < 0 || goalsReceived < 0 {
 		return Goal{}, errors.New("Error parsing goals")
 	}

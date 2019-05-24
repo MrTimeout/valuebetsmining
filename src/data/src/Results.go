@@ -12,14 +12,35 @@ type Result struct {
 	StreackLosing    int   `json:"streack losing"`
 }
 
-//New ... creates a new structure of Results of a team
-func (r Result) New(goalsTucked, goalsReceived int) (Result, error) {
+//NewResults ... creates a new structure of Results of a team
+func NewResults(goalsTucked, goalsReceived int) (Result, error) {
 	if goalsTucked < 0 || goalsReceived < 0 {
 		return Result{}, errors.New("Error parsing goals of result")
 	}
-	return Result{
+	r := Result{
 		Matchs: []int{WhoIsBigger(goalsTucked, goalsReceived)},
-	}, nil
+	}
+	err := r.CalStreackLosing()
+	if err != nil {
+		return Result{}, err
+	}
+	err = r.CalStreackNoLosing()
+	if err != nil {
+		return Result{}, err
+	}
+	err = r.CalStreackNoWinning()
+	if err != nil {
+		return Result{}, err
+	}
+	err = r.CalStreackTieding()
+	if err != nil {
+		return Result{}, err
+	}
+	err = r.CalStreackWinning()
+	if err != nil {
+		return Result{}, err
+	}
+	return r, nil
 }
 
 //InsertMatch ... Insert a new match

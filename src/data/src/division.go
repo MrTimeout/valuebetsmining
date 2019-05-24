@@ -2,12 +2,12 @@ package data
 
 //Division ... Each division of each league
 type Division struct {
-	Years       []int   `json:"Years"`
+	Name        string  `json:"Name"`
 	Matchs      []Match `json:"Matchs"`
 	LengthMatch int     `json:"Amount of matches"`
 }
 
-//New ... Creates an instance of the struct Division
-func (d Division) New() (Division, error) {
-
+//UpdateLengthMatch ... Update the length of the match inside the struct
+func (d Division) UpdateLengthMatch() {
+	d.LengthMatch = len(d.Matchs)
 }

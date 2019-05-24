@@ -1,23 +1,27 @@
 package data
 
-import "errors"
-
 //Team ... This is where we store information about each team
 type Team struct {
-	Name   string `json:"name"`
-	Goals  Goal   `json:"goals"`
-	Matchs []int  `json:"matchs"`
+	Name    string `json:"name"`
+	Goals   Goal   `json:"goals"`
+	Results Result `json:"results"`
 }
 
-//InsertMatch ... Insert other result of the team
-func (t Team) InsertMatch(a int) error {
-	if a > 1 || a < -1 {
-		return errors.New("Error parsing result of a team")
+//NewTeam ... Creates a new instance of Team
+func NewTeam(name string, goalTucked, goalReceived int) (Team, error) {
+	goal, err := NewGoal(goalTucked, goalReceived)
+	if err != nil {
+		return Team{}, err
 	}
-	if len(t.Matchs) == 10 {
-		t.Matchs = append(t.Matchs, a)
+	results, err := NewResults(goalTucked, goalReceived)
+	if err != nil {
+
 	}
-	return nil
+	return Team{
+		Name:    name,
+		Goals:   goal,
+		Results: results,
+	}, nil
 }
 
 //TeamLocal ... This is the object where we will store and calculate the data to insert in mongodb(local)
