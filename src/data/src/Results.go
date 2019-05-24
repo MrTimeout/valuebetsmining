@@ -43,35 +43,35 @@ func NewResults(goalsTucked, goalsReceived int) (Result, error) {
 	return r, nil
 }
 
-//InsertMatch ... Insert a new match
-func (r Result) InsertMatch(goalsTucked, goalsReceived int) error {
+//Update ... Insert a new match
+func (r Result) Update(goalsTucked, goalsReceived int) error {
 	if goalsTucked < 0 || goalsReceived < 0 {
 		return errors.New("Error parsing goals of result")
 	}
 	if len(r.Matchs) == 10 {
 		r.Matchs = append(r.Matchs[1:], WhoIsBigger(goalsTucked, goalsReceived))
-		err := r.CalStreackLosing()
-		if err != nil {
-			return err
-		}
-		err = r.CalStreackNoLosing()
-		if err != nil {
-			return err
-		}
-		err = r.CalStreackNoWinning()
-		if err != nil {
-			return err
-		}
-		err = r.CalStreackTieding()
-		if err != nil {
-			return err
-		}
-		err = r.CalStreackWinning()
-		if err != nil {
-			return err
-		}
 	} else {
 		r.Matchs = append(r.Matchs, WhoIsBigger(goalsTucked, goalsReceived))
+	}
+	err := r.CalStreackLosing()
+	if err != nil {
+		return err
+	}
+	err = r.CalStreackNoLosing()
+	if err != nil {
+		return err
+	}
+	err = r.CalStreackNoWinning()
+	if err != nil {
+		return err
+	}
+	err = r.CalStreackTieding()
+	if err != nil {
+		return err
+	}
+	err = r.CalStreackWinning()
+	if err != nil {
+		return err
 	}
 	return nil
 }

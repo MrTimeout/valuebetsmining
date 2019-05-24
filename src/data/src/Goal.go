@@ -27,50 +27,66 @@ func NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
 	}, nil
 }
 
+//Update ... Updates the propertues of Goal object
+func (g Goal) Update(goalsTucked, goalsReceived int) error {
+	if goalsTucked < 0 || goalsReceived < 0 {
+		return errors.New("Error parsing goals")
+	}
+	err := g.AppendGoalsReceived(goalsReceived)
+	if err != nil {
+		return err
+	}
+	err = g.AppendGoalsTucked(goalsTucked)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 //AppendGoalsTucked ... Append to the GoalsTucked array a new goal.
-func (g *Goal) AppendGoalsTucked(goals int) error {
+func (g Goal) AppendGoalsTucked(goals int) error {
 	if goals < 0 {
 		return errors.New("Error parsing goals argument")
 	}
 	if len(g.GoalsTucked) == 10 {
 		g.GoalsTucked = append(g.GoalsTucked[1:len(g.GoalsTucked)], goals)
-		err := g.CalculateGoalsTuckedAverage()
-		if err != nil {
-			return err
-		}
-		err = g.CalculateGoalsTuckedMode()
-		if err != nil {
-			return err
-		}
 	} else {
 		g.GoalsTucked = append(g.GoalsTucked, goals)
+	}
+	err := g.CalculateGoalsTuckedAverage()
+	if err != nil {
+		return err
+	}
+	err = g.CalculateGoalsTuckedMode()
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 //AppendGoalsReceived ... Append to the GoalsReceived array a new goal.
-func (g *Goal) AppendGoalsReceived(goals int) error {
+func (g Goal) AppendGoalsReceived(goals int) error {
 	if goals < 0 {
 		return errors.New("Error parsing goals argument")
 	}
 	if len(g.GoalsReceived) == 10 {
 		g.GoalsReceived = append(g.GoalsReceived[1:len(g.GoalsReceived)], goals)
-		err := g.CalculateGoalsReceivedAverage()
-		if err != nil {
-			return err
-		}
-		err = g.CalculateGoalsReceivedMode()
-		if err != nil {
-			return err
-		}
 	} else {
 		g.GoalsReceived = append(g.GoalsReceived, goals)
+	}
+	err := g.CalculateGoalsReceivedAverage()
+	if err != nil {
+		return err
+	}
+	err = g.CalculateGoalsReceivedMode()
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 //CalculateGoalsTuckedAverage ... Calculates the average of the goals tucked
-func (g *Goal) CalculateGoalsTuckedAverage() error {
+func (g Goal) CalculateGoalsTuckedAverage() error {
 	average, err := Average(g.GoalsTucked, false)
 	if err != nil {
 		return err
@@ -80,7 +96,7 @@ func (g *Goal) CalculateGoalsTuckedAverage() error {
 }
 
 //CalculateGoalsReceivedAverage ... Calculates the average of the goals received
-func (g *Goal) CalculateGoalsReceivedAverage() error {
+func (g Goal) CalculateGoalsReceivedAverage() error {
 	average, err := Average(g.GoalsReceived, false)
 	if err != nil {
 		return err
@@ -90,7 +106,7 @@ func (g *Goal) CalculateGoalsReceivedAverage() error {
 }
 
 //CalculateGoalsTuckedMode ... Calculates the mode of the goals tucked
-func (g *Goal) CalculateGoalsTuckedMode() error {
+func (g Goal) CalculateGoalsTuckedMode() error {
 	mode, err := Mode(g.GoalsTucked...)
 	if err != nil {
 		return err
@@ -100,7 +116,7 @@ func (g *Goal) CalculateGoalsTuckedMode() error {
 }
 
 //CalculateGoalsReceivedMode ... Calculates the mode of the goals received
-func (g *Goal) CalculateGoalsReceivedMode() error {
+func (g Goal) CalculateGoalsReceivedMode() error {
 	mode, err := Mode(g.GoalsReceived...)
 	if err != nil {
 		return err

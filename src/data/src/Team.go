@@ -8,12 +8,12 @@ type Team struct {
 }
 
 //NewTeam ... Creates a new instance of Team
-func NewTeam(name string, goalTucked, goalReceived int) (Team, error) {
-	goal, err := NewGoal(goalTucked, goalReceived)
+func NewTeam(name string, goalsTucked, goalsReceived int) (Team, error) {
+	goal, err := NewGoal(goalsTucked, goalsReceived)
 	if err != nil {
 		return Team{}, err
 	}
-	results, err := NewResults(goalTucked, goalReceived)
+	results, err := NewResults(goalsTucked, goalsReceived)
 	if err != nil {
 		return Team{}, err
 	}
@@ -22,6 +22,19 @@ func NewTeam(name string, goalTucked, goalReceived int) (Team, error) {
 		Goals:   goal,
 		Results: results,
 	}, nil
+}
+
+//Update ... Update values of the properties of each team
+func (t Team) Update(goalsTucked, goalsReceived int) error {
+	err := t.Goals.Update(goalsTucked, goalsReceived)
+	if err != nil {
+		return err
+	}
+	err = t.Results.Update(goalsTucked, goalsReceived)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 //TeamLocal ... This is the object where we will store and calculate the data to insert in mongodb(local)

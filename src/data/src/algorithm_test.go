@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/csv"
 	"io"
+	"log"
 	"os"
 	"testing"
 )
@@ -24,6 +25,6 @@ func TestWriteJSONToAFile(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-
+		log.Print(teams, matchs, line)
 	}
 }
