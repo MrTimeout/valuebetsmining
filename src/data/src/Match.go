@@ -13,12 +13,12 @@ type Match struct {
 }
 
 //NewMatch ... Creates a new instance of match struct to handle each line of each csv
-func NewMatch(number, goalTucked, goalReceived, from, to int, date, result, teamLocal, teamAway string) (Match, error) {
-	local, err := NewTeam(teamLocal, goalTucked, goalReceived)
+func NewMatch(number, goalsTucked, goalsReceived, from, to int, date, result, teamLocal, teamAway string) (Match, error) {
+	local, err := NewTeam(teamLocal, goalsTucked, goalsReceived)
 	if err != nil {
 		return Match{}, err
 	}
-	away, err := NewTeam(teamAway, goalReceived, goalTucked)
+	away, err := NewTeam(teamAway, goalsReceived, goalsTucked)
 	if err != nil {
 		return Match{}, err
 	}
@@ -29,8 +29,8 @@ func NewMatch(number, goalTucked, goalReceived, from, to int, date, result, team
 			From: from,
 			To:   to,
 		},
-		GoalAway:  goalReceived,
-		GoalLocal: goalTucked,
+		GoalAway:  goalsReceived,
+		GoalLocal: goalsTucked,
 		Result:    result,
 		TeamLocal: TeamLocal{local},
 		TeamAway:  TeamAway{away},
@@ -38,8 +38,12 @@ func NewMatch(number, goalTucked, goalReceived, from, to int, date, result, team
 }
 
 //NewMatchReusingLocal ... Creates a new instance of match struct to handle each line of each csv. It resuses the object local
-func NewMatchReusingLocal(number, goalTucked, goalReceived, from, to int, date, result, teamAway string, teamLocal TeamLocal) (Match, error) {
-	away, err := NewTeam(teamAway, goalReceived, goalTucked)
+func NewMatchReusingLocal(number, goalsTucked, goalsReceived, from, to int, date, result, teamAway string, teamLocal TeamLocal) (Match, error) {
+	away, err := NewTeam(teamAway, goalsReceived, goalsTucked)
+	if err != nil {
+		return Match{}, err
+	}
+	err = teamLocal.Update(goalsTucked, goalsReceived)
 	if err != nil {
 		return Match{}, err
 	}
@@ -50,8 +54,8 @@ func NewMatchReusingLocal(number, goalTucked, goalReceived, from, to int, date, 
 			From: from,
 			To:   to,
 		},
-		GoalAway:  goalReceived,
-		GoalLocal: goalTucked,
+		GoalAway:  goalsReceived,
+		GoalLocal: goalsTucked,
 		Result:    result,
 		TeamLocal: teamLocal,
 		TeamAway:  TeamAway{away},
@@ -59,8 +63,12 @@ func NewMatchReusingLocal(number, goalTucked, goalReceived, from, to int, date, 
 }
 
 //NewMatchReusingAway ... Creates a new instance of match struct to handle each line of each csv. It reuses the away team
-func NewMatchReusingAway(number, goalTucked, goalReceived, from, to int, date, result, teamLocal string, teamAway TeamAway) (Match, error) {
-	local, err := NewTeam(teamLocal, goalTucked, goalReceived)
+func NewMatchReusingAway(number, goalsTucked, goalsReceived, from, to int, date, result, teamLocal string, teamAway TeamAway) (Match, error) {
+	local, err := NewTeam(teamLocal, goalsTucked, goalsReceived)
+	if err != nil {
+		return Match{}, err
+	}
+	err = teamAway.Update(goalsReceived, goalsTucked)
 	if err != nil {
 		return Match{}, err
 	}
@@ -71,10 +79,35 @@ func NewMatchReusingAway(number, goalTucked, goalReceived, from, to int, date, r
 			From: from,
 			To:   to,
 		},
-		GoalAway:  goalReceived,
-		GoalLocal: goalTucked,
+		GoalAway:  goalsReceived,
+		GoalLocal: goalsTucked,
 		Result:    result,
 		TeamLocal: TeamLocal{local},
+		TeamAway:  teamAway,
+	}, nil
+}
+
+//NewMatchReusingBoth ... Creates a new instance of match struct to handle each line of each csv. It reuses the away and local team
+func NewMatchReusingBoth(number, goalsTucked, goalsReceived, from, to int, date, result string, teamLocal TeamLocal, teamAway TeamAway) (Match, error) {
+	err := teamLocal.Update(goalsTucked, goalsReceived)
+	if err != nil {
+		return Match{}, err
+	}
+	err = teamAway.Update(goalsReceived, goalsTucked)
+	if err != nil {
+		return Match{}, err
+	}
+	return Match{
+		Number: number,
+		Date:   date,
+		Years: Year{
+			From: from,
+			To:   to,
+		},
+		GoalAway:  goalsReceived,
+		GoalLocal: goalsTucked,
+		Result:    result,
+		TeamLocal: teamLocal,
 		TeamAway:  teamAway,
 	}, nil
 }

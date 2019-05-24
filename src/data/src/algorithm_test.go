@@ -2,9 +2,11 @@ package data
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"io"
-	"log"
+	"io/ioutil"
 	"os"
+	"strconv"
 	"testing"
 )
 
@@ -15,8 +17,11 @@ func TestWriteJSONToAFile(t *testing.T) {
 		t.Errorf("Error: %#v", err)
 	}
 	reader := csv.NewReader(csvFile)
-	teams := make(map[string]Team)
+	teamsLocal, teamsAway := make(map[string]TeamLocal), make(map[string]TeamAway)
 	matchs := []Match{}
+	from, to := 18, 19
+	count := 1
+	reader.Read() //First line
 	for {
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -25,6 +30,51 @@ func TestWriteJSONToAFile(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		log.Print(teams, matchs, line)
+		goalsTucked, err := strconv.Atoi(line[4])
+		if err != nil {
+			t.Error(err)
+		}
+		goalsReceived, err := strconv.Atoi(line[5])
+		if err != nil {
+			t.Error(err)
+		}
+		if _, ok := teamsLocal[line[2]]; !ok {
+			if _, ok := teamsAway[line[3]]; !ok {
+				match, err := NewMatch(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[2], line[3])
+				if err != nil {
+					t.Error(err)
+				}
+				matchs = append(matchs, match)
+			} else {
+				match, err := NewMatchReusingAway(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[2], teamsAway[line[3]])
+				if err != nil {
+					t.Error(err)
+				}
+				matchs = append(matchs, match)
+			}
+		} else if _, ok := teamsLocal[line[2]]; ok {
+			if _, ok := teamsAway[line[3]]; !ok {
+				match, err := NewMatchReusingLocal(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[3], teamsLocal[line[2]])
+				if err != nil {
+					t.Error(err)
+				}
+				matchs = append(matchs, match)
+			} else {
+				match, err := NewMatchReusingBoth(count, goalsTucked, goalsReceived, from, to, line[1], line[6], teamsLocal[line[2]], teamsAway[line[3]])
+				if err != nil {
+					t.Error(err)
+				}
+				matchs = append(matchs, match)
+			}
+		}
+		count++
+	}
+	matchsJSON, err := json.Marshal(matchs)
+	if err != nil {
+		t.Error(err)
+	}
+	err = ioutil.WriteFile("test/SP1_1819.json", matchsJSON, 0644)
+	if err != nil {
+		t.Error(err)
 	}
 }
