@@ -44,7 +44,7 @@ func NewResults(goalsTucked, goalsReceived int) (Result, error) {
 }
 
 //Update ... Insert a new match
-func (r Result) Update(goalsTucked, goalsReceived int) error {
+func (r *Result) Update(goalsTucked, goalsReceived int) error {
 	if goalsTucked < 0 || goalsReceived < 0 {
 		return errors.New("Error parsing goals of result")
 	}
@@ -77,7 +77,7 @@ func (r Result) Update(goalsTucked, goalsReceived int) error {
 }
 
 //CalStreackWinning ...Calculates the streack winning of the team
-func (r Result) CalStreackWinning() error {
+func (r *Result) CalStreackWinning() error {
 	res, err := HowManyTimes(r.Matchs, 1)
 	if err != nil {
 		return err
@@ -87,7 +87,7 @@ func (r Result) CalStreackWinning() error {
 }
 
 //CalStreackNoLosing ...Calculates the streack without losin of the team
-func (r Result) CalStreackNoLosing() error {
+func (r *Result) CalStreackNoLosing() error {
 	res, err := HowManyTimes(r.Matchs, 1, 0)
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func (r Result) CalStreackNoLosing() error {
 }
 
 //CalStreackTieding ...Calculates the streack tieding of the team
-func (r Result) CalStreackTieding() error {
+func (r *Result) CalStreackTieding() error {
 	res, err := HowManyTimes(r.Matchs, 0)
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func (r Result) CalStreackTieding() error {
 }
 
 //CalStreackLosing ...Calculates the streack losing of the team
-func (r Result) CalStreackLosing() error {
+func (r *Result) CalStreackLosing() error {
 	res, err := HowManyTimes(r.Matchs, -1)
 	if err != nil {
 		return err
@@ -117,7 +117,7 @@ func (r Result) CalStreackLosing() error {
 }
 
 //CalStreackNoWinning ...Calculates the streack no winning of the team
-func (r Result) CalStreackNoWinning() error {
+func (r *Result) CalStreackNoWinning() error {
 	res, err := HowManyTimes(r.Matchs, -1, 0)
 	if err != nil {
 		return err

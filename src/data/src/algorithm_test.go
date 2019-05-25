@@ -17,7 +17,7 @@ func TestWriteJSONToAFile(t *testing.T) {
 		t.Errorf("Error: %#v", err)
 	}
 	reader := csv.NewReader(csvFile)
-	teamsLocal, teamsAway := make(map[string]TeamLocal), make(map[string]TeamAway)
+	teamsLocal, teamsAway := make(map[string]Team), make(map[string]Team)
 	matchs := []Match{}
 	from, to := 18, 19
 	count := 1

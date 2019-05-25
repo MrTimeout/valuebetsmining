@@ -28,7 +28,7 @@ func NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
 }
 
 //Update ... Updates the propertues of Goal object
-func (g Goal) Update(goalsTucked, goalsReceived int) error {
+func (g *Goal) Update(goalsTucked, goalsReceived int) error {
 	if goalsTucked < 0 || goalsReceived < 0 {
 		return errors.New("Error parsing goals")
 	}
@@ -44,7 +44,7 @@ func (g Goal) Update(goalsTucked, goalsReceived int) error {
 }
 
 //AppendGoalsTucked ... Append to the GoalsTucked array a new goal.
-func (g Goal) AppendGoalsTucked(goals int) error {
+func (g *Goal) AppendGoalsTucked(goals int) error {
 	if goals < 0 {
 		return errors.New("Error parsing goals argument")
 	}
@@ -65,7 +65,7 @@ func (g Goal) AppendGoalsTucked(goals int) error {
 }
 
 //AppendGoalsReceived ... Append to the GoalsReceived array a new goal.
-func (g Goal) AppendGoalsReceived(goals int) error {
+func (g *Goal) AppendGoalsReceived(goals int) error {
 	if goals < 0 {
 		return errors.New("Error parsing goals argument")
 	}
@@ -86,7 +86,7 @@ func (g Goal) AppendGoalsReceived(goals int) error {
 }
 
 //CalculateGoalsTuckedAverage ... Calculates the average of the goals tucked
-func (g Goal) CalculateGoalsTuckedAverage() error {
+func (g *Goal) CalculateGoalsTuckedAverage() error {
 	average, err := Average(g.GoalsTucked, false)
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func (g Goal) CalculateGoalsTuckedAverage() error {
 }
 
 //CalculateGoalsReceivedAverage ... Calculates the average of the goals received
-func (g Goal) CalculateGoalsReceivedAverage() error {
+func (g *Goal) CalculateGoalsReceivedAverage() error {
 	average, err := Average(g.GoalsReceived, false)
 	if err != nil {
 		return err
@@ -106,7 +106,7 @@ func (g Goal) CalculateGoalsReceivedAverage() error {
 }
 
 //CalculateGoalsTuckedMode ... Calculates the mode of the goals tucked
-func (g Goal) CalculateGoalsTuckedMode() error {
+func (g *Goal) CalculateGoalsTuckedMode() error {
 	mode, err := Mode(g.GoalsTucked...)
 	if err != nil {
 		return err
@@ -116,7 +116,7 @@ func (g Goal) CalculateGoalsTuckedMode() error {
 }
 
 //CalculateGoalsReceivedMode ... Calculates the mode of the goals received
-func (g Goal) CalculateGoalsReceivedMode() error {
+func (g *Goal) CalculateGoalsReceivedMode() error {
 	mode, err := Mode(g.GoalsReceived...)
 	if err != nil {
 		return err

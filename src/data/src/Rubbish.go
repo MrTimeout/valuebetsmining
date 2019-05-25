@@ -3,6 +3,7 @@ package data
 import (
 	"errors"
 	"math"
+	"math/rand"
 	"sort"
 )
 
@@ -120,6 +121,38 @@ func AmIHere(data []int, value int) (bool, error) {
 		}
 	}
 	return false, nil
+}
+
+//RandomArr ... Random arrays of integers in [from, to]{amount}
+func RandomArr(from, to, amount int) ([]int, error) {
+	if from < 0 || to < 0 || amount <= 0 || from >= to {
+		return nil, errors.New("Error parsing params")
+	}
+	rands := make([]int, amount)
+	for i := 0; i < amount; i++ {
+		rands = append(rands, rand.Intn(to-from)+from)
+	}
+	return rands, nil
+}
+
+//RandomArrNegative ... Random arrays of integers in [from, to]{amount}
+func RandomArrNegative(from, to, amount int) ([]int, error) {
+	if amount <= 0 || from >= to {
+		return nil, errors.New("Error parsing params")
+	}
+	rands := make([]int, amount)
+	for i := 0; i < amount; i++ {
+		rands = append(rands, (rand.Intn(to-from)+from)*RandomSign())
+	}
+	return rands, nil
+}
+
+//RandomSign ... returns -1 or 1, dependends on if it is odd or even
+func RandomSign() int {
+	if r := rand.Int(); r%2 == 0 {
+		return 1
+	}
+	return -1
 }
 
 /*

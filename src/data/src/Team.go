@@ -25,7 +25,7 @@ func NewTeam(name string, goalsTucked, goalsReceived int) (Team, error) {
 }
 
 //Update ... Update values of the properties of each team
-func (t Team) Update(goalsTucked, goalsReceived int) error {
+func (t *Team) Update(goalsTucked, goalsReceived int) error {
 	err := t.Goals.Update(goalsTucked, goalsReceived)
 	if err != nil {
 		return err
@@ -35,14 +35,4 @@ func (t Team) Update(goalsTucked, goalsReceived int) error {
 		return err
 	}
 	return nil
-}
-
-//TeamLocal ... This is the object where we will store and calculate the data to insert in mongodb(local)
-type TeamLocal struct {
-	Team
-}
-
-//TeamAway ... This is the object where we will store and calculate the data to insert in mongodb(away)
-type TeamAway struct {
-	Team
 }
