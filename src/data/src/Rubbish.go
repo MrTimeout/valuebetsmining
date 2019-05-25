@@ -128,7 +128,7 @@ func RandomArr(from, to, amount int) ([]int, error) {
 	if from < 0 || to < 0 || amount <= 0 || from >= to {
 		return nil, errors.New("Error parsing params")
 	}
-	rands := make([]int, amount)
+	rands := make([]int, 0, amount)
 	for i := 0; i < amount; i++ {
 		rands = append(rands, rand.Intn(to-from)+from)
 	}
@@ -140,7 +140,7 @@ func RandomArrNegative(from, to, amount int) ([]int, error) {
 	if amount <= 0 || from >= to {
 		return nil, errors.New("Error parsing params")
 	}
-	rands := make([]int, amount)
+	rands := make([]int, 0, amount)
 	for i := 0; i < amount; i++ {
 		rands = append(rands, (rand.Intn(to-from)+from)*RandomSign())
 	}
@@ -153,6 +153,50 @@ func RandomSign() int {
 		return 1
 	}
 	return -1
+}
+
+//RandomWords ... Return a random arr of words
+func RandomWords(len, lenWord int) ([]string, error) {
+	if len <= 0 {
+		return []string{}, errors.New("Error parsing len of the array")
+	}
+	if lenWord <= 0 {
+		lenWord = rand.Intn(rand.Int()) + rand.Int()
+	}
+	str, i := make([]string, 0, len), 0
+	for {
+		if i == len {
+			break
+		}
+		s, err := RandomWord(lenWord)
+		if err != nil {
+			return []string{}, err
+		}
+		str = append(str, s)
+		i++
+	}
+	return str, nil
+}
+
+//RandomWord ... Returns a random word of an specific len
+func RandomWord(len int) (string, error) {
+	if len <= 0 {
+		return "", errors.New("Error parsing length of the word")
+	}
+	s, i := "", 0
+	for {
+		if i == len {
+			break
+		}
+		s += RandomLetter()
+		i++
+	}
+	return s, nil
+}
+
+//RandomLetter ... It returns a latin letter
+func RandomLetter() string {
+	return string(rand.Intn(122-97) + 97)
 }
 
 /*

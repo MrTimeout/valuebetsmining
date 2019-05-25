@@ -45,12 +45,16 @@ func TestWriteJSONToAFile(t *testing.T) {
 					t.Error(err)
 				}
 				matchs = append(matchs, match)
+				teamsLocal[line[2]] = match.TeamLocal
+				teamsAway[line[3]] = match.TeamAway
 			} else {
 				match, err := NewMatchReusingAway(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[2], teamsAway[line[3]])
 				if err != nil {
 					t.Error(err)
 				}
 				matchs = append(matchs, match)
+				teamsLocal[line[2]] = match.TeamLocal
+				teamsAway[line[3]] = match.TeamAway
 			}
 		} else if _, ok := teamsLocal[line[2]]; ok {
 			if _, ok := teamsAway[line[3]]; !ok {
@@ -59,12 +63,16 @@ func TestWriteJSONToAFile(t *testing.T) {
 					t.Error(err)
 				}
 				matchs = append(matchs, match)
+				teamsLocal[line[2]] = match.TeamLocal
+				teamsAway[line[3]] = match.TeamAway
 			} else {
 				match, err := NewMatchReusingBoth(count, goalsTucked, goalsReceived, from, to, line[1], line[6], teamsLocal[line[2]], teamsAway[line[3]])
 				if err != nil {
 					t.Error(err)
 				}
 				matchs = append(matchs, match)
+				teamsLocal[line[2]] = match.TeamLocal
+				teamsAway[line[3]] = match.TeamAway
 			}
 		}
 		count++

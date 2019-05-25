@@ -5,11 +5,6 @@ import (
 	"testing"
 )
 
-//TestObjectConfigGet ... Testing the object created in config
-func TestObjectConfigGet(t *testing.T) {
-
-}
-
 //TestConnectionGetResponse ... Testing connection via get to the Path and getting response
 func TestConnectionGetResponse(t *testing.T) {
 	config, err := ReadFile("config.json")

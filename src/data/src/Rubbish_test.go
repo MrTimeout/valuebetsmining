@@ -2,6 +2,7 @@ package data
 
 import (
 	"sort"
+	"strconv"
 	"testing"
 )
 
@@ -110,5 +111,21 @@ func TestAmIHere(t *testing.T) {
 			t.Errorf("\nCase:%d\nWant:\n\t%t\nGot:\n\t%t", testInts[index], wants[index], resul)
 		}
 		index++
+	}
+}
+
+func TestRadomLetter(t *testing.T) {
+	i, cases := 0, 100
+	for {
+		if i == cases {
+			break
+		}
+		r := RandomLetter()
+		if ri, err := strconv.Atoi(r); err != nil {
+			t.Error(err)
+		} else if ri < 97 || ri > 122 {
+			t.Error("Error creating random letter")
+		}
+		i++
 	}
 }
