@@ -1,8 +1,7 @@
 package data
 
 import (
-	"sort"
-	"strconv"
+	"math/rand"
 	"testing"
 )
 
@@ -56,27 +55,23 @@ func TestMixtArrAverage(t *testing.T) {
 	}
 }
 
-//TestEmptyArrSortMapByValue ... test that if we pass an empty map, it will trigger an error.
-func TestEmptyArrSortMapByValue(t *testing.T) {
-	emptyMap := make(map[int]int)
-	if _, err := SortMapByValue(emptyMap, true); err == nil {
-		t.Errorf("Expected-> %s\n\tGet-> %s\n\t", "Error parsing map of integers", err)
+//TestMode ... Testing mode method
+func TestMode(t *testing.T) {
+	i, cases, mode := 0, 20, 4
+	arr := make([]int, 0, cases)
+	for {
+		if i == cases {
+			break
+		}
+		arr = append(arr, mode)
+		i++
 	}
-}
-
-//TestArgsArrSortMapByValue ... test that if we pass a specific map, it will be equal to the order arr
-func TestArrSortMapByValue(t *testing.T) {
-	orderedMap := make(map[int]int)
-	reverseOrderedMap := make(map[int]int)
-	for index := 10; index >= 1; index-- {
-		orderedMap[index] = -index
-		reverseOrderedMap[index] = index
-	}
-	if result, _ := SortMapByValue(orderedMap, true); sort.IsSorted(sort.IntSlice(result)) {
-		t.Errorf("Expected-> %v\n\tGet-> %v\n\t", orderedMap, result)
-	}
-	if result, _ := SortMapByValue(reverseOrderedMap, false); sort.IsSorted(sort.Reverse(sort.IntSlice(result))) {
-		t.Errorf("Expected-> %v\n\tGet-> %v\n\t", reverseOrderedMap, result)
+	if v, err := Mode(arr...); err != nil {
+		t.Error(err)
+	} else if len(v) != 1 {
+		t.Errorf("Length:\nWant:\n\r%d\nGot:\n\r%d", 1, len(v))
+	} else if v[0] != mode {
+		t.Errorf("Mode:\nWant:\n\r%d\nGot:\n\r%d", mode, v[0])
 	}
 }
 
@@ -114,17 +109,34 @@ func TestAmIHere(t *testing.T) {
 	}
 }
 
+//TestRadomLetter ... Random letter testing that are in a range of [97,122]
 func TestRadomLetter(t *testing.T) {
 	i, cases := 0, 100
 	for {
 		if i == cases {
 			break
 		}
-		r := RandomLetter()
-		if ri, err := strconv.Atoi(r); err != nil {
-			t.Error(err)
-		} else if ri < 97 || ri > 122 {
+		r := []rune(RandomLetter())
+		if ri := int(r[0]); ri < 97 || ri > 122 {
 			t.Error("Error creating random letter")
+		}
+		i++
+	}
+}
+
+//TestRandomWords ... Random words of an specific length
+func TestRandomWords(t *testing.T) {
+	i, cases := 0, 100
+	for {
+		if i == cases {
+			break
+		}
+		r, err := RandomWord(rand.Intn(cases-i+1) + i)
+		if err != nil {
+			t.Error(err)
+		}
+		if _, err := IsASCIICodeArr([]rune(r), 97, 122); err != nil {
+			t.Error(err)
 		}
 		i++
 	}

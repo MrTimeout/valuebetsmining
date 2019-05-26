@@ -31,7 +31,7 @@ func (y Year) GetYears() []string {
 	res := []string{}
 	index := 1
 	for {
-		if index == 19 {
+		if index == y.To-y.From {
 			break
 		}
 		res = append(res, fmt.Sprintf("%d%d", y.From+index, y.From+index+1))

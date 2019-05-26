@@ -38,3 +38,16 @@ func TestConnectionGetAllByCountryDivResponse(t *testing.T) {
 		}
 	}
 }
+
+//TestWriteAllByCountryDiv ... Test if the csv is written
+func TestWriteAllByCountryDiv(t *testing.T) {
+	config, err := ReadFile("config.json")
+	if err != nil {
+		t.Error(err)
+	}
+	connection := &Connection{config}
+	err = connection.WriteAllByCountryDiv("Spain", "SP1")
+	if err != nil {
+		t.Error(err)
+	}
+}

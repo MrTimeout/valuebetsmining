@@ -4,7 +4,6 @@ import (
 	"errors"
 	"math"
 	"math/rand"
-	"sort"
 )
 
 //Pair ... Custom pair of values: key=value
@@ -54,7 +53,7 @@ func Mode(nums ...int) ([]int, error) {
 		m[value]++
 	}
 
-	result, err := SortMapByValue(m, false)
+	result, err := MaxsOfAMap(m)
 	if err != nil {
 		return []int{}, err
 	}
@@ -62,21 +61,51 @@ func Mode(nums ...int) ([]int, error) {
 	return result, nil
 }
 
-//SortMapByValue ... Order a map by its values
-func SortMapByValue(m map[int]int, reverse bool) ([]int, error) {
+//MaxsOfAMap ... Order a map by its values
+func MaxsOfAMap(m map[int]int) ([]int, error) {
 	if len(m) == 0 {
 		return []int{}, errors.New("Error parsing map of integers")
 	}
-	result := []int{}
-	for _, key := range m {
-		result = append(result, key)
+	resul := make([]int, 0)
+	_, values := ParseMapIntToKeysValues(m)
+	max, err := MaxArr(values)
+	if err != nil {
+		return []int{}, errors.New("Error parsing values of arr values")
 	}
-	if reverse {
-		sort.Sort(sort.Reverse(sort.IntSlice(result)))
-	} else {
-		sort.Sort(sort.IntSlice(result))
+	for key, value := range m {
+		if value == max {
+			resul = append(resul, key)
+		}
 	}
-	return result, nil
+	return resul, nil
+}
+
+//ParseMapIntToKeysValues ... Return an array of the keys and values
+func ParseMapIntToKeysValues(m map[int]int) ([]int, []int) {
+	keys, values := make([]int, 0, len(m)), make([]int, 0, len(m))
+	for k, v := range m {
+		keys, values = append(keys, k), append(values, v)
+
+	}
+	return keys, values
+}
+
+//MaxArr ... Max number of an array of integer
+func MaxArr(arr []int) (int, error) {
+	if len(arr) == 0 {
+		return 0, errors.New("Error parsing arr")
+	}
+	i, max := 0, math.MinInt64
+	for {
+		if i == len(arr) {
+			break
+		}
+		if arr[i] >= max {
+			max = arr[i]
+		}
+		i++
+	}
+	return max, nil
 }
 
 //WhoIsBigger ... returns -1|0|1 if a < b|a == b|a > b
@@ -197,6 +226,27 @@ func RandomWord(len int) (string, error) {
 //RandomLetter ... It returns a latin letter
 func RandomLetter() string {
 	return string(rand.Intn(122-97) + 97)
+}
+
+//IsASCIICode ... Returns true if it is between and b
+func IsASCIICode(min, max int, char rune) (bool, error) {
+	if min <= 0 || max <= 0 {
+		return false, errors.New("Error parsing params")
+	}
+	return int(char) >= min && int(char) <= max, nil
+}
+
+//IsASCIICodeArr ... Return true if it is between min and max
+func IsASCIICodeArr(runes []rune, min, max int) (bool, error) {
+	if min <= 0 || max <= 0 {
+		return false, errors.New("Error parsing params")
+	}
+	for _, v := range runes {
+		if int(v) >= min && int(v) <= max {
+			return false, nil
+		}
+	}
+	return true, nil
 }
 
 /*
