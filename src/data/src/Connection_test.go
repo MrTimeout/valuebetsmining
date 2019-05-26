@@ -46,7 +46,7 @@ func TestWriteAllByCountryDiv(t *testing.T) {
 		t.Error(err)
 	}
 	connection := &Connection{config}
-	err = connection.WriteAllByCountryDiv("Spain", "SP1")
+	_, err = connection.WriteAllByCountryDiv("Spain", "SP1")
 	if err != nil {
 		t.Error(err)
 	}
