@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Valuebetsmining</title>
+    <link rel="stylesheet" type="text/css" href="estilos.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="js/herramienta.js"></script>
+</head>
+
+<body>
+
+    <header id="main-header">
+        <ul id="logo-header">
+            <li><a href="#contenido" title="Saltar a contenido"><img src="recursos/vbm.svg" alt="logo" /><span>V</span>alue<span>B</span>ets<span>M</span>ining</a>
+            </li>
+        </ul>
+        <nav>
+                <a id="menu" href="#"><img src="recursos/menu.svg" alt="menu" /></a>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="herramienta.html">Herramienta</a></li>
+                <li><a href="guia.html">Guia</a></li>
+                <li><a href="algoritmo.html">Algoritmo</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+        <ul id="contacto">
+            <li>
+                <a href="#"><img src="recursos/usuario.svg" alt="login" /></a>
+            </li>
+        </ul>
+    </header>
+    <div class="login">
+        <img id="x" src="recursos/x.svg" alt="cerrar">
+        <div class="wrapper">
+            <div class="fondoform">
+                <h1>LOG IN</h1>
+                <p>Inicia sesion con tu cuenta de usuario</p>
+                <form class="form" method="post" action="yourpage.html">
+                        <label for="user"></label>
+                        <input type="text" id="user" class="name" placeholder="NOMBRE O EMAIL">
+                        <label for="password"></label>
+                        <input type="password" id="password" class="password" placeholder="PASS">
+                    <input type="submit" class="submit" value="INICIO">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="contenido" class="seleccion">
+            
+        <div>
+            <label for="Paises">Paises</label>
+            <select id="Paises" name="Paises"></select>
+        </div>
+        <div>
+            <label for="Division">Division</label>
+            <select id="Division" name="Division"></select>
+        </div>
+        <div>
+            <label for="Local">Local</label>
+            <select id="Local" name="Local"></select>
+        </div>
+        <div>
+            <label for="Visitante">Visitante</label>
+            <select id="Visitante" name="Visitante"></select>
+        </div>
+        
+        <div id="graficas"><img src="recursos/capas.svg" alt="datos en grafricas o texto"></div>
+    </div>
+ 
+    <div class="contenido">
+        <div class="graficas">
+            <div>
+                <h2>RESULTADOS</h2>
+                <div id="ultimos"></div>
+            </div>
+        </div>
+
+        <div class="graficas">
+            <div>
+                <h2>GOLES</h2>
+                <div id="goles"></div>
+            </div>
+        </div>
+
+        <div class="graficas">
+            <div>
+                <h2>RACHA</h2>
+                <div id="racha"></div>
+            </div>
+        </div>
+
+        <div class="graficas">
+            <div>
+                <h2>PROBABILIDAD</h2>
+                <div id="porcentaje"></div>
+            </div>
+        </div>
+    </div>
+    <div class="zona">
+
+        <div class="calculo">
+          
+            <div id="cab">
+                <p><span></span></p>
+                <p><span>Probabilidad</span></p>
+                <p><span>Cuota</span></p>
+                <p><span>Valor</span></p>
+                <p><span>Kelly</span></p>
+            </div>
+
+            <div>
+                <p><span>Local</span></p>
+                <label for="localA"></label>
+                <input type="text" id="localA" placeholder="Ingrese un número" readonly>
+                <label for="localB"></label>
+                <input type="text" id="localB" placeholder="Ingrese un número" >
+                <label for="resultadolocal"></label>
+                <input type="text" id="resultadolocal" placeholder="Ingrese un número">
+                <label for="kellylocal"></label>
+                <input type="text" id="kellylocal" placeholder="Ingrese un número">
+            </div>
+
+            <div>
+                <p><span>Empate</span></p>
+                <label for="empateA"></label>
+                <input type="text" id="empateA" placeholder="Ingrese un número" readonly>
+                <label for="empateB"></label>
+                <input type="text" id="empateB" placeholder="Ingrese un número">
+                <label for="resultadoempate"></label>
+                <input type="text" id="resultadoempate" placeholder="Ingrese un número">
+                <label for="kellyempate"></label>
+                <input type="text" id="kellyempate" placeholder="Ingrese un número">
+            </div>
+
+            <div>
+                <p><span>Visitante</span></p>
+                <label for="visitanteA"></label>
+                <input type="text" id="visitanteA" placeholder="Ingrese un número" readonly>
+                <label for="visitanteB"></label>
+                <input type="text" id="visitanteB" placeholder="Ingrese un número">
+                <label for="resultadovisitante"></label>
+                <input type="text" id="resultadovisitante" placeholder="Ingrese un número">
+                <label for="kellyvisitante"></label>
+                <input type="text" id="kellyvisitante" placeholder="Ingrese un número">
+            </div>
+        </div>
+        <input type="submit" value="calcular" id="calcular">
+    </div>
+    <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a
+            href="https://www.flaticon.es/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+            href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC
+            3.0 BY</a></div>
+    <div>Icons made by <a href="https://www.flaticon.es/autores/smashicons" title="Smashicons">Smashicons</a> from
+        <a href="https://www.flaticon.es/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+            href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC
+            3.0 BY</a></div>
+    <div>Icons made by <a href="https://www.flaticon.com/authors/vaadin" title="Vaadin">Vaadin</a> from <a
+            href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+            href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC
+            3.0 BY</a></div>
+    <div>Icons made by <a href="https://www.flaticon.es/autores/chanut" title="Chanut">Chanut</a> from <a
+            href="https://www.flaticon.es/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+            href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC
+            3.0 BY</a></div>
+</body>
+
+
+
+</html>
