@@ -1,15 +1,5 @@
 package data
 
-import (
-	"encoding/csv"
-	"encoding/json"
-	"fmt"
-	"io"
-	"io/ioutil"
-	"os"
-	"strconv"
-)
-
 //ProcessData ... Processing all files from the path endpoints and years
 func ProcessData() error {
 	config, err := ReadFile("config.json")
@@ -19,92 +9,20 @@ func ProcessData() error {
 	connection := &Connection{config}
 	for _, country := range connection.Endpoint {
 		for _, key := range country.Keys {
-			path, err := connection.WriteAllByCountryDiv(country.Name, key)
+			err := connection.WriteByCountryDivYears(connection.Year, country.Name, key)
 			if err != nil {
 				return err
 			}
-			err = ParseEachFile(connection.Year, path)
+			div, err := NewDivision(country.Name)
 			if err != nil {
 				return err
 			}
-		}
-	}
-	return nil
-}
-
-//ParseEachFile ... Parsing data to create new files and insert into the database
-func ParseEachFile(year Year, path string) error {
-	csvFile, err := os.Open(fmt.Sprintf("%s.csv", path))
-	if err != nil {
-		return err
-	}
-	reader := csv.NewReader(csvFile)
-	teamsLocal, teamsAway := make(map[string]Team), make(map[string]Team)
-	matchs := []Match{}
-	count := 1
-	reader.Read() //First line
-	for {
-		line, err := reader.Read()
-		if err == io.EOF {
+			err = div.ParseFiles(connection.Year, country.Name, key)
+			if err != nil {
+				return err
+			}
 			break
 		}
-		if err != nil {
-			return err
-		}
-		goalsTucked, err := strconv.Atoi(line[4])
-		if err != nil {
-			return err
-		}
-		goalsReceived, err := strconv.Atoi(line[5])
-		if err != nil {
-			return err
-		}
-		if _, ok := teamsLocal[line[2]]; !ok {
-			if _, ok := teamsAway[line[3]]; !ok {
-				match, err := NewMatch(count, goalsTucked, goalsReceived, year.From, year.To, line[1], line[6], line[2], line[3])
-				if err != nil {
-					return err
-				}
-				matchs = append(matchs, match)
-				teamsLocal[line[2]] = match.TeamLocal
-				teamsAway[line[3]] = match.TeamAway
-			} else {
-				match, err := NewMatchReusingAway(count, goalsTucked, goalsReceived, year.From, year.To, line[1], line[6], line[2], teamsAway[line[3]])
-				if err != nil {
-					return err
-				}
-				matchs = append(matchs, match)
-				teamsLocal[line[2]] = match.TeamLocal
-				teamsAway[line[3]] = match.TeamAway
-			}
-		} else if _, ok := teamsLocal[line[2]]; ok {
-			if _, ok := teamsAway[line[3]]; !ok {
-				match, err := NewMatchReusingLocal(count, goalsTucked, goalsReceived, year.From, year.To, line[1], line[6], line[3], teamsLocal[line[2]])
-				if err != nil {
-					return err
-				}
-				matchs = append(matchs, match)
-				teamsLocal[line[2]] = match.TeamLocal
-				teamsAway[line[3]] = match.TeamAway
-			} else {
-				match, err := NewMatchReusingBoth(count, goalsTucked, goalsReceived, year.From, year.To, line[1], line[6], teamsLocal[line[2]], teamsAway[line[3]])
-				if err != nil {
-					return err
-				}
-				matchs = append(matchs, match)
-				teamsLocal[line[2]] = match.TeamLocal
-				teamsAway[line[3]] = match.TeamAway
-			}
-			count++
-		}
-	}
-	matchsJSON, err := json.Marshal(matchs)
-	if err != nil {
-		return err
-	}
-	err = ioutil.WriteFile(fmt.Sprintf("%s.json", path), matchsJSON, 0644)
-	if err != nil {
-		return err
 	}
 	return nil
 }

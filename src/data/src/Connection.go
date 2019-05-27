@@ -58,8 +58,8 @@ func (c Connection) GetAllByCountryDiv(country, div string) ([]string, error) {
 	return result, nil
 }
 
-//GetWithParams ... Return the response of a get request
-func (c Connection) GetWithParams(year Year, country, div string) (string, error) {
+//WriteWithParams ... Return the response of a get request
+func (c Connection) WriteWithParams(year Year, country, div string) (string, error) {
 	res, err := http.Get(fmt.Sprintf("%s/%d%d/%s.csv", c.Path, year.From, year.To, div))
 	if err != nil {
 		return "", err
@@ -89,7 +89,7 @@ func (c Connection) RequestByCountryDivYear(year Year, country, div string) (str
 	} else if !resul {
 		return "", errors.New("Errors getting division")
 	}
-	return c.GetWithParams(year, country, div)
+	return c.WriteWithParams(year, country, div)
 }
 
 //WriteByCountryDivYears ... Write in csv files by a range of years, country and division
@@ -104,16 +104,12 @@ func (c Connection) WriteByCountryDivYears(year Year, country, div string) error
 	} else if !resul {
 		return errors.New("Errors getting division")
 	}
-	err := os.MkdirAll(fmt.Sprintf("./leagues/%s", country), 0666)
+	err := os.MkdirAll(fmt.Sprintf("./leagues/%s", country), 0777)
 	if err != nil {
 		return err
 	}
 	for i := year.From; i < year.To; i++ {
-		str, err := c.RequestByCountryDivYear(Year{From: i, To: i + 1}, country, div)
-		if err != nil {
-			return err
-		}
-		err = ioutil.WriteFile(fmt.Sprintf("./leagues/%s/%s_%d%d.csv", country, div, i, i+1), []byte(str), 0644)
+		_, err := c.RequestByCountryDivYear(Year{From: i, To: i + 1}, country, div)
 		if err != nil {
 			return err
 		}

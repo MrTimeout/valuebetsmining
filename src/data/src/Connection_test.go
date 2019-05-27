@@ -51,3 +51,16 @@ func TestWriteAllByCountryDiv(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+//TestWriteByCountryDivYears ... Write By country, div and a range years
+func TestWriteByCountryDivYears(t *testing.T) {
+	config, err := ReadFile("config.json")
+	if err != nil {
+		t.Error(err)
+	}
+	connection := &Connection{config}
+	err = connection.WriteByCountryDivYears(connection.Year, "Spain", "SP1")
+	if err != nil {
+		t.Error(err)
+	}
+}
