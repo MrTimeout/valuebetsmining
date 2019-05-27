@@ -1,0 +1,4 @@
+**/secrets/**
+vendor/**
+**/leagues/**
+**/test/**.json
