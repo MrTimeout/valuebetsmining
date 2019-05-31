@@ -38,6 +38,7 @@ func NewDivision(name string) (Division, error) {
 //ParseFiles ... Parse files using a path and the struct Division
 func (d *Division) ParseFiles(year Year, country, div string) error {
 	for i := year.From; i < year.To; i++ {
+		fmt.Println(i)
 		err := d.ParseEachFile(Year{From: i, To: i + 1}, fmt.Sprintf("./leagues/%s/%s_%d%d", country, div, i, i+1))
 		if err != nil {
 			return err
@@ -51,8 +52,21 @@ func (d *Division) ParseFiles(year Year, country, div string) error {
 	return nil
 }
 
+//ParseFilesToCSV ... Parse files using a path and the struct Division creating an unique csv file
+func (d *Division) ParseFilesToCSV(year Year, country, div string) error {
+	for i := year.From; i < year.To; i++ {
+		err := d.ParseEachFile(Year{From: i, To: i + 1}, fmt.Sprintf("./leagues/%s/%s_%d%d", country, div, i, i+1))
+		if err != nil {
+			return err
+		}
+	}
+	//err = ioutil.WriteFile(fmt.Sprintf("./leagues/CSV/%s_%s_%d%d.csv", country, div, year.From, year.To), csvData, 0666)
+	return nil
+}
+
 //ParseEachFile ... Parsing data to create new files and insert into the database. Using struct Division
 func (d *Division) ParseEachFile(year Year, path string) error {
+	fmt.Println(path)
 	csvFile, err := os.Open(fmt.Sprintf("%s.csv", path))
 	if err != nil {
 		return err
@@ -67,6 +81,9 @@ func (d *Division) ParseEachFile(year Year, path string) error {
 		}
 		if err != nil {
 			return err
+		}
+		if strings.Trim(line[0], " ") == "" {
+			break
 		}
 		goalsTucked, err := strconv.Atoi(line[4])
 		if err != nil {

@@ -111,3 +111,9 @@ func NewMatchReusingBoth(number, goalsTucked, goalsReceived, from, to int, date,
 		TeamAway:  teamAway,
 	}, nil
 }
+
+//ToString ... 
+func (m *Match) ToString() string {
+	//Number, Date, HomeTeam, AwayTeam, HomeGoals, AwayGoals
+	return fmt.Sprintf("%d,%s,%s,%s,%d,%d", m.Number, m.Date, m.TeamLocal.Name, m.TeamAway.Name, m.GoalsLocal, m.GoalsAway)
+}
