@@ -249,6 +249,23 @@ func IsASCIICodeArr(runes []rune, min, max int) (bool, error) {
 	return true, nil
 }
 
+//CompareTwoArrs ... Compare two arrays returning bool value. True if they are equals and false otherwise
+func CompareTwoArrs(arr, arr2 []int) bool {
+	if len(arr) != len(arr2) {
+		return false
+	}
+	index := 0
+	for {
+		if index == len(arr) {
+			return true
+		}
+		if arr[index] != arr2[index] {
+			return false
+		}
+		index++
+	}
+}
+
 /*
 //DisorderAMap ... Disorder a map of integers
 func DisorderAMap(m map[int]int) (map[int]int, error) {
