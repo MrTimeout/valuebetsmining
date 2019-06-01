@@ -1,7 +1,6 @@
 package data
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -43,7 +42,7 @@ var (
 //NewResults ... creates a new structure of Results of a team
 func NewResults(goalsTucked, goalsReceived int) (Result, error) {
 	if goalsTucked < 0 || goalsReceived < 0 {
-		return Result{}, errors.New("Error parsing goals of result")
+		return Result{}, ErrNegativeGoal
 	}
 	r := Result{
 		Matchs: []int{WhoIsBigger(goalsTucked, goalsReceived)},
@@ -101,13 +100,9 @@ func (r *Result) CalFeatures() error {
 //Update ... Insert a new match
 func (r *Result) Update(goalsTucked, goalsReceived int) error {
 	if goalsTucked < 0 || goalsReceived < 0 {
-		return errors.New("Error parsing goals of result")
+		return ErrNegativeGoal
 	}
-	if len(r.Matchs) == 10 {
-		r.Matchs = append(r.Matchs[1:], WhoIsBigger(goalsTucked, goalsReceived))
-	} else {
-		r.Matchs = append(r.Matchs, WhoIsBigger(goalsTucked, goalsReceived))
-	}
+	r.Matchs = append(r.Matchs, WhoIsBigger(goalsTucked, goalsReceived))
 	err := r.CalFeatures()
 	if err != nil {
 		return err
@@ -117,7 +112,13 @@ func (r *Result) Update(goalsTucked, goalsReceived int) error {
 
 //CalStreackWinning ...Calculates the streack winning of the team
 func (r *Result) CalStreackWinning() error {
-	res, err := HowManyTimes(r.Matchs, 1)
+	var res int
+	var err error
+	if len(r.Matchs) >= DefaultLenResult {
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], 1)
+	} else {
+		res, err = HowManyTimes(r.Matchs, 1)
+	}
 	if err != nil {
 		return err
 	}
@@ -127,7 +128,13 @@ func (r *Result) CalStreackWinning() error {
 
 //CalStreackNoLosing ...Calculates the streack without losin of the team
 func (r *Result) CalStreackNoLosing() error {
-	res, err := HowManyTimes(r.Matchs, 1, 0)
+	var res int
+	var err error
+	if len(r.Matchs) >= DefaultLenResult {
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], 1, 0)
+	} else {
+		res, err = HowManyTimes(r.Matchs, 1, 0)
+	}
 	if err != nil {
 		return err
 	}
@@ -137,7 +144,13 @@ func (r *Result) CalStreackNoLosing() error {
 
 //CalStreackTieding ...Calculates the streack tieding of the team
 func (r *Result) CalStreackTieding() error {
-	res, err := HowManyTimes(r.Matchs, 0)
+	var res int
+	var err error
+	if len(r.Matchs) >= DefaultLenResult {
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], 0)
+	} else {
+		res, err = HowManyTimes(r.Matchs, 0)
+	}
 	if err != nil {
 		return err
 	}
@@ -145,9 +158,31 @@ func (r *Result) CalStreackTieding() error {
 	return nil
 }
 
+//CalStreackNoWinning ...Calculates the streack no winning of the team
+func (r *Result) CalStreackNoWinning() error {
+	var res int
+	var err error
+	if len(r.Matchs) >= DefaultLenResult {
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], -1, 0)
+	} else {
+		res, err = HowManyTimes(r.Matchs, -1, 0)
+	}
+	if err != nil {
+		return err
+	}
+	r.StreackNoWinning = res
+	return nil
+}
+
 //CalStreackLosing ...Calculates the streack losing of the team
 func (r *Result) CalStreackLosing() error {
-	res, err := HowManyTimes(r.Matchs, -1)
+	var res int
+	var err error
+	if len(r.Matchs) >= DefaultLenResult {
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], -1)
+	} else {
+		res, err = HowManyTimes(r.Matchs, -1)
+	}
 	if err != nil {
 		return err
 	}
@@ -155,14 +190,20 @@ func (r *Result) CalStreackLosing() error {
 	return nil
 }
 
-//CalStreackNoWinning ...Calculates the streack no winning of the team
-func (r *Result) CalStreackNoWinning() error {
-	res, err := HowManyTimes(r.Matchs, -1, 0)
-	if err != nil {
-		return err
+//WinTieLose ... Returns a map with won, tieded and lost matchs
+func (r *Result) WinTieLose() map[string]int {
+	mapWTL := make(map[string]int)
+	for _, v := range r.Matchs {
+		switch v {
+		case -1:
+			mapWTL["lost"] = mapWTL["lost"] + 1
+		case 0:
+			mapWTL["tied"] = mapWTL["tied"] + 1
+		case 1:
+			mapWTL["won"] = mapWTL["won"] + 1
+		}
 	}
-	r.StreackNoWinning = res
-	return nil
+	return mapWTL
 }
 
 //PreviousNResultsOfAMatch ... Take an object with values of an specific match n previous matchs
@@ -191,11 +232,23 @@ func (r *Result) PreviousNResultsOfAMatch(n int) (Result, error) {
 	if err != nil {
 		return Result{}, err
 	}
+	result.Matchs = r.Matchs[:diff+1]
 	return result, nil
 }
 
+//CompareOfResults ... Compare of two instances of struct Result
+func (r *Result) CompareOfResults(r2 Result) bool {
+	return CompareTwoArrs(r.Matchs, r2.Matchs, false) &&
+		r.StreackLosing == r2.StreackLosing &&
+		r.StreackNoLosing == r2.StreackNoLosing &&
+		r.StreackTieding == r2.StreackTieding &&
+		r.StreackNoWinning == r2.StreackNoWinning &&
+		r.StreackWinning == r2.StreackWinning
+}
+
 func (r *Result) String() string {
-	return fmt.Sprintf("Matchs: %v") //Incomplete
+	mapWTL := r.WinTieLose()
+	return fmt.Sprintf("Matchs:\n\tWon: %d\n\tTied: %d\n\tLost: %d \nStreack losing: %d\nStreack no losing: %d\nStreack tieding: %d\nStreack no winning: %d\nStreack winning: %d\n", mapWTL["won"], mapWTL["tied"], mapWTL["lost"], r.StreackLosing, r.StreackNoLosing, r.StreackTieding, r.StreackNoWinning, r.StreackWinning)
 }
 
 //Error ... Return error of struct Result
