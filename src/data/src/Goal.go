@@ -18,25 +18,25 @@ type GoalError struct {
 }
 
 const (
-	//DefaultLen ... Default length of the arrays of struct goals
-	DefaultLen = 10
+	//DefaultLenGoal ... Default length of the arrays of struct goals
+	DefaultLenGoal = 10
 	//DefaultPreviousGoals ... Default number of matchs before actual one
 	DefaultPreviousGoals = 1
 )
 
 var (
-	//ErrNegative ... Error parsing goals because they are less than 0
-	ErrNegative = &GoalError{ErrorString: "Error parsing goals because they are negative"}
+	//ErrNegativeGoal ... Error parsing goals because they are less than 0
+	ErrNegativeGoal = &GoalError{ErrorString: "Error parsing goals because they are negative"}
 	//ErrIndexOutOfGoal ... Error parsing goals of a match that doesnt exit
 	ErrIndexOutOfGoal = &GoalError{ErrorString: "Error parsing goals of a match that doesnt exit"}
-	//ErrIndexOutOfRange ... Error parsing array of goals because of a negative array
-	ErrIndexOutOfRange = &GoalError{ErrorString: "Error parsing array of goals because of a negative number"}
+	//ErrIndexOutOfRangeGoal ... Error parsing array of goals because of a negative array
+	ErrIndexOutOfRangeGoal = &GoalError{ErrorString: "Error parsing array of goals because of a negative number"}
 )
 
 //NewGoal ... This is the 'constructor of the struct goal'
 func NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
 	if goalsTucked < 0 || goalsReceived < 0 {
-		return Goal{}, ErrNegative
+		return Goal{}, ErrNegativeGoal
 	}
 	return Goal{
 		GoalsTucked:          []int{goalsTucked},
@@ -51,7 +51,7 @@ func NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
 //Update ... Updates the propertues of Goal object
 func (g *Goal) Update(goalsTucked, goalsReceived int) error {
 	if goalsTucked < 0 || goalsReceived < 0 {
-		return ErrNegative
+		return ErrNegativeGoal
 	}
 	err := g.AppendGoalsReceived(goalsReceived)
 	if err != nil {
@@ -67,13 +67,9 @@ func (g *Goal) Update(goalsTucked, goalsReceived int) error {
 //AppendGoalsTucked ... Append to the GoalsTucked array a new goal.
 func (g *Goal) AppendGoalsTucked(goals int) error {
 	if goals < 0 {
-		return ErrNegative
+		return ErrNegativeGoal
 	}
-	if len(g.GoalsTucked) == DefaultLen {
-		g.GoalsTucked = append(g.GoalsTucked[1:len(g.GoalsTucked)], goals)
-	} else {
-		g.GoalsTucked = append(g.GoalsTucked, goals)
-	}
+	g.GoalsTucked = append(g.GoalsTucked, goals)
 	err := g.CalculateGoalsTuckedAverage()
 	if err != nil {
 		return err
@@ -88,13 +84,9 @@ func (g *Goal) AppendGoalsTucked(goals int) error {
 //AppendGoalsReceived ... Append to the GoalsReceived array a new goal.
 func (g *Goal) AppendGoalsReceived(goals int) error {
 	if goals < 0 {
-		return ErrNegative
+		return ErrNegativeGoal
 	}
-	if len(g.GoalsReceived) == DefaultLen {
-		g.GoalsReceived = append(g.GoalsReceived[1:len(g.GoalsReceived)], goals)
-	} else {
-		g.GoalsReceived = append(g.GoalsReceived, goals)
-	}
+	g.GoalsReceived = append(g.GoalsReceived, goals)
 	err := g.CalculateGoalsReceivedAverage()
 	if err != nil {
 		return err
@@ -108,7 +100,13 @@ func (g *Goal) AppendGoalsReceived(goals int) error {
 
 //CalculateGoalsTuckedAverage ... Calculates the average of the goals tucked
 func (g *Goal) CalculateGoalsTuckedAverage() error {
-	average, err := Average(g.GoalsTucked, false)
+	var average float64
+	var err error
+	if len(g.GoalsTucked) >= DefaultLenGoal {
+		average, err = Average(g.GoalsTucked[len(g.GoalsTucked)-DefaultLenGoal:len(g.GoalsTucked)], false)
+	} else {
+		average, err = Average(g.GoalsTucked, false)
+	}
 	if err != nil {
 		return err
 	}
@@ -118,7 +116,13 @@ func (g *Goal) CalculateGoalsTuckedAverage() error {
 
 //CalculateGoalsReceivedAverage ... Calculates the average of the goals received
 func (g *Goal) CalculateGoalsReceivedAverage() error {
-	average, err := Average(g.GoalsReceived, false)
+	var average float64
+	var err error
+	if len(g.GoalsReceived) >= DefaultLenGoal {
+		average, err = Average(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal:len(g.GoalsReceived)], false)
+	} else {
+		average, err = Average(g.GoalsReceived, false)
+	}
 	if err != nil {
 		return err
 	}
@@ -128,7 +132,13 @@ func (g *Goal) CalculateGoalsReceivedAverage() error {
 
 //CalculateGoalsTuckedMode ... Calculates the mode of the goals tucked
 func (g *Goal) CalculateGoalsTuckedMode() error {
-	mode, err := Mode(g.GoalsTucked...)
+	var mode []int
+	var err error
+	if len(g.GoalsTucked) >= DefaultLenGoal {
+		mode, err = Mode(g.GoalsTucked[len(g.GoalsTucked)-DefaultLenGoal : len(g.GoalsTucked)]...)
+	} else {
+		mode, err = Mode(g.GoalsTucked...)
+	}
 	if err != nil {
 		return err
 	}
@@ -138,7 +148,13 @@ func (g *Goal) CalculateGoalsTuckedMode() error {
 
 //CalculateGoalsReceivedMode ... Calculates the mode of the goals received
 func (g *Goal) CalculateGoalsReceivedMode() error {
-	mode, err := Mode(g.GoalsReceived...)
+	var mode []int
+	var err error
+	if len(g.GoalsReceived) >= DefaultLenGoal {
+		mode, err = Mode(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal : len(g.GoalsReceived)]...)
+	} else {
+		mode, err = Mode(g.GoalsReceived...)
+	}
 	if err != nil {
 		return err
 	}
@@ -149,7 +165,7 @@ func (g *Goal) CalculateGoalsReceivedMode() error {
 //PreviousNGoalsOfAMatch ... Take an object with values of an specific match n previous matchs
 func (g *Goal) PreviousNGoalsOfAMatch(n int) (Goal, error) {
 	if n < 0 {
-		return Goal{}, ErrIndexOutOfRange
+		return Goal{}, ErrIndexOutOfRangeGoal
 	}
 	if n == 0 {
 		n = DefaultPreviousGoals
@@ -158,25 +174,33 @@ func (g *Goal) PreviousNGoalsOfAMatch(n int) (Goal, error) {
 	if diff < 0 {
 		return Goal{}, ErrIndexOutOfGoal
 	}
-	averageTucked, err := Average(g.GoalsTucked[:diff], false)
+	var gt, gr []int
+	if diff+1 >= DefaultLenGoal {
+		gt = g.GoalsTucked[diff+1-DefaultLenGoal : diff+1]
+		gr = g.GoalsReceived[diff+1-DefaultLenGoal : diff+1]
+	} else {
+		gt = g.GoalsTucked[:diff+1]
+		gr = g.GoalsReceived[:diff+1]
+	}
+	averageTucked, err := Average(gt, false)
 	if err != nil {
 		return Goal{}, err
 	}
-	averageReceived, err := Average(g.GoalsReceived[:diff], false)
+	averageReceived, err := Average(gr, false)
 	if err != nil {
 		return Goal{}, err
 	}
-	modeTucked, err := Mode(g.GoalsTucked[:diff]...)
+	modeTucked, err := Mode(gt...)
 	if err != nil {
 		return Goal{}, err
 	}
-	modeReceived, err := Mode(g.GoalsReceived[:diff]...)
+	modeReceived, err := Mode(gr...)
 	if err != nil {
 		return Goal{}, err
 	}
 	return Goal{
-		GoalsTucked:          []int{g.GoalsTucked[diff]},
-		GoalsReceived:        []int{g.GoalsReceived[diff]},
+		GoalsTucked:          g.GoalsTucked[:diff+1],
+		GoalsReceived:        g.GoalsReceived[:diff+1],
 		GoalsTuckedAverage:   averageTucked,
 		GoalsReceivedAverage: averageReceived,
 		GoalsTuckedMode:      modeTucked,
@@ -186,17 +210,17 @@ func (g *Goal) PreviousNGoalsOfAMatch(n int) (Goal, error) {
 
 //CompareOfGoals ... Compare actual goal struct and other passed by param
 func (g *Goal) CompareOfGoals(g2 Goal) bool {
-	return CompareTwoArrs(g.GoalsReceived, g2.GoalsReceived) &&
-		CompareTwoArrs(g.GoalsTucked, g2.GoalsTucked) &&
-		CompareTwoArrs(g.GoalsReceivedMode, g2.GoalsReceivedMode) &&
-		CompareTwoArrs(g.GoalsTuckedMode, g2.GoalsTuckedMode) &&
+	return CompareTwoArrs(g.GoalsReceived, g2.GoalsReceived, false) &&
+		CompareTwoArrs(g.GoalsTucked, g2.GoalsTucked, false) &&
+		CompareTwoArrs(g.GoalsReceivedMode, g2.GoalsReceivedMode, true) &&
+		CompareTwoArrs(g.GoalsTuckedMode, g2.GoalsTuckedMode, true) &&
 		g.GoalsReceivedAverage == g2.GoalsReceivedAverage &&
 		g.GoalsTuckedAverage == g2.GoalsTuckedAverage
 }
 
 //String ... Return a form more readable of the struct goal
 func (g *Goal) String() string {
-	return fmt.Sprintf("%")
+	return fmt.Sprintf("Goals Tucked: %v\nGoals Received: %v\nAverage of goals tucked: %f\nAverage of goals received: %f\nMode of goals tucked: %v\nMode of goals received: %v\n", g.GoalsTucked, g.GoalsReceived, g.GoalsTuckedAverage, g.GoalsReceivedAverage, g.GoalsTuckedMode, g.GoalsReceivedMode)
 }
 
 //Error ... Returns the error of the struct goal

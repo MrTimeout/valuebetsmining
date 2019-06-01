@@ -13,10 +13,8 @@ func TestGoalsFunc(t *testing.T) {
 	for key, value := range rands {
 		goals.Update(value, key)
 	}
-	if len(goals.GoalsReceived) != 10 {
+	if len(goals.GoalsReceived) <= 10 {
 		t.Errorf("Error parsing goals length: %d", len(goals.GoalsReceived))
-	} else {
-		t.Errorf("GOALS: %#v", goals.GoalsReceived)
 	}
 }
 
@@ -28,7 +26,7 @@ func TestPreviousNGoalsOfAMatch(t *testing.T) {
 	}
 	randsLocal, err := RandomArr(0, 10, 10)
 	randsAway, err := RandomArr(0, 10, 10)
-	goalsArr := []Goal{}
+	goalsArr := []Goal{goals}
 	for i := 0; i < len(randsLocal); i++ {
 		err = goals.Update(randsLocal[i], randsAway[i])
 		if err != nil {
@@ -43,8 +41,8 @@ func TestPreviousNGoalsOfAMatch(t *testing.T) {
 			t.Error(err)
 			break
 		}
-		if !goalsPrevious.CompareOfGoals(goalsArr[i-1]) {
-			t.Error("Want->%#v\nGot->%#v\n", goalsArr[i-1], goalsPrevious)
+		if !goalsPrevious.CompareOfGoals(goalsArr[len(goalsArr)-i]) {
+			t.Errorf("Time:%d\nWant->\n%s\nGot->\n%s\n", i, goalsArr[len(goalsArr)-i].String(), goalsPrevious.String())
 			break
 		}
 	}

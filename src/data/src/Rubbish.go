@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math"
 	"math/rand"
+	"sort"
 )
 
 //Pair ... Custom pair of values: key=value
@@ -14,6 +15,13 @@ type Pair struct {
 
 //PairList ... Custom list of Pairs
 type PairList []Pair
+
+var (
+	//ErrMinimalLength ... Error parsing length because is less than or equal to 0
+	ErrMinimalLength = errors.New("Error parsing length because is negative or 0")
+	//ErrNilArr ... Error parsing arr because it is nil or has length og 0
+	ErrNilArr = errors.New("Error parsing arr because it is nil or has len of 0")
+)
 
 //Len ... Returns length og the PairList
 func (p PairList) Len() int { return len(p) }
@@ -250,9 +258,13 @@ func IsASCIICodeArr(runes []rune, min, max int) (bool, error) {
 }
 
 //CompareTwoArrs ... Compare two arrays returning bool value. True if they are equals and false otherwise
-func CompareTwoArrs(arr, arr2 []int) bool {
+func CompareTwoArrs(arr, arr2 []int, sor bool) bool {
 	if len(arr) != len(arr2) {
 		return false
+	}
+	if sor {
+		sort.Ints(arr)
+		sort.Ints(arr2)
 	}
 	index := 0
 	for {
@@ -264,6 +276,36 @@ func CompareTwoArrs(arr, arr2 []int) bool {
 		}
 		index++
 	}
+}
+
+//RandomArrWithValues ... Creates a random arr with values passed by param
+func RandomArrWithValues(length int, values []int) ([]int, error) {
+	if length <= 0 {
+		return []int{}, ErrMinimalLength
+	}
+	if values == nil || len(values) == 0 {
+		return []int{}, ErrNilArr
+	}
+	var arr = []int{}
+	for i := 0; i < length; i++ {
+		arr = append(arr, rand.Intn(length-0)+0)
+	}
+	return arr, nil
+}
+
+//IsAStrangerHere ... Test if there are not other values than the ones inside the helper
+func IsAStrangerHere(target, helper []int) (bool, error) {
+	if target == nil || helper == nil || len(target) == 0 || len(helper) == 0 {
+		return false, ErrNilArr
+	}
+	for i := 0; i < len(target); i++ {
+		if b, err := AmIHere(helper, target[i]); err != nil {
+			return false, err
+		} else if !b {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 /*
