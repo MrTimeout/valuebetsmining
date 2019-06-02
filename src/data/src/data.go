@@ -1,7 +1,6 @@
 package data
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -26,6 +25,23 @@ type Country struct {
 	Keys []string `json:"keys"`
 }
 
+//ConfigError ... Struct that handles error of struct Config
+type ConfigError struct {
+	ErrorString string
+}
+
+//CountryError ... Struct that handles errors of struct country
+type CountryError struct {
+	ErrorString string
+}
+
+var (
+	//ErrNotExistCountry ... Error that handles when dont exist a country
+	ErrNotExistCountry = &CountryError{ErrorString: "Dont exist this country"}
+	//ErrParsingCountry ... Error that handles an incorrect parsing of a country
+	ErrParsingCountry = &CountryError{ErrorString: "Error parsing Country"}
+)
+
 //GetYears ... Returns years [from, to] in an array of strings in the format: from(from+1),...
 func (y Year) GetYears() []string {
 	res := []string{}
@@ -41,9 +57,9 @@ func (y Year) GetYears() []string {
 }
 
 //ExistsCountry ... Determinates if exists a specific country
-func (c Config) ExistsCountry(country string) (bool, error) {
+func (c Config) ExistsCountry(country string) error {
 	if strings.Trim(country, " ") == "" || len(strings.Trim(country, " ")) == 0 {
-		return false, errors.New("Error parsing country")
+		return ErrParsingCountry
 	}
 	index := 0
 	for {
@@ -51,17 +67,17 @@ func (c Config) ExistsCountry(country string) (bool, error) {
 			break
 		}
 		if match, _ := regexp.MatchString("^"+country+"$", c.Endpoint[index].Name); match {
-			return true, nil
+			return nil
 		}
 		index++
 	}
-	return false, nil
+	return ErrNotExistCountry
 }
 
 //ExistsDivision ... Determinates if exists a specific division
-func (c Config) ExistsDivision(division string) (bool, error) {
+func (c Config) ExistsDivision(division string) error {
 	if strings.Trim(division, " ") == "" || len(strings.Trim(division, " ")) == 0 {
-		return false, errors.New("Error parsing division")
+		return ErrParsingDivision
 	}
 	index := 0
 	for {
@@ -70,10 +86,20 @@ func (c Config) ExistsDivision(division string) (bool, error) {
 		}
 		for _, value := range c.Endpoint[index].Keys {
 			if match, _ := regexp.MatchString("^"+division+"$", value); match {
-				return true, nil
+				return nil
 			}
 		}
 		index++
 	}
-	return false, nil
+	return ErrNotExitDivision
+}
+
+//Error ... Func that return a string representing an error of country
+func (cr *ConfigError) Error() string {
+	return cr.ErrorString
+}
+
+//Error ... Func that return a string representing an error of country
+func (cr *CountryError) Error() string {
+	return cr.ErrorString
 }

@@ -1,7 +1,6 @@
 package data
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,6 +10,11 @@ import (
 //Connection ... Struct used to connect to an url and download it
 type Connection struct {
 	Config
+}
+
+//ConnectionError ... Struct used to handle errors of struct connection
+type ConnectionError struct {
+	ErrorString string
 }
 
 //Get ... Download the content of an endpoint
@@ -31,15 +35,11 @@ func (c Connection) Get() (string, error) {
 
 //GetAllByCountryDiv ... Download all the content of all years of a country/div
 func (c Connection) GetAllByCountryDiv(country, div string) ([]string, error) {
-	if resul, err := c.ExistsCountry(country); err != nil {
+	if err := c.ExistsCountry(country); err != nil {
 		return []string{}, err
-	} else if !resul {
-		return []string{}, errors.New("Errors getting country")
 	}
-	if resul, err := c.ExistsDivision(div); err != nil {
+	if err := c.ExistsDivision(div); err != nil {
 		return []string{}, err
-	} else if !resul {
-		return []string{}, errors.New("Errors getting division")
 	}
 	result := []string{}
 	for _, value := range c.Year.GetYears() {
@@ -79,30 +79,22 @@ func (c Connection) WriteWithParams(year Year, country, div string) (string, err
 
 //RequestByCountryDivYear ... Download all the content of each year of a country/div and write it in a file with the name {{.Country}}_{{.Division}}.csv
 func (c Connection) RequestByCountryDivYear(year Year, country, div string) (string, error) {
-	if resul, err := c.ExistsCountry(country); err != nil {
+	if err := c.ExistsCountry(country); err != nil {
 		return "", err
-	} else if !resul {
-		return "", errors.New("Errors getting country")
 	}
-	if resul, err := c.ExistsDivision(div); err != nil {
+	if err := c.ExistsDivision(div); err != nil {
 		return "", err
-	} else if !resul {
-		return "", errors.New("Errors getting division")
 	}
 	return c.WriteWithParams(year, country, div)
 }
 
 //WriteByCountryDivYears ... Write in csv files by a range of years, country and division
 func (c Connection) WriteByCountryDivYears(year Year, country, div string) error {
-	if resul, err := c.ExistsCountry(country); err != nil {
+	if err := c.ExistsCountry(country); err != nil {
 		return err
-	} else if !resul {
-		return errors.New("Errors getting country")
 	}
-	if resul, err := c.ExistsDivision(div); err != nil {
+	if err := c.ExistsDivision(div); err != nil {
 		return err
-	} else if !resul {
-		return errors.New("Errors getting division")
 	}
 	err := os.MkdirAll(fmt.Sprintf("./leagues/%s", country), 0777)
 	if err != nil {
@@ -119,15 +111,11 @@ func (c Connection) WriteByCountryDivYears(year Year, country, div string) error
 
 //WriteAllByCountryDiv ... Download all the content of all years of a country/div and write it in a file with the name {{.Country}}_{{.Division}}.csv
 func (c Connection) WriteAllByCountryDiv(country, div string) (string, error) {
-	if resul, err := c.ExistsCountry(country); err != nil {
+	if err := c.ExistsCountry(country); err != nil {
 		return "", err
-	} else if !resul {
-		return "", errors.New("Errors getting country")
 	}
-	if resul, err := c.ExistsDivision(div); err != nil {
+	if err := c.ExistsDivision(div); err != nil {
 		return "", err
-	} else if !resul {
-		return "", errors.New("Errors getting division")
 	}
 	i := 0
 	for _, value := range c.Year.GetYears() {
@@ -161,4 +149,9 @@ func (c Connection) WriteAllByCountryDiv(country, div string) (string, error) {
 		i++
 	}
 	return fmt.Sprintf("./leagues/%s_%s_%d%d", country, div, c.Year.From, c.Year.To), nil
+}
+
+//Error ... Returns an error of the struct connection
+func (cr *ConnectionError) Error() string {
+	return cr.ErrorString
 }

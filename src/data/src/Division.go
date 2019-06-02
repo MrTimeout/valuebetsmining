@@ -3,7 +3,6 @@ package data
 import (
 	"encoding/csv"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -21,10 +20,22 @@ type Division struct {
 	LengthMatch int             `json:"Amount of matches"`
 }
 
+//DivisionError ... Struct that handles errors of struct Division
+type DivisionError struct {
+	ErrorString string
+}
+
+var (
+	//ErrNotExitDivision ... Error that handles when dont exist a division
+	ErrNotExitDivision = &DivisionError{ErrorString: "Dont exist this division"}
+	//ErrParsingDivision ... Error that handles an incorrect parsing of a division
+	ErrParsingDivision = &DivisionError{ErrorString: "Error parsing division"}
+)
+
 //NewDivision ... Creates a new object that represent a division
 func NewDivision(name string) (Division, error) {
 	if strings.Trim(name, " ") == "" || len(strings.Trim(name, " ")) == 0 {
-		return Division{}, errors.New("Error parsing name argument")
+		return Division{}, ErrParsingDivision
 	}
 	return Division{
 		Name:        name,
@@ -138,4 +149,9 @@ func (d *Division) ParseEachFile(year Year, path string) error {
 //UpdateLengthMatch ... Update the length of the match inside the struct
 func (d Division) UpdateLengthMatch() {
 	d.LengthMatch = len(d.Matchs)
+}
+
+//Error ... Func that returns a string representing an error the struct Division
+func (dr *DivisionError) Error() string {
+	return dr.ErrorString
 }
