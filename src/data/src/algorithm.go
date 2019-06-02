@@ -21,7 +21,10 @@ func ProcessData() error {
 			if err != nil {
 				return err
 			}
-			break
+			err = div.ParseFilesToCSV(connection.Year, country.Name, key)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

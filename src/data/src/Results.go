@@ -251,6 +251,12 @@ func (r *Result) String() string {
 	return fmt.Sprintf("Matchs:\n\tWon: %d\n\tTied: %d\n\tLost: %d \nStreack losing: %d\nStreack no losing: %d\nStreack tieding: %d\nStreack no winning: %d\nStreack winning: %d\n", mapWTL["won"], mapWTL["tied"], mapWTL["lost"], r.StreackLosing, r.StreackNoLosing, r.StreackTieding, r.StreackNoWinning, r.StreackWinning)
 }
 
+//StringCSV ... Return a string of attr of struct result
+func (r *Result) StringCSV() string {
+	mapWTL := r.WinTieLose()
+	return fmt.Sprintf("%d,%d,%d", mapWTL["won"], mapWTL["tied"], mapWTL["lost"])
+}
+
 //Error ... Return error of struct Result
 func (re ResultError) Error() string {
 	return re.ErrorString

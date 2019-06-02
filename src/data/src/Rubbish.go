@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"sort"
+	"strings"
 )
 
 //Pair ... Custom pair of values: key=value
@@ -302,6 +303,19 @@ func IsAStrangerHere(target, helper []int) (bool, error) {
 		if b, err := AmIHere(helper, target[i]); err != nil {
 			return false, err
 		} else if !b {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+//AnyoneIsEmpty ... Returns a bool value! false in case of != "" an true otherwise
+func AnyoneIsEmpty(arr []string) (bool, error) {
+	if arr == nil || len(arr) == 0 {
+		return false, ErrNilArr
+	}
+	for i := 0; i < len(arr); i++ {
+		if strings.Trim(arr[i], " ") == "" || len(strings.Trim(arr[i], " ")) == 0 {
 			return true, nil
 		}
 	}

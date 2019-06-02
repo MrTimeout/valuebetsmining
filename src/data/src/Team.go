@@ -7,6 +7,11 @@ type Team struct {
 	Results Result `json:"results"`
 }
 
+const (
+	//DefaultPreviousTeam ... Default previous team
+	DefaultPreviousTeam = 1
+)
+
 //NewTeam ... Creates a new instance of Team
 func NewTeam(name string, goalsTucked, goalsReceived int) (Team, error) {
 	goal, err := NewGoal(goalsTucked, goalsReceived)
@@ -19,6 +24,29 @@ func NewTeam(name string, goalsTucked, goalsReceived int) (Team, error) {
 	}
 	return Team{
 		Name:    name,
+		Goals:   goal,
+		Results: results,
+	}, nil
+}
+
+//PreviousNTeamOfAMatch ... Creates a instance of n prebious matchs
+func (t *Team) PreviousNTeamOfAMatch(n int) (Team, error) {
+	if n < 0 {
+		return Team{}, ErrIndexOutOfRangeResult
+	}
+	if n == 0 {
+		n = DefaultPreviousTeam
+	}
+	goal, err := t.Goals.PreviousNGoalsOfAMatch(n)
+	if err != nil {
+		return Team{}, err
+	}
+	results, err := t.Results.PreviousNResultsOfAMatch(n)
+	if err != nil {
+		return Team{}, err
+	}
+	return Team{
+		Name:    t.Name,
 		Goals:   goal,
 		Results: results,
 	}, nil

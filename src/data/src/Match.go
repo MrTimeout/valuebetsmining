@@ -1,5 +1,7 @@
 package data
 
+import "fmt"
+
 //Match ... This is where we are going to handle match between local team and away team
 type Match struct {
 	Number    int    `json:"number"`
@@ -110,4 +112,112 @@ func NewMatchReusingBoth(number, goalsTucked, goalsReceived, from, to int, date,
 		TeamLocal: teamLocal,
 		TeamAway:  teamAway,
 	}, nil
+}
+
+//StringCSV ... Return a string of data in format csv
+func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, error) {
+	var previousLocal, previousAway Team
+	var err error
+	allNil := func(count int, line []string) string {
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+			count,
+			line[0],
+			line[1],
+			line[2],
+			line[3],
+			line[4],
+			line[5],
+			line[6],
+			"nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil")
+	}
+	localNil := func(count int, line []string, previousAway Team) string {
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%f,%s,%f",
+			count,
+			line[0],
+			line[1],
+			line[2],
+			line[3],
+			line[4],
+			line[5],
+			line[6],
+			"nil",
+			previousAway.Results.StringCSV(),
+			"nil",
+			previousAway.Results.StreackWinning,
+			"nil",
+			previousAway.Results.StreackNoLosing,
+			"nil",
+			previousAway.Goals.GoalsTuckedAverage,
+			"nil",
+			previousAway.Goals.GoalsReceivedAverage)
+	}
+	awayNil := func(count int, line []string, previousLocal Team) string {
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%f,%s,%f,%s",
+			count,
+			line[0],
+			line[1],
+			line[2],
+			line[3],
+			line[4],
+			line[5],
+			line[6],
+			previousLocal.Results.StringCSV(),
+			"nil",
+			previousLocal.Results.StreackWinning,
+			"nil",
+			previousLocal.Results.StreackNoLosing,
+			"nil",
+			previousLocal.Goals.GoalsTuckedAverage,
+			"nil",
+			previousLocal.Goals.GoalsReceivedAverage,
+			"nil")
+	}
+	if !tLocal && !tAway {
+		return allNil(count, line), nil
+	}
+	if tLocal && !tAway {
+		previousLocal, err = m.TeamAway.PreviousNTeamOfAMatch(1)
+		if err != nil {
+			return "", err
+		}
+		return awayNil(count, line, previousLocal), nil
+	}
+
+	if tAway && !tLocal {
+		previousAway, err = m.TeamAway.PreviousNTeamOfAMatch(1)
+		if err != nil {
+			return "", err
+		}
+		return localNil(count, line, previousAway), nil
+	}
+
+	previousLocal, err = m.TeamAway.PreviousNTeamOfAMatch(1)
+	if err != nil {
+		return "", err
+	}
+
+	previousAway, err = m.TeamAway.PreviousNTeamOfAMatch(1)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%d,%d,%d,%f,%f,%f,%f",
+		count,
+		line[0],
+		line[1],
+		line[2],
+		line[3],
+		line[4],
+		line[5],
+		line[6],
+		previousLocal.Results.StringCSV(),
+		previousAway.Results.StringCSV(),
+		previousLocal.Results.StreackWinning,
+		previousAway.Results.StreackWinning,
+		previousLocal.Results.StreackNoLosing,
+		previousAway.Results.StreackNoLosing,
+		previousLocal.Goals.GoalsTuckedAverage,
+		previousAway.Goals.GoalsTuckedAverage,
+		previousLocal.Goals.GoalsReceivedAverage,
+		previousAway.Goals.GoalsReceivedAverage), nil
 }
