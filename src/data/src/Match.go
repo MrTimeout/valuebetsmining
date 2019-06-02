@@ -131,7 +131,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			"nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil")
 	}
 	localNil := func(count int, line []string, previousAway Team) string {
-		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%f,%s,%f",
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%.2f,%s,%.2f",
 			count,
 			line[0],
 			line[1],
@@ -152,7 +152,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			previousAway.Goals.GoalsReceivedAverage)
 	}
 	awayNil := func(count int, line []string, previousLocal Team) string {
-		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%f,%s,%f,%s",
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%.2f,%s,%.2f,%s",
 			count,
 			line[0],
 			line[1],
@@ -201,7 +201,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 		return "", err
 	}
 
-	return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%d,%d,%d,%f,%f,%f,%f",
+	return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f",
 		count,
 		line[0],
 		line[1],

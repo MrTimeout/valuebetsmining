@@ -254,8 +254,8 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 				}
 				str = append(str, strings.Split(target, ","))
 			}
-			count++
 		}
+		count++
 	}
 	return str, nil
 }

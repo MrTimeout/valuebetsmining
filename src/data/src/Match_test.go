@@ -78,3 +78,12 @@ func TestNewMatchsLocal(t *testing.T) {
 		t.Errorf("Want: %d\n Got: %d\n", length, len(matchs))
 	}
 }
+
+//TestStringCSV ... Testing String CSV
+func TestStringCSV(t *testing.T) {
+	match, err := NewMatch(1, 1, 2, 10, 11, "date", "A", "local", "away")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Error(match.StringCSV(1, []string{"1", "2", "3", "4", "5", "6", "7"}, false, false))
+}
