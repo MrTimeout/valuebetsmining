@@ -109,6 +109,18 @@ func TestAmIHere(t *testing.T) {
 	}
 }
 
+func TestHowManyTimes(t *testing.T) {
+	ints, want := []int{1, 1, 1, 1, 0, -1, 1, 1, 0}, []int{0, 1}
+	expected := 3
+	got, err := HowManyTimes(ints, true, want...)
+	if err != nil {
+		t.Error(err)
+	}
+	if got != expected {
+		t.Errorf("\nCase:%d\nWant:\n\t%d\nGot:\n\t%d", 1, expected, got)
+	}
+}
+
 //TestRadomLetter ... Random letter testing that are in a range of [97,122]
 func TestRadomLetter(t *testing.T) {
 	i, cases := 0, 100

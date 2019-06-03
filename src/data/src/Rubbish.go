@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math"
 	"math/rand"
+	"runtime"
 	"sort"
 	"strings"
 )
@@ -129,26 +130,40 @@ func WhoIsBigger(a, b int) int {
 }
 
 //HowManyTimes ... Returns how many times a value or an array of values are inside an amount of data
-func HowManyTimes(data []int, values ...int) (int, error) {
+func HowManyTimes(data []int, final bool, values ...int) (int, error) {
 	if len(data) == 0 || len(values) == 0 {
 		return -1, errors.New("Error parsing array of integers")
 	}
 	hmt := 0
-	for index := 0; index < len(data); index++ {
-		b, err := AmIHere(values, data[index])
-		if err != nil {
-			return -1, err
+	if final {
+		for index := len(data) - 1; index >= 0; index-- {
+			b, err := AmIHere(values, data[index])
+			if err != nil {
+				return -1, err
+			}
+			if !b {
+				break
+			} else {
+				hmt++
+			}
 		}
-		if !b {
-			break
-		} else {
-			hmt++
+	} else {
+		for index := 0; index < len(data); index++ {
+			b, err := AmIHere(values, data[index])
+			if err != nil {
+				return -1, err
+			}
+			if !b {
+				break
+			} else {
+				hmt++
+			}
 		}
 	}
 	return hmt, nil
 }
 
-//AmIHere ... Returns bool is a element exists in an array
+//AmIHere ... Returns bool if a element exists in an array
 func AmIHere(data []int, value int) (bool, error) {
 	if len(data) == 0 {
 		return false, errors.New("Error parsing array of integers")
@@ -320,6 +335,12 @@ func AnyoneIsEmpty(arr []string) (bool, error) {
 		}
 	}
 	return false, nil
+}
+
+//FuncName ... Returns name of the function that is executed
+func FuncName() string {
+	pc, _, _, _ := runtime.Caller(1)
+	return strings.Split(runtime.FuncForPC(pc).Name(), ".")[len(strings.Split(runtime.FuncForPC(pc).Name(), "."))-1]
 }
 
 /*

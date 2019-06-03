@@ -1,6 +1,19 @@
 package data
 
-import "testing"
+import (
+	"encoding/csv"
+	"fmt"
+	"os"
+	"strings"
+	"testing"
+	"time"
+)
+
+const (
+	DefaultDirTestResults  = "test/Results"
+	DefaultNameTestResults = "Testing"
+	DefaultExtensionCSV    = ".csv"
+)
 
 func TestResultsFunc(t *testing.T) {
 	results, err := NewResults(5, 2)
@@ -16,6 +29,70 @@ func TestResultsFunc(t *testing.T) {
 	} else {
 		t.Errorf("MATCHS: %#v", results.Matchs)
 	}
+}
+
+func TestNewResults(t *testing.T) {
+	r, err := NewResults(0, 1)
+	if err != nil {
+		t.Error(err)
+	}
+	randGoalsLocal, err := RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	randsGoalsAway, err := RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	data := make([][]string, 0, 100)
+	for i := 0; i < len(randGoalsLocal); i++ {
+		r.Update(randGoalsLocal[i], randsGoalsAway[i])
+		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s", i, randGoalsLocal[i], randsGoalsAway[i], r.StringCSV(DefaultLenResult)), ","))
+	}
+	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	if err != nil {
+		t.Error(err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	writer.Write([]string{"Index", "goals local", "goals away", "local winnings", "local tiedings", "local losings"})
+
+	writer.WriteAll(data)
+}
+
+func TestNewResultsStringCSVAll(t *testing.T) {
+	r, err := NewResults(0, 1)
+	if err != nil {
+		t.Error(err)
+	}
+	randGoalsLocal, err := RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	randsGoalsAway, err := RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	data := make([][]string, 0, 100)
+	for i := 0; i < len(randGoalsLocal); i++ {
+		r.Update(randGoalsLocal[i], randsGoalsAway[i])
+		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s,%d,%d", i, randGoalsLocal[i], randsGoalsAway[i], r.StringCSV(DefaultLenResult), r.StreackWinning, r.StreackNoLosing), ","))
+	}
+	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	if err != nil {
+		t.Error(err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	writer.Write([]string{"Index", "goals local", "goals away", "local winnings", "local tiedings", "local losings", "local winning streack", "local no losing streack"})
+
+	writer.WriteAll(data)
 }
 
 //TestPreviousNResultsOfAMatch ... Testing function PreviousNResultsOfAMatch to visualize if it returns correct values
@@ -46,4 +123,8 @@ func TestPreviousNResultsOfAMatch(t *testing.T) {
 			break
 		}
 	}
+}
+
+func TestCalsFeatures(t *testing.T) {
+
 }

@@ -115,9 +115,9 @@ func (r *Result) CalStreackWinning() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], 1)
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 1)
 	} else {
-		res, err = HowManyTimes(r.Matchs, 1)
+		res, err = HowManyTimes(r.Matchs, true, 1)
 	}
 	if err != nil {
 		return err
@@ -131,9 +131,9 @@ func (r *Result) CalStreackNoLosing() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], 1, 0)
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 1, 0)
 	} else {
-		res, err = HowManyTimes(r.Matchs, 1, 0)
+		res, err = HowManyTimes(r.Matchs, true, 1, 0)
 	}
 	if err != nil {
 		return err
@@ -147,9 +147,9 @@ func (r *Result) CalStreackTieding() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], 0)
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 0)
 	} else {
-		res, err = HowManyTimes(r.Matchs, 0)
+		res, err = HowManyTimes(r.Matchs, true, 0)
 	}
 	if err != nil {
 		return err
@@ -163,9 +163,9 @@ func (r *Result) CalStreackNoWinning() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], -1, 0)
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, -1, 0)
 	} else {
-		res, err = HowManyTimes(r.Matchs, -1, 0)
+		res, err = HowManyTimes(r.Matchs, true, -1, 0)
 	}
 	if err != nil {
 		return err
@@ -179,9 +179,9 @@ func (r *Result) CalStreackLosing() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], -1)
+		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, -1)
 	} else {
-		res, err = HowManyTimes(r.Matchs, -1)
+		res, err = HowManyTimes(r.Matchs, true, -1)
 	}
 	if err != nil {
 		return err
@@ -191,9 +191,13 @@ func (r *Result) CalStreackLosing() error {
 }
 
 //WinTieLose ... Returns a map with won, tieded and lost matchs
-func (r *Result) WinTieLose() map[string]int {
+func (r *Result) WinTieLose(maxIndex int) map[string]int {
+	if maxIndex > len(r.Matchs) {
+		maxIndex = len(r.Matchs)
+	}
+	slices := r.Matchs[len(r.Matchs)-maxIndex:]
 	mapWTL := make(map[string]int)
-	for _, v := range r.Matchs {
+	for _, v := range slices {
 		switch v {
 		case -1:
 			mapWTL["lost"] = mapWTL["lost"] + 1
@@ -247,13 +251,13 @@ func (r *Result) CompareOfResults(r2 Result) bool {
 }
 
 func (r *Result) String() string {
-	mapWTL := r.WinTieLose()
+	mapWTL := r.WinTieLose(DefaultLenResult)
 	return fmt.Sprintf("Matchs:\n\tWon: %d\n\tTied: %d\n\tLost: %d \nStreack losing: %d\nStreack no losing: %d\nStreack tieding: %d\nStreack no winning: %d\nStreack winning: %d\n", mapWTL["won"], mapWTL["tied"], mapWTL["lost"], r.StreackLosing, r.StreackNoLosing, r.StreackTieding, r.StreackNoWinning, r.StreackWinning)
 }
 
 //StringCSV ... Return a string of attr of struct result
-func (r *Result) StringCSV() string {
-	mapWTL := r.WinTieLose()
+func (r *Result) StringCSV(maxIndex int) string {
+	mapWTL := r.WinTieLose(maxIndex)
 	return fmt.Sprintf("%d,%d,%d", mapWTL["won"], mapWTL["tied"], mapWTL["lost"])
 }
 
