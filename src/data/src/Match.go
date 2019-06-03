@@ -16,7 +16,19 @@ type Match struct {
 
 const (
 	//HeaderLine ... First line of each csv file created
-	HeaderLine = ""
+	HeaderLine = `Index,
+				  Division,
+				  Date,
+				  LocalTeam,AwayTeam,
+				  LocalGoals,AwayGoals,
+				  Last10WinningLocalMatchs,Last10TiedingLocalMatchs,Last10LosingLocalMatchs,
+				  Last10WinningAwayMatchs,Last10TiedingAwayMatchs,Last10LosingAwayMatchs,
+				  Last10StreackWinningLocal,Last10StreackNoLosingLocal,
+				  Last10StreackWinningAway,Last10StreackNoLosingAway,
+				  Last10AverageTuckedGoalsLocal,Last10AverageReceivedGoalsLocal,
+				  Last10AverageTuckedGoalsAway,Last10AverageReceivedGoalsAway`
+	//DefaultNil ... Used to replace nil in programming
+	DefaultNil = "-1"
 )
 
 //NewMatch ... Creates a new instance of match struct to handle each line of each csv
@@ -124,7 +136,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 	var previousLocal, previousAway Team
 	var err error
 	allNil := func(count int, line []string) string {
-		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
 			count,
 			line[0],
 			line[1],
@@ -133,7 +145,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			line[4],
 			line[5],
 			line[6],
-			"nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil")
+			DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil)
 	}
 	localNil := func(count int, line []string, previousAway Team) string {
 		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%.2f,%s,%.2f",
@@ -145,15 +157,15 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			line[4],
 			line[5],
 			line[6],
-			"nil",
+			DefaultNil,
 			previousAway.Results.StringCSV(DefaultLenResult),
-			"nil",
+			DefaultNil,
 			previousAway.Results.StreackWinning,
-			"nil",
+			DefaultNil,
 			previousAway.Results.StreackNoLosing,
-			"nil",
+			DefaultNil,
 			previousAway.Goals.GoalsTuckedAverage,
-			"nil",
+			DefaultNil,
 			previousAway.Goals.GoalsReceivedAverage)
 	}
 	awayNil := func(count int, line []string, previousLocal Team) string {
@@ -167,21 +179,21 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			line[5],
 			line[6],
 			previousLocal.Results.StringCSV(DefaultLenResult),
-			"nil",
+			DefaultNil,
 			previousLocal.Results.StreackWinning,
-			"nil",
+			DefaultNil,
 			previousLocal.Results.StreackNoLosing,
-			"nil",
+			DefaultNil,
 			previousLocal.Goals.GoalsTuckedAverage,
-			"nil",
+			DefaultNil,
 			previousLocal.Goals.GoalsReceivedAverage,
-			"nil")
+			DefaultNil)
 	}
 	if !tLocal && !tAway {
 		return allNil(count, line), nil
 	}
 	if tLocal && !tAway {
-		previousLocal, err = m.TeamAway.PreviousNTeamOfAMatch(1)
+		previousLocal, err = m.TeamLocal.PreviousNTeamOfAMatch(1)
 		if err != nil {
 			return "", err
 		}
@@ -196,7 +208,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 		return localNil(count, line, previousAway), nil
 	}
 
-	previousLocal, err = m.TeamAway.PreviousNTeamOfAMatch(1)
+	previousLocal, err = m.TeamLocal.PreviousNTeamOfAMatch(1)
 	if err != nil {
 		return "", err
 	}
