@@ -1,7 +1,17 @@
 package data
 
 import (
+	"encoding/csv"
+	"fmt"
+	"os"
+	"strings"
 	"testing"
+	"time"
+)
+
+const (
+	DefaultDirTestGoals  = "test/Goals"
+	DefaultNameTestGoals = "Testing"
 )
 
 func TestGoalsFunc(t *testing.T) {
@@ -46,4 +56,36 @@ func TestPreviousNGoalsOfAMatch(t *testing.T) {
 			break
 		}
 	}
+}
+
+func TestNewGoals(t *testing.T) {
+	g, err := NewGoal(0, 1)
+	if err != nil {
+		t.Error(err)
+	}
+	randGoalsLocal, err := RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	randsGoalsAway, err := RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	data := make([][]string, 0, 100)
+	for i := 0; i < len(randGoalsLocal); i++ {
+		g.Update(randGoalsLocal[i], randsGoalsAway[i])
+		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s", i, randGoalsLocal[i], randsGoalsAway[i], g.StringCSV()), ","))
+	}
+	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestGoals, DefaultNameTestGoals, FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	if err != nil {
+		t.Error(err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	writer.Write([]string{"Index", "goals local", "goals away", "Average tucked goals local", "average received goals local"})
+
+	writer.WriteAll(data)
 }

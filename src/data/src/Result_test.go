@@ -124,7 +124,3 @@ func TestPreviousNResultsOfAMatch(t *testing.T) {
 		}
 	}
 }
-
-func TestCalsFeatures(t *testing.T) {
-
-}

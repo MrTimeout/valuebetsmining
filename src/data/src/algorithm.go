@@ -9,18 +9,18 @@ func ProcessData() error {
 	connection := &Connection{config}
 	for _, country := range connection.Endpoint {
 		for _, key := range country.Keys {
-			err := connection.WriteByCountryDivYears(connection.Year, country.Name, key)
+			/*err := connection.WriteByCountryDivYears(connection.Year, country.Name, key)
 			if err != nil {
 				return err
-			}
+			}*/
 			div, err := NewDivision(country.Name)
 			if err != nil {
 				return err
 			}
-			/*err = div.ParseFiles(connection.Year, country.Name, key)
+			err = div.ParseFiles(connection.Year, country.Name, key)
 			if err != nil {
 				return err
-			}*/
+			}
 			err = div.ParseFilesToCSV(connection.Year, country.Name, key)
 			if err != nil {
 				return err

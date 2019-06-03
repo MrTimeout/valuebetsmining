@@ -119,7 +119,7 @@ func (g *Goal) CalculateGoalsReceivedAverage() error {
 	var average float64
 	var err error
 	if len(g.GoalsReceived) >= DefaultLenGoal {
-		average, err = Average(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal:len(g.GoalsReceived)], false)
+		average, err = Average(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal:], false)
 	} else {
 		average, err = Average(g.GoalsReceived, false)
 	}
@@ -221,6 +221,11 @@ func (g *Goal) CompareOfGoals(g2 Goal) bool {
 //String ... Return a form more readable of the struct goal
 func (g *Goal) String() string {
 	return fmt.Sprintf("Goals Tucked: %v\nGoals Received: %v\nAverage of goals tucked: %f\nAverage of goals received: %f\nMode of goals tucked: %v\nMode of goals received: %v\n", g.GoalsTucked, g.GoalsReceived, g.GoalsTuckedAverage, g.GoalsReceivedAverage, g.GoalsTuckedMode, g.GoalsReceivedMode)
+}
+
+//StringCSV ... Return a string of attr of struct goal
+func (g *Goal) StringCSV() string {
+	return fmt.Sprintf("%.2f,%.2f", g.GoalsTuckedAverage, g.GoalsReceivedAverage)
 }
 
 //Error ... Returns the error of the struct goal

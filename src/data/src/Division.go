@@ -81,6 +81,7 @@ func (d *Division) ParseEachFile(year Year, path string) error {
 	if err != nil {
 		return err
 	}
+	defer csvFile.Close()
 	reader := csv.NewReader(csvFile)
 	count := 1
 	reader.Read() //First line
@@ -153,7 +154,9 @@ func (d *Division) ParseFilesToCSV(year Year, country, div string) error {
 	if err != nil {
 		return err
 	}
+	defer fileCSV.Close()
 	writer := csv.NewWriter(fileCSV)
+	defer writer.Flush()
 	for i := year.From; i < year.To; i++ {
 		strTemp, err := d.ParseEachFileToCSV(Year{From: i, To: i + 1}, fmt.Sprintf("%s%s/%s_%d%d", DirMaster, country, div, i, i+1))
 		if err != nil {
@@ -173,6 +176,7 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 	if err != nil {
 		return nil, err
 	}
+	defer csvFile.Close()
 	reader := csv.NewReader(csvFile)
 	count := 1
 	reader.Read() //First line

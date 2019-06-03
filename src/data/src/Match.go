@@ -14,6 +14,11 @@ type Match struct {
 	TeamAway  Team   `json:"away team"`
 }
 
+const (
+	//HeaderLine ... First line of each csv file created
+	HeaderLine = ""
+)
+
 //NewMatch ... Creates a new instance of match struct to handle each line of each csv
 func NewMatch(number, goalsTucked, goalsReceived, from, to int, date, result, teamLocal, teamAway string) (Match, error) {
 	local, err := NewTeam(teamLocal, goalsTucked, goalsReceived)
