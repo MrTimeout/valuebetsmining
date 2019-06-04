@@ -1,4 +1,4 @@
-package data
+package main
 
 import (
 	"encoding/csv"
@@ -157,6 +157,7 @@ func (d *Division) ParseFilesToCSV(year Year, country, div string) error {
 	defer fileCSV.Close()
 	writer := csv.NewWriter(fileCSV)
 	defer writer.Flush()
+	writer.Write(strings.Split(HeaderLine, ","))
 	for i := year.From; i < year.To; i++ {
 		strTemp, err := d.ParseEachFileToCSV(Year{From: i, To: i + 1}, fmt.Sprintf("%s%s/%s_%d%d", DirMaster, country, div, i, i+1))
 		if err != nil {

@@ -1,4 +1,4 @@
-package data
+package main
 
 //Team ... This is where we store information about each team
 type Team struct {

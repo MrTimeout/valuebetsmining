@@ -5,18 +5,27 @@ ARG CODE_VERSION
 RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of golang"]
 
 WORKDIR $GOPATH/src
-COPY ./src ./
+COPY src ./
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o data .
+RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .
 
-FROM alpine:${CODE_VERSION}
-ARG CODE_VERSION
+EXPOSE 8080
 
-RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of alpine"]
+CMD ["./app"]
 
-RUN apk --no-cache add ca-certificates
+#FROM alpine:${CODE_VERSION}
+#ARG CODE_VERSION
 
-WORKDIR /my
-COPY --from=golang /go/src/ .
+#RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of alpine"]
 
-CMD ["./data"]
+#RUN apk --no-cache add ca-certificates
+
+#WORKDIR /my
+#COPY --from=golang /go/src/ .
+
+#RUN ["/bin/sh", "-c", "ls -al"]
+#RUN ["/bin/sh", "-c", "chmod +x app"]
+
+#EXPOSE 8080
+
+#CMD ["/bin/sh", "-c", "./app"]
