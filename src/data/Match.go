@@ -16,7 +16,7 @@ type Match struct {
 
 const (
 	//HeaderLine ... First line of each csv file created
-	HeaderLine = "Index,Division,Date,LocalTeam,AwayTeam,LocalGoals,AwayGoals,Last10WinningLocalMatchs,Last10TiedingLocalMatchs,Last10LosingLocalMatchs,Last10WinningAwayMatchs,Last10TiedingAwayMatchs,Last10LosingAwayMatchs,Last10StreackWinningLocal,Last10StreackNoLosingLocal,Last10StreackWinningAway,Last10StreackNoLosingAway,Last10AverageTuckedGoalsLocal,Last10AverageReceivedGoalsLocal,Last10AverageTuckedGoalsAway,Last10AverageReceivedGoalsAway"
+	HeaderLine = "Index,Division,Date,LocalTeam,AwayTeam,LocalGoals,AwayGoals,Result,Last10WinningLocalMatchs,Last10TiedingLocalMatchs,Last10LosingLocalMatchs,Last10WinningAwayMatchs,Last10TiedingAwayMatchs,Last10LosingAwayMatchs,Last10StreackWinningLocal,Last10StreackNoLosingLocal,Last10StreackWinningAway,Last10StreackNoLosingAway,Last10AverageTuckedGoalsLocal,Last10AverageReceivedGoalsLocal,Last10AverageTuckedGoalsAway,Last10AverageReceivedGoalsAway"
 	//DefaultNil ... Used to replace nil in programming
 	DefaultNil = "-1"
 )
