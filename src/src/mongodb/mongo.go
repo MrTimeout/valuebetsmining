@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -84,7 +86,8 @@ func (d *DriverMongo) GetAllTeamName(codiv string) ([]string, error) {
 	if strings.Trim(DBDbase, " ") == "" || len(strings.Trim(DBDbase, " ")) == 0 {
 		return nil, ErrEmptyString
 	}
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
 	t, err := d.AmIHereDB(DBDbase)
 	if err != nil {
 		return nil, err
@@ -97,15 +100,22 @@ func (d *DriverMongo) GetAllTeamName(codiv string) ([]string, error) {
 	} else if !t {
 		return nil, ErrNotExistCOL
 	}
-	collections, err := d.Client.Database(DBDbase).Collection(codiv).Find(ctx, bson.D{{"Date", bson.D{{"$regex", `/^[0-9]{2}\/[0-9]{2}\/(18|19)$/`}}}, {"Index", bson.D{{"$gte", 1}}}})
+	filter := bson.A{
+		bson.D{
+			primitive.E{Key: "Date", Value: primitive.Regex{Pattern: `^[0-9]{2}\/[0-9]{2}\/(18|19)$`, Options: ""}},
+		},
+		bson.D{
+			primitive.E{Key: "Index", Value: bson.D{
+				primitive.E{Key: "$gte", Value: 1},
+			},
+			}}}
+	var result []string
+	collections, err := d.Client.Database(DBDbase).Collection(codiv).Distinct(ctx, "LocalTeam", filter)
 	if err != nil {
 		return nil, err
 	}
-	defer collections.Close(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return nil, nil
+	log.Println(collections)
+	return result, nil
 }
 
 //GetAllCollectionNames ... Get all collection names of an existing database
