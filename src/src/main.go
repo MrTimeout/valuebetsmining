@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	mongo "valuebetsmining/src/src/mongodb"
+
+	"github.com/gorilla/mux"
 )
 
 var (
@@ -15,19 +17,21 @@ var (
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	r := mux.NewRouter()
+	r.HandleFunc("/{country}/{division}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
 		driver, err := mongo.ConnectDB()
 		if err != nil {
-			io.WriteString(w, fmt.Sprintf("Status code: %d", http.StatusNotFound))
+			io.WriteString(w, fmt.Sprintf("%d", http.StatusNotFound))
 		}
-		str, err := driver.GetAllCollectionNames(mongo.DBDbase)
+		str, err := driver.GetAllTeamName(vars["country"] + vars["division"] + "1019")
 		if err != nil {
-			io.WriteString(w, fmt.Sprintf("Status code: %d", http.StatusNotFound))
+			io.WriteString(w, fmt.Sprintf("%#q", err))
 		}
-		for k, v := range str {
-			log.Println(k, v)
-			io.WriteString(w, fmt.Sprintf("%d: %#q", k, v))
+		for _, v := range str {
+			io.WriteString(w, fmt.Sprintf("<h1>%s</h1><br>", v))
 		}
 	})
+	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", PORT), nil))
 }

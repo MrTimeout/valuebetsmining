@@ -8,9 +8,9 @@ WORKDIR $GOPATH/src/valuebetsmining/src/src/
 COPY src ./
 
 RUN go get -u github.com/golang/dep/cmd/dep
-#RUN dep ensure
+RUN dep ensure
 
-RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .
 
 EXPOSE 8080
 

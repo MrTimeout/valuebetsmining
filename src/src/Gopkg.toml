@@ -22,9 +22,5 @@
 
 
 [[constraint]]
-  name = "github.com/graphql-go/graphql"
-  version = "0.7.8"
-
-[[constraint]]
   name = "go.mongodb.org/mongo-driver"
   version = "1.0.3"

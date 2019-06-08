@@ -66,19 +66,15 @@ type Result struct {
 //ConnectDB ... Returns a fresh instance of a driver to connect to mongodb
 func ConnectDB() (DriverMongo, error) {
 
-	ctx := context.Background()
-
-	client, err := mongo.Connect(
-		ctx,
-		options.Client().ApplyURI(GetStringToConnect()),
-	)
+	c, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(GetStringToConnect()))
 	if err != nil {
 		return DriverMongo{}, err
 	}
-
-	defer client.Disconnect(ctx)
-
-	return DriverMongo{Client: client}, nil
+	err = c.Ping(context.TODO(), nil)
+	if err != nil {
+		return DriverMongo{}, err
+	}
+	return DriverMongo{Client: c}, nil
 }
 
 //GetAllTeamName ... Get all team names of an existing collection
@@ -215,7 +211,7 @@ func (d *DriverMongo) GetProperties(local, away, cols string) (Result, error) {
 
 //GetStringToConnect ... Return string to connect to sql
 func GetStringToConnect() string {
-	return fmt.Sprintf("mongodb://%s:%s@%s:%s/?authSource=admin", DBUser, DBPassword, DBHost, DBPort) //mongodb://user:password@localhost:27017/
+	return fmt.Sprintf("mongodb://%s:%s@%s:%s/?authSource=admin", DBUser, DBPassword, DBHost, DBPort)
 }
 
 //CountryDiv ... Return a map of country:[]divisions

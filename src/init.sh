@@ -73,8 +73,8 @@ if [ "$2" = true ]; then
 
     docker run --detach \
             --env-file secret \
-            --volume "${PWD}/src/leagues:/leagues" \
-            --volume "${PWD}/src/script:${DATASTORE}" \
+            --volume "${PWD}/data/leagues:/leagues" \
+            --volume "${PWD}/data/script:${DATASTORE}" \
             --name ${CONTAINER_DATABASE} \
             --publish 3000-4000:${PORT_DEFAULT_MONGO} \
             --network ${NETWORK} ${IMAGE_DATABASE}:${TAG}
@@ -100,13 +100,14 @@ if [ "$3" = true ]; then
 
     if [ $(docker image ls --format "{{.Repository}}" | grep -w -c ${IMAGE_SERVICE}) -eq 1 ]; then
         IP_ADDR=$(docker container inspect --format '{{.NetworkSettings.Networks.valuebetsmining.IPAddress}}' valuebetsminingmongodb)
+        #MONGO_INITDB_PORT=$(docker container inspect valuebetsminingmongodb --format '{{ (index (index .NetworkSettings.Ports "27017/tcp") 0).HostPort }}')
         docker run --detach \
             -e MONGODB_ROOT_ADDR=${IP_ADDR} \
+            -e MONGO_INITDB_PORT=${PORT_DEFAULT_MONGO} \
             -e PORT=${PORT_DEFAULT_SERVICE} \
             --env-file "${PWD}/secret" \
             --name ${CONTAINER_SERVICE} \
             --publish 3000-4000:${PORT_DEFAULT_SERVICE} \
-            --workdir /go/src \
             --network ${NETWORK} ${IMAGE_SERVICE}:${TAG}
     else 
         echo "Problem creating the image of name ${IMAGE_SERVICE}:${TAG}"
