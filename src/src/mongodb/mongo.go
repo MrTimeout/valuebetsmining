@@ -179,8 +179,8 @@ func GetStringToConnect() string {
 }
 
 //CountryDiv ... Return a map of country:[]divisions
-func CountryDiv(driver *DriverMongo) (map[string][]string, error) {
-	cols, err := driver.GetAllCollectionNames(DBDbase)
+func (d *DriverMongo) CountryDiv() (map[string][]string, error) {
+	cols, err := d.GetAllCollectionNames(DBDbase)
 	if err != nil {
 		return nil, err
 	}
