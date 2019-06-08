@@ -22,13 +22,13 @@ var (
 	//DBHost ... Address of the database to connect to it
 	DBHost = os.Getenv("MONGODB_ROOT_ADDR")
 	//DBPort ... Port to connect to the database
-	DBPort = os.Getenv("MONGODB_ROOT_PORT")
+	DBPort = os.Getenv("MONGO_INITDB_PORT")
 	//DBUser ... User to connect to the database
-	DBUser = os.Getenv("MONGODB_ROOT_USER")
+	DBUser = os.Getenv("MONGO_INITDB_ROOT_USERNAME")
 	//DBPassword ... Password to connect to the database
-	DBPassword = os.Getenv("MONGODB_ROOT_PASSWORD")
+	DBPassword = os.Getenv("MONGO_INITDB_ROOT_PASSWORD")
 	//DBDbase ... Database name to connect
-	DBDbase = os.Getenv("MONGODB_ROOT_DATABASE_NAME")
+	DBDbase = os.Getenv("MONGO_DB_NAME")
 )
 
 var (
@@ -123,6 +123,7 @@ func (d *DriverMongo) GetAllCollectionNames(db string) ([]string, error) {
 	if strings.Trim(db, " ") == "" || len(strings.Trim(db, " ")) == 0 {
 		return nil, ErrEmptyString
 	}
+	str := make([]string, 0)
 	ctx := context.Background()
 	t, err := d.AmIHereDB(db)
 	if err != nil {
@@ -130,11 +131,30 @@ func (d *DriverMongo) GetAllCollectionNames(db string) ([]string, error) {
 	} else if !t {
 		return nil, ErrNotExistDB
 	}
-	collections, err := d.Client.Database(db).ListCollectionNames(ctx, bsonx.Doc{})
+	res, err := d.Client.Database(db).ListCollections(ctx, bsonx.Doc{})
 	if err != nil {
 		return nil, err
 	}
-	return collections, nil
+	for res.Next(ctx) {
+		next := &bsonx.Doc{}
+		err = res.Decode(next)
+		if err != nil {
+			return nil, err
+		}
+
+		elem, err := next.LookupErr("name")
+		if err != nil {
+			return nil, err
+		}
+
+		if elem.Type() != bson.TypeString {
+			return nil, fmt.Errorf("incorrect type for 'name'. got %v. want %v", elem.Type(), bson.TypeString)
+		}
+
+		elemName := elem.StringValue()
+		str = append(str, elemName)
+	}
+	return str, nil
 }
 
 //AmIHereDB ... Return true if the db exists and false otherwise
@@ -155,12 +175,32 @@ func (d *DriverMongo) AmIHereCol(col string) (bool, error) {
 	if strings.Trim(col, " ") == "" || len(strings.Trim(col, " ")) == 0 {
 		return false, ErrEmptyString
 	}
+	str := []string{}
 	ctx := context.Background()
-	cols, err := d.Client.Database(DBDbase).ListCollectionNames(ctx, bson.D{primitive.E{Key: "name", Value: col}})
+	res, err := d.Client.Database(DBDbase).ListCollections(ctx, bson.D{primitive.E{Key: "name", Value: col}})
 	if err != nil {
 		return false, err
 	}
-	return len(cols) == 1, nil
+	for res.Next(ctx) {
+		next := &bsonx.Doc{}
+		err = res.Decode(next)
+		if err != nil {
+			return false, err
+		}
+
+		elem, err := next.LookupErr("name")
+		if err != nil {
+			return false, err
+		}
+
+		if elem.Type() != bson.TypeString {
+			return false, fmt.Errorf("incorrect type for 'name'. got %v. want %v", elem.Type(), bson.TypeString)
+		}
+
+		elemName := elem.StringValue()
+		str = append(str, elemName)
+	}
+	return len(str) == 1, nil
 }
 
 //GetProperties ... Return properties of a team

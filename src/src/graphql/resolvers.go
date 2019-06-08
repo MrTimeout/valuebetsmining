@@ -30,7 +30,10 @@ func (r *Resolv) TeamResolv(p graphql.ResolveParams) (interface{}, error) {
 	}
 	cols, ok := p.Args["cols"].(string) //assertion
 	if ok {
-		users := r.db.GetProperties(local, away, cols)
+		users, err := r.db.GetProperties(local, away, cols)
+		if err != nil {
+			return nil, err
+		}
 		return users, nil
 	}
 

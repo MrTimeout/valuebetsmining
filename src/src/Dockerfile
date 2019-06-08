@@ -4,8 +4,11 @@ ARG CODE_VERSION
 
 RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of golang"]
 
-WORKDIR $GOPATH/src
-COPY data ./
+WORKDIR $GOPATH/src/valuebetsmining/src/src/
+COPY src ./
+
+RUN go get -u github.com/golang/dep/cmd/dep
+#RUN dep ensure
 
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .
 

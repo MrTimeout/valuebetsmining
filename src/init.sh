@@ -99,7 +99,11 @@ if [ "$3" = true ]; then
                 .
 
     if [ $(docker image ls --format "{{.Repository}}" | grep -w -c ${IMAGE_SERVICE}) -eq 1 ]; then
+        IP_ADDR=$(docker container inspect --format '{{.NetworkSettings.Networks.valuebetsmining.IPAddress}}' valuebetsminingmongodb)
         docker run --detach \
+            -e MONGODB_ROOT_ADDR=${IP_ADDR} \
+            -e PORT=${PORT_DEFAULT_SERVICE} \
+            --env-file "${PWD}/secret" \
             --name ${CONTAINER_SERVICE} \
             --publish 3000-4000:${PORT_DEFAULT_SERVICE} \
             --workdir /go/src \

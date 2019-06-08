@@ -1,6 +1,8 @@
 package gql
 
 import (
+	mongo "valuebetsmining/src/src/mongodb"
+
 	"github.com/graphql-go/graphql"
 )
 
@@ -10,7 +12,7 @@ type Root struct {
 }
 
 //NewRoot ... Return a fresh instance of Root struct
-func NewRoot(db *postgres.Db) *Root {
+func NewRoot(db *mongo.DriverMongo) *Root {
 
 	resolv := Resolv{db: db}
 
@@ -20,13 +22,13 @@ func NewRoot(db *postgres.Db) *Root {
 				Name: "Query",
 				Fields: graphql.Fields{
 					"users": &graphql.Field{
-						Type: graphql.NewList(User),
+						Type: graphql.NewList(Properties),
 						Args: graphql.FieldConfigArgument{
 							"name": &graphql.ArgumentConfig{
 								Type: graphql.String,
 							},
 						},
-						Resolve: resolv.UserResolv,
+						Resolve: resolv.TeamResolv,
 					},
 				},
 			},

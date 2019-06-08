@@ -3,3 +3,4 @@ vendor/**
 **/leagues/**
 **/test/**.json
 **/**secret
+**/vendor
