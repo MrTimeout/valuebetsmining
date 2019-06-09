@@ -50,7 +50,7 @@ if [ "$1" = true ]; then
 
     if [ $(docker image ls --format "{{.Repository}}" | grep -w -c ${IMAGE_GO}) -eq 1 ]; then
         docker run --detach \
-            --volume "${PWD}/src/leagues:/go/src/leagues" \
+            --volume "${PWD}/data/leagues:/go/src/leagues" \
             --name ${CONTAINER_GO} \
             --publish 3000-4000:${PORT_DEFAULT_GO} \
             --workdir /go/src \
@@ -59,7 +59,11 @@ if [ "$1" = true ]; then
         echo "Problem creating the image of name ${IMAGE_GO}:${TAG}"
         exit 1
     fi
-    sleep 30s
+
+    if [ "$2" = true ]; then 
+        sleep 30s 
+    fi    
+    
 fi
 
 if [ "$2" = true ]; then
