@@ -1,4 +1,4 @@
-package main
+package entities
 
 import (
 	"encoding/csv"
@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	others "valuebetsmining/src/data/Others"
 )
 
 //Division ... Each division of each league
@@ -93,7 +94,7 @@ func (d *Division) ParseEachFile(year Year, path string) error {
 		if err != nil {
 			return err
 		}
-		if t, err := AnyoneIsEmpty(line[:6]); err != nil {
+		if t, err := others.AnyoneIsEmpty(line[:6]); err != nil {
 			return err
 		} else if t {
 			continue
@@ -190,7 +191,7 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 		if err != nil {
 			return nil, err
 		}
-		if t, err := AnyoneIsEmpty(line[:7]); err != nil {
+		if t, err := others.AnyoneIsEmpty(line[:7]); err != nil {
 			return nil, err
 		} else if t {
 			break

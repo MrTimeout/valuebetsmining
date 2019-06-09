@@ -1,4 +1,4 @@
-package main
+package entities
 
 import (
 	"encoding/csv"
@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 	"time"
+	others "valuebetsmining/src/data/Others"
 )
 
 const (
@@ -20,7 +21,7 @@ func TestResultsFunc(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	rands, err := RandomArr(1, 3, 4)
+	rands, err := others.RandomArr(1, 3, 4)
 	for _, value := range rands {
 		results.Update(value, -value)
 	}
@@ -36,11 +37,11 @@ func TestNewResults(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	randGoalsLocal, err := RandomArr(0, 5, 100)
+	randGoalsLocal, err := others.RandomArr(0, 5, 100)
 	if err != nil {
 		t.Error(err)
 	}
-	randsGoalsAway, err := RandomArr(0, 5, 100)
+	randsGoalsAway, err := others.RandomArr(0, 5, 100)
 	if err != nil {
 		t.Error(err)
 	}
@@ -49,7 +50,7 @@ func TestNewResults(t *testing.T) {
 		r.Update(randGoalsLocal[i], randsGoalsAway[i])
 		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s", i, randGoalsLocal[i], randsGoalsAway[i], r.StringCSV(DefaultLenResult)), ","))
 	}
-	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
 	if err != nil {
 		t.Error(err)
 	}
@@ -68,11 +69,11 @@ func TestNewResultsStringCSVAll(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	randGoalsLocal, err := RandomArr(0, 5, 100)
+	randGoalsLocal, err := others.RandomArr(0, 5, 100)
 	if err != nil {
 		t.Error(err)
 	}
-	randsGoalsAway, err := RandomArr(0, 5, 100)
+	randsGoalsAway, err := others.RandomArr(0, 5, 100)
 	if err != nil {
 		t.Error(err)
 	}
@@ -81,7 +82,7 @@ func TestNewResultsStringCSVAll(t *testing.T) {
 		r.Update(randGoalsLocal[i], randsGoalsAway[i])
 		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s,%d,%d", i, randGoalsLocal[i], randsGoalsAway[i], r.StringCSV(DefaultLenResult), r.StreackWinning, r.StreackNoLosing), ","))
 	}
-	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
 	if err != nil {
 		t.Error(err)
 	}
@@ -101,8 +102,8 @@ func TestPreviousNResultsOfAMatch(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	randsLocal, err := RandomArr(0, 5, 10)
-	randsAway, err := RandomArr(0, 5, 10)
+	randsLocal, err := others.RandomArr(0, 5, 10)
+	randsAway, err := others.RandomArr(0, 5, 10)
 	resultsArr := []Result{r}
 	for i := 0; i < len(randsLocal); i++ {
 		err = r.Update(randsLocal[i], randsAway[i])

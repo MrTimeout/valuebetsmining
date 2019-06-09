@@ -1,4 +1,4 @@
-package main
+package others
 
 import (
 	"errors"
@@ -341,6 +341,69 @@ func AnyoneIsEmpty(arr []string) (bool, error) {
 func FuncName() string {
 	pc, _, _, _ := runtime.Caller(1)
 	return strings.Split(runtime.FuncForPC(pc).Name(), ".")[len(strings.Split(runtime.FuncForPC(pc).Name(), "."))-1]
+}
+
+//Sum ... Sum an amount of numbers
+func Sum(negative bool, nums ...int) int {
+	resul := 0
+	if negative {
+		for _, v := range nums {
+			resul += v
+		}
+	} else {
+		for _, v := range nums {
+			if v >= 0 {
+				resul += v
+			}
+		}
+	}
+	return resul
+}
+
+//RangeArr ... Creates an arr "from" to "to" >= "from" and "seq" != 0
+func RangeArr(from, to, seq int) []int {
+	arr := make([]int, 0)
+	if seq == 0 {
+		seq = 1
+	}
+	if seq > 0 && from > to {
+		to, from = from, to
+	} else if seq < 0 && to > from {
+		to, from = from, to
+	}
+	if seq > 0 {
+		for i := Min(from, to); i < Max(from, to); i += seq {
+			arr = append(arr, i)
+		}
+	} else if seq < 0 {
+		for i := Max(from, to); i > Min(from, to); i += seq {
+			arr = append(arr, i)
+		}
+	}
+
+	return arr
+}
+
+//Max ... Return the max value
+func Max(nums ...int) int {
+	max := math.MinInt32
+	for _, v := range nums {
+		if v > max {
+			max = v
+		}
+	}
+	return max
+}
+
+//Min ... Return the min value
+func Min(nums ...int) int {
+	min := math.MaxInt32
+	for _, v := range nums {
+		if v < min {
+			min = v
+		}
+	}
+	return min
 }
 
 /*

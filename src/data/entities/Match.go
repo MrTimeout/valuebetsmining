@@ -1,6 +1,8 @@
-package main
+package entities
 
-import "fmt"
+import (
+	"fmt"
+)
 
 //Match ... This is where we are going to handle match between local team and away team
 type Match struct {

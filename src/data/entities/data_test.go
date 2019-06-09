@@ -1,11 +1,11 @@
-package main
+package entities
 
 import (
 	"testing"
 )
 
 func TestExistsDivision(t *testing.T) {
-	config, err := ReadFile("config.json")
+	config, err := .ReadFile("config.json")
 	if err != nil {
 		t.Errorf("Error:%#v", err)
 	}

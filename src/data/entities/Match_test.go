@@ -1,23 +1,24 @@
-package main
+package entities
 
 import (
 	"encoding/json"
 	"io/ioutil"
 	"testing"
+	others "valuebetsmining/src/data/Others"
 )
 
 func TestNewMatchsLocal(t *testing.T) {
 	matchs := make([]Match, 0, 20)
 	teamsLocal, teamsAway := make(map[string]Team), make(map[string]Team)
-	randomTeams, err := RandomWords(2, 10)
+	randomTeams, err := others.RandomWords(2, 10)
 	if err != nil {
 		t.Error(err)
 	}
-	goalsTucked, err := RandomArr(1, 10, 20)
+	goalsTucked, err := others.RandomArr(1, 10, 20)
 	if err != nil {
 		t.Error(err)
 	}
-	goalsReceibed, err := RandomArr(1, 10, 20)
+	goalsReceibed, err := others.RandomArr(1, 10, 20)
 	if err != nil {
 		t.Error(err)
 	}

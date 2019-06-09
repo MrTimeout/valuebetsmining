@@ -1,7 +1,8 @@
-package main
+package entities
 
 import (
 	"fmt"
+	others "valuebetsmining/src/data/Others"
 )
 
 //Result ... these are the results of each team (local and away)
@@ -45,7 +46,7 @@ func NewResults(goalsTucked, goalsReceived int) (Result, error) {
 		return Result{}, ErrNegativeGoal
 	}
 	r := Result{
-		Matchs: []int{WhoIsBigger(goalsTucked, goalsReceived)},
+		Matchs: []int{others.WhoIsBigger(goalsTucked, goalsReceived)},
 	}
 	err := r.CalFeatures()
 	if err != nil {
@@ -59,7 +60,7 @@ func NewResultsMatchs(matchs []int) (Result, error) {
 	if matchs == nil || len(matchs) == 0 {
 		return Result{}, ErrNilArrResults
 	}
-	if t, err := IsAStrangerHere(matchs, []int{1, 0, -1}); err != nil {
+	if t, err := others.IsAStrangerHere(matchs, []int{1, 0, -1}); err != nil {
 		return Result{}, err
 	} else if t {
 		return Result{}, ErrTypeResults
@@ -102,7 +103,7 @@ func (r *Result) Update(goalsTucked, goalsReceived int) error {
 	if goalsTucked < 0 || goalsReceived < 0 {
 		return ErrNegativeGoal
 	}
-	r.Matchs = append(r.Matchs, WhoIsBigger(goalsTucked, goalsReceived))
+	r.Matchs = append(r.Matchs, others.WhoIsBigger(goalsTucked, goalsReceived))
 	err := r.CalFeatures()
 	if err != nil {
 		return err
@@ -115,9 +116,9 @@ func (r *Result) CalStreackWinning() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 1)
+		res, err = others.HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 1)
 	} else {
-		res, err = HowManyTimes(r.Matchs, true, 1)
+		res, err = others.HowManyTimes(r.Matchs, true, 1)
 	}
 	if err != nil {
 		return err
@@ -131,9 +132,9 @@ func (r *Result) CalStreackNoLosing() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 1, 0)
+		res, err = others.HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 1, 0)
 	} else {
-		res, err = HowManyTimes(r.Matchs, true, 1, 0)
+		res, err = others.HowManyTimes(r.Matchs, true, 1, 0)
 	}
 	if err != nil {
 		return err
@@ -147,9 +148,9 @@ func (r *Result) CalStreackTieding() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 0)
+		res, err = others.HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, 0)
 	} else {
-		res, err = HowManyTimes(r.Matchs, true, 0)
+		res, err = others.HowManyTimes(r.Matchs, true, 0)
 	}
 	if err != nil {
 		return err
@@ -163,9 +164,9 @@ func (r *Result) CalStreackNoWinning() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, -1, 0)
+		res, err = others.HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, -1, 0)
 	} else {
-		res, err = HowManyTimes(r.Matchs, true, -1, 0)
+		res, err = others.HowManyTimes(r.Matchs, true, -1, 0)
 	}
 	if err != nil {
 		return err
@@ -179,9 +180,9 @@ func (r *Result) CalStreackLosing() error {
 	var res int
 	var err error
 	if len(r.Matchs) >= DefaultLenResult {
-		res, err = HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, -1)
+		res, err = others.HowManyTimes(r.Matchs[len(r.Matchs)-DefaultLenResult:], true, -1)
 	} else {
-		res, err = HowManyTimes(r.Matchs, true, -1)
+		res, err = others.HowManyTimes(r.Matchs, true, -1)
 	}
 	if err != nil {
 		return err
@@ -242,7 +243,7 @@ func (r *Result) PreviousNResultsOfAMatch(n int) (Result, error) {
 
 //CompareOfResults ... Compare of two instances of struct Result
 func (r *Result) CompareOfResults(r2 Result) bool {
-	return CompareTwoArrs(r.Matchs, r2.Matchs, false) &&
+	return others.CompareTwoArrs(r.Matchs, r2.Matchs, false) &&
 		r.StreackLosing == r2.StreackLosing &&
 		r.StreackNoLosing == r2.StreackNoLosing &&
 		r.StreackTieding == r2.StreackTieding &&

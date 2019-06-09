@@ -1,4 +1,4 @@
-package main
+package entities
 
 import (
 	"encoding/csv"
@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 	"time"
+	others "valuebetsmining/src/data/Others"
 )
 
 const (
@@ -19,7 +20,7 @@ func TestGoalsFunc(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	rands, err := RandomArr(0, 10, 10)
+	rands, err := others.RandomArr(0, 10, 10)
 	for key, value := range rands {
 		goals.Update(value, key)
 	}
@@ -34,8 +35,8 @@ func TestPreviousNGoalsOfAMatch(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	randsLocal, err := RandomArr(0, 10, 10)
-	randsAway, err := RandomArr(0, 10, 10)
+	randsLocal, err := others.RandomArr(0, 10, 10)
+	randsAway, err := others.RandomArr(0, 10, 10)
 	goalsArr := []Goal{goals}
 	for i := 0; i < len(randsLocal); i++ {
 		err = goals.Update(randsLocal[i], randsAway[i])
@@ -63,11 +64,11 @@ func TestNewGoals(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	randGoalsLocal, err := RandomArr(0, 5, 100)
+	randGoalsLocal, err := others.RandomArr(0, 5, 100)
 	if err != nil {
 		t.Error(err)
 	}
-	randsGoalsAway, err := RandomArr(0, 5, 100)
+	randsGoalsAway, err := others.RandomArr(0, 5, 100)
 	if err != nil {
 		t.Error(err)
 	}
@@ -76,7 +77,7 @@ func TestNewGoals(t *testing.T) {
 		g.Update(randGoalsLocal[i], randsGoalsAway[i])
 		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s", i, randGoalsLocal[i], randsGoalsAway[i], g.StringCSV()), ","))
 	}
-	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestGoals, DefaultNameTestGoals, FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestGoals, DefaultNameTestGoals, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
 	if err != nil {
 		t.Error(err)
 	}

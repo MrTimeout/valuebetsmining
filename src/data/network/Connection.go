@@ -1,15 +1,16 @@
-package main
+package network
 
 import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"valuebetsmining/src/data/entities"
 )
 
 //Connection ... Struct used to connect to an url and download it
 type Connection struct {
-	Config
+	entities.Config
 }
 
 //ConnectionError ... Struct used to handle errors of struct connection
@@ -59,7 +60,7 @@ func (c Connection) GetAllByCountryDiv(country, div string) ([]string, error) {
 }
 
 //WriteWithParams ... Return the response of a get request
-func (c Connection) WriteWithParams(year Year, country, div string) (string, error) {
+func (c Connection) WriteWithParams(year entities.Year, country, div string) (string, error) {
 	res, err := http.Get(fmt.Sprintf("%s/%d%d/%s.csv", c.Path, year.From, year.To, div))
 	if err != nil {
 		return "", err
@@ -78,7 +79,7 @@ func (c Connection) WriteWithParams(year Year, country, div string) (string, err
 }
 
 //RequestByCountryDivYear ... Download all the content of each year of a country/div and write it in a file with the name {{.Country}}_{{.Division}}.csv
-func (c Connection) RequestByCountryDivYear(year Year, country, div string) (string, error) {
+func (c Connection) RequestByCountryDivYear(year entities.Year, country, div string) (string, error) {
 	if err := c.ExistsCountry(country); err != nil {
 		return "", err
 	}
@@ -89,7 +90,7 @@ func (c Connection) RequestByCountryDivYear(year Year, country, div string) (str
 }
 
 //WriteByCountryDivYears ... Write in csv files by a range of years, country and division
-func (c Connection) WriteByCountryDivYears(year Year, country, div string) error {
+func (c Connection) WriteByCountryDivYears(year entities.Year, country, div string) error {
 	if err := c.ExistsCountry(country); err != nil {
 		return err
 	}
@@ -101,7 +102,7 @@ func (c Connection) WriteByCountryDivYears(year Year, country, div string) error
 		return err
 	}
 	for i := year.From; i < year.To; i++ {
-		_, err := c.RequestByCountryDivYear(Year{From: i, To: i + 1}, country, div)
+		_, err := c.RequestByCountryDivYear(entities.Year{From: i, To: i + 1}, country, div)
 		if err != nil {
 			return err
 		}

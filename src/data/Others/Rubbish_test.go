@@ -1,4 +1,4 @@
-package main
+package others
 
 import (
 	"math/rand"
@@ -151,5 +151,43 @@ func TestRandomWords(t *testing.T) {
 			t.Error(err)
 		}
 		i++
+	}
+}
+
+func TestSum(t *testing.T) {
+	want, rangeAr := 5050, RangeArr(0, 101, 1)
+	if resul := Sum(false, rangeAr...); resul != want {
+		t.Errorf("Want: %d, Got: %d", want, resul)
+	}
+	want, rangeAr = -5050, RangeArr(-100, 0, 1)
+	if resul := Sum(true, rangeAr...); resul != want {
+		t.Errorf("Want: %d, Got: %d", want, resul)
+	}
+	want, rangeAr = 0, RangeArr(-100, 0, 1)
+	if resul := Sum(false, rangeAr...); resul != want {
+		t.Errorf("Want: %d, Got: %d", want, resul)
+	}
+}
+
+func TestRangeArr(t *testing.T) {
+	from, to, seq, want := 0, 10, 1, 10
+	final := RangeArr(from, to, seq)
+	if len(final) != want {
+		t.Errorf("Want: %d, got: %d", want, len(final))
+	}
+	from, to, seq, want = 10, 0, -1, 10
+	final = RangeArr(from, to, seq)
+	if len(final) != want {
+		t.Errorf("Want: %d, got: %d", want, len(final))
+	}
+	from, to, seq, want = 0, 10, -1, 10
+	final = RangeArr(from, to, seq)
+	if len(final) != want {
+		t.Errorf("Want: %d, got: %d", want, len(final))
+	}
+	from, to, seq, want = 0, -10, 1, 10
+	final = RangeArr(from, to, seq)
+	if len(final) != want {
+		t.Errorf("Want: %d, got: %d", want, len(final))
 	}
 }

@@ -1,4 +1,4 @@
-package main
+package logic
 
 import (
 	"encoding/csv"
@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"testing"
+	"valuebetsmining/src/data/entities"
 )
 
 //TestWriteJSONToAFile ... Write random info of the stucts team* to a file to understand how it works
@@ -17,8 +18,8 @@ func TestWriteJSONToAFile(t *testing.T) {
 		t.Errorf("Error: %#v", err)
 	}
 	reader := csv.NewReader(csvFile)
-	teamsLocal, teamsAway := make(map[string]Team), make(map[string]Team)
-	matchs := []Match{}
+	teamsLocal, teamsAway := make(map[string]entities.Team), make(map[string]entities.Team)
+	matchs := []entities.Match{}
 	from, to := 18, 19
 	count := 1
 	reader.Read() //First line
@@ -40,7 +41,7 @@ func TestWriteJSONToAFile(t *testing.T) {
 		}
 		if _, ok := teamsLocal[line[2]]; !ok {
 			if _, ok := teamsAway[line[3]]; !ok {
-				match, err := NewMatch(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[2], line[3])
+				match, err := entities.NewMatch(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[2], line[3])
 				if err != nil {
 					t.Error(err)
 				}
@@ -48,7 +49,7 @@ func TestWriteJSONToAFile(t *testing.T) {
 				teamsLocal[line[2]] = match.TeamLocal
 				teamsAway[line[3]] = match.TeamAway
 			} else {
-				match, err := NewMatchReusingAway(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[2], teamsAway[line[3]])
+				match, err := entities.NewMatchReusingAway(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[2], teamsAway[line[3]])
 				if err != nil {
 					t.Error(err)
 				}
@@ -58,7 +59,7 @@ func TestWriteJSONToAFile(t *testing.T) {
 			}
 		} else if _, ok := teamsLocal[line[2]]; ok {
 			if _, ok := teamsAway[line[3]]; !ok {
-				match, err := NewMatchReusingLocal(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[3], teamsLocal[line[2]])
+				match, err := entities.NewMatchReusingLocal(count, goalsTucked, goalsReceived, from, to, line[1], line[6], line[3], teamsLocal[line[2]])
 				if err != nil {
 					t.Error(err)
 				}
@@ -66,7 +67,7 @@ func TestWriteJSONToAFile(t *testing.T) {
 				teamsLocal[line[2]] = match.TeamLocal
 				teamsAway[line[3]] = match.TeamAway
 			} else {
-				match, err := NewMatchReusingBoth(count, goalsTucked, goalsReceived, from, to, line[1], line[6], teamsLocal[line[2]], teamsAway[line[3]])
+				match, err := entities.NewMatchReusingBoth(count, goalsTucked, goalsReceived, from, to, line[1], line[6], teamsLocal[line[2]], teamsAway[line[3]])
 				if err != nil {
 					t.Error(err)
 				}

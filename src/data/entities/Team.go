@@ -1,4 +1,4 @@
-package main
+package entities
 
 //Team ... This is where we store information about each team
 type Team struct {

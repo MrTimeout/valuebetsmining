@@ -1,11 +1,16 @@
-package main
+package entities
 
-import "fmt"
+import (
+	"fmt"
+	others "valuebetsmining/src/data/Others"
+)
 
 //Goal ... This is where we store the goals of each team
 type Goal struct {
 	GoalsTucked          []int   `json:"goals tucked"`
 	GoalsReceived        []int   `json:"goals received"`
+	GoalsTuckedAmount    int     `json:"goals tucked amount"`
+	GoalsReceivedAmount  int     `json:"goals received amount"`
 	GoalsTuckedAverage   float64 `json:"goals tucked average"`
 	GoalsReceivedAverage float64 `json:"goals received average"`
 	GoalsTuckedMode      []int   `json:"goals tucked mode"`
@@ -41,6 +46,8 @@ func NewGoal(goalsTucked int, goalsReceived int) (Goal, error) {
 	return Goal{
 		GoalsTucked:          []int{goalsTucked},
 		GoalsReceived:        []int{goalsReceived},
+		GoalsTuckedAmount:    goalsTucked,
+		GoalsReceivedAmount:  goalsReceived,
 		GoalsTuckedAverage:   float64(goalsTucked),
 		GoalsReceivedAverage: float64(goalsReceived),
 		GoalsTuckedMode:      []int{goalsTucked},
@@ -98,14 +105,24 @@ func (g *Goal) AppendGoalsReceived(goals int) error {
 	return nil
 }
 
+//CalculateGoalsTuckedAmount ... Calculates the amount of the tucked goals
+func (g *Goal) CalculateGoalsTuckedAmount() {
+	g.GoalsTuckedAmount = others.Sum(false, g.GoalsTucked...)
+}
+
+//CalculateGoalsReceivedAmount ... Calculates the amount of the tucked goals
+func (g *Goal) CalculateGoalsReceivedAmount() {
+	g.GoalsReceivedAmount = others.Sum(false, g.GoalsReceived...)
+}
+
 //CalculateGoalsTuckedAverage ... Calculates the average of the goals tucked
 func (g *Goal) CalculateGoalsTuckedAverage() error {
 	var average float64
 	var err error
 	if len(g.GoalsTucked) >= DefaultLenGoal {
-		average, err = Average(g.GoalsTucked[len(g.GoalsTucked)-DefaultLenGoal:len(g.GoalsTucked)], false)
+		average, err = others.Average(g.GoalsTucked[len(g.GoalsTucked)-DefaultLenGoal:len(g.GoalsTucked)], false)
 	} else {
-		average, err = Average(g.GoalsTucked, false)
+		average, err = others.Average(g.GoalsTucked, false)
 	}
 	if err != nil {
 		return err
@@ -119,9 +136,9 @@ func (g *Goal) CalculateGoalsReceivedAverage() error {
 	var average float64
 	var err error
 	if len(g.GoalsReceived) >= DefaultLenGoal {
-		average, err = Average(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal:], false)
+		average, err = others.Average(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal:], false)
 	} else {
-		average, err = Average(g.GoalsReceived, false)
+		average, err = others.Average(g.GoalsReceived, false)
 	}
 	if err != nil {
 		return err
@@ -135,9 +152,9 @@ func (g *Goal) CalculateGoalsTuckedMode() error {
 	var mode []int
 	var err error
 	if len(g.GoalsTucked) >= DefaultLenGoal {
-		mode, err = Mode(g.GoalsTucked[len(g.GoalsTucked)-DefaultLenGoal : len(g.GoalsTucked)]...)
+		mode, err = others.Mode(g.GoalsTucked[len(g.GoalsTucked)-DefaultLenGoal : len(g.GoalsTucked)]...)
 	} else {
-		mode, err = Mode(g.GoalsTucked...)
+		mode, err = others.Mode(g.GoalsTucked...)
 	}
 	if err != nil {
 		return err
@@ -151,9 +168,9 @@ func (g *Goal) CalculateGoalsReceivedMode() error {
 	var mode []int
 	var err error
 	if len(g.GoalsReceived) >= DefaultLenGoal {
-		mode, err = Mode(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal : len(g.GoalsReceived)]...)
+		mode, err = others.Mode(g.GoalsReceived[len(g.GoalsReceived)-DefaultLenGoal : len(g.GoalsReceived)]...)
 	} else {
-		mode, err = Mode(g.GoalsReceived...)
+		mode, err = others.Mode(g.GoalsReceived...)
 	}
 	if err != nil {
 		return err
@@ -182,19 +199,19 @@ func (g *Goal) PreviousNGoalsOfAMatch(n int) (Goal, error) {
 		gt = g.GoalsTucked[:diff+1]
 		gr = g.GoalsReceived[:diff+1]
 	}
-	averageTucked, err := Average(gt, false)
+	averageTucked, err := others.Average(gt, false)
 	if err != nil {
 		return Goal{}, err
 	}
-	averageReceived, err := Average(gr, false)
+	averageReceived, err := others.Average(gr, false)
 	if err != nil {
 		return Goal{}, err
 	}
-	modeTucked, err := Mode(gt...)
+	modeTucked, err := others.Mode(gt...)
 	if err != nil {
 		return Goal{}, err
 	}
-	modeReceived, err := Mode(gr...)
+	modeReceived, err := others.Mode(gr...)
 	if err != nil {
 		return Goal{}, err
 	}
@@ -210,10 +227,10 @@ func (g *Goal) PreviousNGoalsOfAMatch(n int) (Goal, error) {
 
 //CompareOfGoals ... Compare actual goal struct and other passed by param
 func (g *Goal) CompareOfGoals(g2 Goal) bool {
-	return CompareTwoArrs(g.GoalsReceived, g2.GoalsReceived, false) &&
-		CompareTwoArrs(g.GoalsTucked, g2.GoalsTucked, false) &&
-		CompareTwoArrs(g.GoalsReceivedMode, g2.GoalsReceivedMode, true) &&
-		CompareTwoArrs(g.GoalsTuckedMode, g2.GoalsTuckedMode, true) &&
+	return others.CompareTwoArrs(g.GoalsReceived, g2.GoalsReceived, false) &&
+		others.CompareTwoArrs(g.GoalsTucked, g2.GoalsTucked, false) &&
+		others.CompareTwoArrs(g.GoalsReceivedMode, g2.GoalsReceivedMode, true) &&
+		others.CompareTwoArrs(g.GoalsTuckedMode, g2.GoalsTuckedMode, true) &&
 		g.GoalsReceivedAverage == g2.GoalsReceivedAverage &&
 		g.GoalsTuckedAverage == g2.GoalsTuckedAverage
 }
