@@ -1,9 +1,12 @@
 package main
 
-import "log"
+import (
+	"log"
+	"valuebetsmining/src/data/logic"
+)
 
 func main() {
-	err := ProcessData()
+	err := logic.ProcessData()
 	if err != nil {
 		log.Panic(err)
 	}

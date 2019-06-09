@@ -3,12 +3,13 @@ package network
 import (
 	"regexp"
 	"testing"
+	"valuebetsmining/src/data/entities"
 	"valuebetsmining/src/data/ios"
 )
 
 //TestConnectionGetResponse ... Testing connection via get to the Path and getting response
 func TestConnectionGetResponse(t *testing.T) {
-	config, err := ios.ReadFile("config.json")
+	config, err := ios.ReadFile(entities.ConfigJSONFile)
 	if err != nil {
 		t.Error(err)
 	}
@@ -24,7 +25,7 @@ func TestConnectionGetResponse(t *testing.T) {
 
 //TestConnectionGetAllByCountryDivResponse ... Testing connection via get to the Path and getting response of all years from a country and division
 func TestConnectionGetAllByCountryDivResponse(t *testing.T) {
-	config, err := ios.ReadFile("config.json")
+	config, err := ios.ReadFile(entities.ConfigJSONFile)
 	if err != nil {
 		t.Error(err)
 	}
@@ -42,7 +43,7 @@ func TestConnectionGetAllByCountryDivResponse(t *testing.T) {
 
 //TestWriteAllByCountryDiv ... Test if the csv is written
 func TestWriteAllByCountryDiv(t *testing.T) {
-	config, err := ios.ReadFile("config.json")
+	config, err := ios.ReadFile(entities.ConfigJSONFile)
 	if err != nil {
 		t.Error(err)
 	}
@@ -55,7 +56,7 @@ func TestWriteAllByCountryDiv(t *testing.T) {
 
 //TestWriteByCountryDivYears ... Write By country, div and a range years
 func TestWriteByCountryDivYears(t *testing.T) {
-	config, err := ios.ReadFile("config.json")
+	config, err := ios.ReadFile(entities.ConfigJSONFile)
 	if err != nil {
 		t.Error(err)
 	}

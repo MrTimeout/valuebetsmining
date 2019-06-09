@@ -28,11 +28,11 @@ type DivisionError struct {
 
 const (
 	//DirJSONDefault ... Default path to JSON files
-	DirJSONDefault = "./leagues/JSON/"
+	DirJSONDefault = "leagues/JSON/"
 	//DirCSVDefault ... Default path to CSV files
-	DirCSVDefault = "./leagues/CSV/"
+	DirCSVDefault = "leagues/CSV/"
 	//DirMaster ... Default father path of data files
-	DirMaster = "./leagues/"
+	DirMaster = "leagues/"
 	//ExtFileJSON ... Default extension of json files
 	ExtFileJSON = ".json"
 	//ExtFileCSV ... Default extension of csv files

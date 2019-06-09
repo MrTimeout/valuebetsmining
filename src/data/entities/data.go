@@ -35,6 +35,11 @@ type CountryError struct {
 	ErrorString string
 }
 
+const (
+	//ConfigJSONFile ... Path to access config.json file
+	ConfigJSONFile = "config/config.json"
+)
+
 var (
 	//ErrNotExistCountry ... Error that handles when dont exist a country
 	ErrNotExistCountry = &CountryError{ErrorString: "Dont exist this country"}

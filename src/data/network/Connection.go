@@ -71,11 +71,11 @@ func (c Connection) WriteWithParams(year entities.Year, country, div string) (st
 	if err != nil {
 		return "", err
 	}
-	err = ioutil.WriteFile(fmt.Sprintf("./leagues/%s/%s_%d%d.csv", country, div, year.From, year.To), body, 0644)
+	err = ioutil.WriteFile(fmt.Sprintf("%s%s/%s_%d%d.csv", entities.DirMaster, country, div, year.From, year.To), body, 0644)
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("./leagues/%s_%s_%d%d", country, div, c.Year.From, c.Year.To), nil
+	return fmt.Sprintf("%s%s_%s_%d%d", entities.DirMaster, country, div, c.Year.From, c.Year.To), nil
 }
 
 //RequestByCountryDivYear ... Download all the content of each year of a country/div and write it in a file with the name {{.Country}}_{{.Division}}.csv
@@ -95,10 +95,6 @@ func (c Connection) WriteByCountryDivYears(year entities.Year, country, div stri
 		return err
 	}
 	if err := c.ExistsDivision(div); err != nil {
-		return err
-	}
-	err := os.MkdirAll(fmt.Sprintf("./leagues/%s", country), 0777)
-	if err != nil {
 		return err
 	}
 	for i := year.From; i < year.To; i++ {
@@ -131,12 +127,12 @@ func (c Connection) WriteAllByCountryDiv(country, div string) (string, error) {
 			return "", err
 		}
 		if i == 0 {
-			err = ioutil.WriteFile(fmt.Sprintf("./leagues/%s_%s_%d%d.csv", country, div, c.Year.From, c.Year.To), body, 0644)
+			err = ioutil.WriteFile(fmt.Sprintf("%s%s_%s_%d%d.csv", entities.DirMaster, country, div, c.Year.From, c.Year.To), body, 0644)
 			if err != nil {
 				return "", err
 			}
 		} else {
-			f, err := os.OpenFile(fmt.Sprintf("./leagues/%s_%s_%d%d.csv", country, div, c.Year.From, c.Year.To), os.O_APPEND|os.O_WRONLY, 0600)
+			f, err := os.OpenFile(fmt.Sprintf("%s%s_%s_%d%d.csv", entities.DirMaster, country, div, c.Year.From, c.Year.To), os.O_APPEND|os.O_WRONLY, 0600)
 			if err != nil {
 				return "", err
 			}
@@ -149,7 +145,7 @@ func (c Connection) WriteAllByCountryDiv(country, div string) (string, error) {
 		}
 		i++
 	}
-	return fmt.Sprintf("./leagues/%s_%s_%d%d", country, div, c.Year.From, c.Year.To), nil
+	return fmt.Sprintf("%s%s_%s_%d%d", entities.DirMaster, country, div, c.Year.From, c.Year.To), nil
 }
 
 //Error ... Returns an error of the struct connection
