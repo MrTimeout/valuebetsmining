@@ -38,6 +38,10 @@ type CountryError struct {
 const (
 	//ConfigJSONFile ... Path to access config.json file
 	ConfigJSONFile = "config/config.json"
+	//MaxYear ... MaxYear of the file config
+	MaxYear = 19
+	//MinYear ... MInyear of the file config
+	MinYear = 10
 )
 
 var (

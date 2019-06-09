@@ -18,7 +18,7 @@ type Match struct {
 
 const (
 	//HeaderLine ... First line of each csv file created
-	HeaderLine = "Index,Division,Date,LocalTeam,AwayTeam,LocalGoals,AwayGoals,Result,Last10WinningLocalMatchs,Last10TiedingLocalMatchs,Last10LosingLocalMatchs,Last10WinningAwayMatchs,Last10TiedingAwayMatchs,Last10LosingAwayMatchs,Last10StreackWinningLocal,Last10StreackNoLosingLocal,Last10StreackWinningAway,Last10StreackNoLosingAway,Last10AverageTuckedGoalsLocal,Last10AverageReceivedGoalsLocal,Last10AverageTuckedGoalsAway,Last10AverageReceivedGoalsAway"
+	HeaderLine = "Index,Division,Date,LocalTeam,AwayTeam,LocalGoals,AwayGoals,Result,Last10WinningLocalMatchs,Last10TiedingLocalMatchs,Last10LosingLocalMatchs,Last10WinningAwayMatchs,Last10TiedingAwayMatchs,Last10LosingAwayMatchs,Last10StreackWinningLocal,Last10StreackNoLosingLocal,Last10StreackWinningAway,Last10StreackNoLosingAway,Last10GoalsTuckedAmount,Last10GoalsReceivedAmount,Last10AverageTuckedGoalsLocal,Last10AverageReceivedGoalsLocal,Last10AverageTuckedGoalsAway,Last10AverageReceivedGoalsAway"
 	//DefaultNil ... Used to replace nil in programming
 	DefaultNil = "-1"
 )
@@ -128,7 +128,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 	var previousLocal, previousAway Team
 	var err error
 	allNil := func(count int, line []string) string {
-		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
 			count,
 			line[0],
 			line[1],
@@ -137,10 +137,10 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			line[4],
 			line[5],
 			line[6],
-			DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil)
+			DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil, DefaultNil)
 	}
 	localNil := func(count int, line []string, previousAway Team) string {
-		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%.2f,%s,%.2f",
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%d,%s,%d,%s,%.2f,%s,%.2f",
 			count,
 			line[0],
 			line[1],
@@ -156,12 +156,16 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			DefaultNil,
 			previousAway.Results.StreackNoLosing,
 			DefaultNil,
+			previousAway.Goals.GoalsTuckedAmount,
+			DefaultNil,
+			previousAway.Goals.GoalsReceivedAmount,
+			DefaultNil,
 			previousAway.Goals.GoalsTuckedAverage,
 			DefaultNil,
 			previousAway.Goals.GoalsReceivedAverage)
 	}
 	awayNil := func(count int, line []string, previousLocal Team) string {
-		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%.2f,%s,%.2f,%s",
+		return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%d,%s,%d,%s,%.2f,%s,%.2f,%s",
 			count,
 			line[0],
 			line[1],
@@ -175,6 +179,10 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 			previousLocal.Results.StreackWinning,
 			DefaultNil,
 			previousLocal.Results.StreackNoLosing,
+			DefaultNil,
+			previousLocal.Goals.GoalsTuckedAmount,
+			DefaultNil,
+			previousLocal.Goals.GoalsReceivedAmount,
 			DefaultNil,
 			previousLocal.Goals.GoalsTuckedAverage,
 			DefaultNil,
@@ -210,7 +218,7 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 		return "", err
 	}
 
-	return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f",
+	return fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f",
 		count,
 		line[0],
 		line[1],
@@ -225,6 +233,10 @@ func (m Match) StringCSV(count int, line []string, tLocal, tAway bool) (string, 
 		previousAway.Results.StreackWinning,
 		previousLocal.Results.StreackNoLosing,
 		previousAway.Results.StreackNoLosing,
+		previousLocal.Goals.GoalsTuckedAmount,
+		previousAway.Goals.GoalsTuckedAmount,
+		previousLocal.Goals.GoalsReceivedAmount,
+		previousAway.Goals.GoalsReceivedAmount,
 		previousLocal.Goals.GoalsTuckedAverage,
 		previousAway.Goals.GoalsTuckedAverage,
 		previousLocal.Goals.GoalsReceivedAverage,

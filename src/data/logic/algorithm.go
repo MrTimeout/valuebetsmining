@@ -2,7 +2,6 @@ package logic
 
 import (
 	"fmt"
-	"os"
 	"valuebetsmining/src/data/entities"
 	"valuebetsmining/src/data/ios"
 	"valuebetsmining/src/data/network"
@@ -10,16 +9,13 @@ import (
 
 //ProcessData ... Processing all files from the path endpoints and years
 func ProcessData() error {
-	err := os.Mkdir(entities.DirMaster, 0777)
-	if err != nil {
+	if err := ios.Restart(entities.DirMaster); err != nil {
 		return err
 	}
-	err = os.Mkdir(entities.DirCSVDefault, 0777)
-	if err != nil {
+	if err := ios.Restart(entities.DirCSVDefault); err != nil {
 		return err
 	}
-	err = os.Mkdir(entities.DirJSONDefault, 0777)
-	if err != nil {
+	if err := ios.Restart(entities.DirJSONDefault); err != nil {
 		return err
 	}
 	config, err := ios.ReadFile(entities.ConfigJSONFile)
@@ -28,8 +24,7 @@ func ProcessData() error {
 	}
 	connection := &network.Connection{Config: config}
 	for _, country := range connection.Endpoint {
-		err := os.Mkdir(fmt.Sprintf("%s%s", entities.DirMaster, country.Name), 0777)
-		if err != nil {
+		if err := ios.Restart(fmt.Sprintf("%s%s", entities.DirMaster, country.Name)); err != nil {
 			return err
 		}
 		for _, key := range country.Keys {

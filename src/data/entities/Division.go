@@ -263,6 +263,24 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 		}
 		count++
 	}
+	if year.To == MaxYear {
+		for k, v := range d.TeamsLocal {
+			match, err := NewMatchReusingBoth(0, 0, 0, year.From, year.To, "test", "test", v, d.TeamsAway[k])
+			if err != nil {
+				return nil, err
+			}
+			d.Matchs = append(d.Matchs, match)
+			d.TeamsLocal[k] = match.TeamLocal
+			d.TeamsAway[k] = match.TeamAway
+			target, err := match.StringCSV(0, []string{"test", "test", k, k, "test", "test", "test"}, true, true)
+			if err != nil {
+				return nil, err
+			}
+			str = append(str, strings.Split(target, ","))
+		}
+	}
+	d.TeamsAway = make(map[string]Team)
+	d.TeamsLocal = make(map[string]Team)
 	return str, nil
 }
 
