@@ -178,12 +178,12 @@ var options = {
   legend: {
     position: 'none',
     textStyle: {
-      color: 'black'
+      color: 'white'
     }
   },
   hAxis: {
     textStyle: {
-      color: 'gray'
+      color: 'white'
     },
     gridlines: {
       color: 'gray'
@@ -191,7 +191,7 @@ var options = {
   },
   vAxis: {
     textStyle: {
-      color: 'gray'
+      color: 'white'
     },
     gridlines: {
       color: 'gray'
@@ -207,7 +207,7 @@ var options2 = {
   colors: ['green', 'blue', '#C55B34'],
   backgroundColor: '#192126',
   textStyle: {
-    color: 'black'
+    color: 'white'
   },
   legend: 'none',
 };
