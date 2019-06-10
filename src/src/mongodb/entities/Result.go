@@ -22,6 +22,8 @@ type Result struct {
 	Last10StreackNoLosingLocal      int     `bson:"Last10StreackNoLosingLocal"`
 	Last10StreackWinningAway        int     `bson:"Last10StreackWinningAway"`
 	Last10StreackNoLosingAway       int     `bson:"Last10StreackNoLosingAway"`
+	Last10GoalsTuckedAmount         int     `bson:"Last10GoalsTuckedAmount"`
+	Last10GoalsReceivedAmount       int     `bson:"Last10GoalsReceivedAmount"`
 	Last10AverageTuckedGoalsLocal   float64 `bson:"Last10AverageTuckedGoalsLocal"`
 	Last10AverageReceivedGoalsLocal float64 `bson:"Last10AverageReceivedGoalsLocal"`
 	Last10AverageTuckedGoalsAway    float64 `bson:"Last10AverageTuckedGoalsAway"`

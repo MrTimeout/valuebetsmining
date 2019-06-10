@@ -1,0 +1,25 @@
+{
+    "Path": "http://www.football-data.co.uk/mmz4281",
+    "Year": {
+        "from": 15,
+        "to": 19
+    },
+    "Endpoints": [
+        {
+            "name": "Spain",
+            "keys": [
+                "SP1",
+                "SP2"
+            ]
+        },
+        {
+            "name": "England",
+            "keys": [
+                "E0",
+                "E1",
+                "E2",
+                "EC"
+            ]
+        }
+    ]
+}

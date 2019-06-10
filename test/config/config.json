@@ -1,0 +1,85 @@
+{
+    "Path": "http://www.football-data.co.uk/mmz4281",
+    "Year": {
+        "from": 10,
+        "to": 19
+    },
+    "Endpoints": [
+        {
+            "name": "Spain",
+            "keys": [
+                "SP1",
+                "SP2"
+            ]
+        },
+        {
+            "name": "England",
+            "keys": [
+                "E0",
+                "E1",
+                "E2",
+                "EC"
+            ]
+        },
+        {
+            "name": "Scotland",
+            "keys": [
+                "SC0",
+                "SC1",
+                "SC2",
+                "SC3"
+            ]
+        },
+        {
+            "name": "Germany",
+            "keys": [
+                "D1",
+                "D2"
+            ]
+        },
+        {
+            "name": "Italy",
+            "keys": [
+                "I1",
+                "I2"
+            ]
+        },
+        {
+            "name": "France",
+            "keys": [
+                "F1",
+                "F2"
+            ]
+        },
+        {
+            "name": "Netherlands",
+            "keys": [
+                "N1"
+            ]
+        },
+        {
+            "name": "Belgium",
+            "keys": [
+                "B1"
+            ]
+        },
+        {
+            "name": "Portugal",
+            "keys": [
+                "P1"
+            ]
+        },
+        {
+            "name": "Turkey",
+            "keys": [
+                "T1"
+            ]
+        },
+        {
+            "name": "Greece",
+            "keys": [
+                "G1"
+            ]
+        }
+    ]
+}
