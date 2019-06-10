@@ -1,4 +1,2 @@
-**/test/**
-**/**_test.go
-**/graphql
-src
+script
+leagues
