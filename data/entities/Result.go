@@ -2,7 +2,7 @@ package entities
 
 import (
 	"fmt"
-	others "valuebetsmining/src/data/Others"
+	others "valuebetsmining/data/Others"
 )
 
 //Result ... these are the results of each team (local and away)

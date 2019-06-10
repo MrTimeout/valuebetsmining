@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	mongo "valuebetsmining/src/src/mongodb"
+	mongo "valuebetsmining/src/mongodb"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

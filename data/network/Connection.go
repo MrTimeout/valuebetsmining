@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"valuebetsmining/src/data/entities"
+	"valuebetsmining/data/entities"
 )
 
 //Connection ... Struct used to connect to an url and download it

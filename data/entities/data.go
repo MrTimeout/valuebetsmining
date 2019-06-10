@@ -1,7 +1,10 @@
 package entities
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"regexp"
 	"strings"
 )
@@ -35,21 +38,46 @@ type CountryError struct {
 	ErrorString string
 }
 
-const (
-	//ConfigJSONFile ... Path to access config.json file
-	ConfigJSONFile = "config/config.json"
-	//MaxYear ... MaxYear of the file config
-	MaxYear = 19
-	//MinYear ... MInyear of the file config
-	MinYear = 10
-)
-
 var (
 	//ErrNotExistCountry ... Error that handles when dont exist a country
 	ErrNotExistCountry = &CountryError{ErrorString: "Dont exist this country"}
 	//ErrParsingCountry ... Error that handles an incorrect parsing of a country
 	ErrParsingCountry = &CountryError{ErrorString: "Error parsing Country"}
 )
+
+//NewConfig ... Return an object to perform config file
+func NewConfig(countr, division string, yearFrom, yearTo int) (Config, error) {
+	c, err := ReadFile(DefaultFileConfig)
+	if err != nil {
+		return Config{}, err
+	}
+	if countr == "all" {
+		c.Year = Year{From: yearFrom, To: yearTo}
+		return c, nil
+	}
+	country := Country{
+		Name: countr,
+		Keys: []string{},
+	}
+	if division == "all" {
+		for _, v := range c.Endpoint {
+			if v.Name == country.Name {
+				for _, va := range v.Keys {
+					country.Keys = append(country.Keys, va)
+				}
+				break
+			}
+		}
+	} else {
+		country.Keys = append(country.Keys, division)
+	}
+	return Config{
+		Path:     c.Path,
+		Endpoint: []Country{country},
+		Year:     Year{From: yearFrom, To: yearTo},
+	}, nil
+
+}
 
 //GetYears ... Returns years [from, to] in an array of strings in the format: from(from+1),...
 func (y Year) GetYears() []string {
@@ -101,6 +129,23 @@ func (c Config) ExistsDivision(division string) error {
 		index++
 	}
 	return ErrNotExitDivision
+}
+
+//ReadFile ... Read a file to parse the json
+func ReadFile(file string) (Config, error) {
+	if strings.Trim(file, " ") == "" || len(file) == 0 {
+		return Config{}, errors.New("Error parsing file name")
+	}
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return Config{}, err
+	}
+	var config Config
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		return Config{}, err
+	}
+	return config, nil
 }
 
 //Error ... Func that return a string representing an error of country

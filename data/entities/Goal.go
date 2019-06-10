@@ -2,7 +2,7 @@ package entities
 
 import (
 	"fmt"
-	others "valuebetsmining/src/data/Others"
+	others "valuebetsmining/data/Others"
 )
 
 //Goal ... This is where we store the goals of each team

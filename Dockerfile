@@ -4,7 +4,7 @@ ARG CODE_VERSION
 
 RUN ["/bin/sh", "-c", "echo We are using the $CODE_VERSION of golang"]
 
-WORKDIR $GOPATH/src/valuebetsmining/src/data/
+WORKDIR $GOPATH/src/valuebetsmining/data/
 COPY data ./
 
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .

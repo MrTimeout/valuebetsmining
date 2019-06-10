@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 	"time"
-	others "valuebetsmining/src/data/Others"
+	others "valuebetsmining/data/Others"
 )
 
 const (

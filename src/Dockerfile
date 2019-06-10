@@ -4,7 +4,7 @@ ARG CODE_VERSION
 
 RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of golang"]
 
-WORKDIR $GOPATH/src/valuebetsmining/src/src/
+WORKDIR $GOPATH/src/valuebetsmining/src/
 COPY src ./
 
 RUN go get -u github.com/golang/dep/cmd/dep

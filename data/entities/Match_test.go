@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"testing"
-	others "valuebetsmining/src/data/Others"
+	others "valuebetsmining/data/Others"
 )
 
 func TestNewMatchsLocal(t *testing.T) {

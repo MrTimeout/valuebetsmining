@@ -9,7 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	others "valuebetsmining/src/data/Others"
+	others "valuebetsmining/data/Others"
 )
 
 //Division ... Each division of each league
@@ -263,7 +263,7 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 		}
 		count++
 	}
-	if year.To == MaxYear {
+	if year.To == DefaultMaxYear {
 		for k, v := range d.TeamsLocal {
 			match, err := NewMatchReusingBoth(0, 0, 0, year.From, year.To, "test", "test", v, d.TeamsAway[k])
 			if err != nil {

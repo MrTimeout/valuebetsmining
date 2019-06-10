@@ -2,9 +2,9 @@ package logic
 
 import (
 	"fmt"
-	"valuebetsmining/src/data/entities"
-	"valuebetsmining/src/data/ios"
-	"valuebetsmining/src/data/network"
+	"valuebetsmining/data/entities"
+	"valuebetsmining/data/ios"
+	"valuebetsmining/data/network"
 )
 
 //ProcessData ... Processing all files from the path endpoints and years

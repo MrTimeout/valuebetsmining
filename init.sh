@@ -107,6 +107,8 @@ if [ "$3" = true ]; then
         docker run --detach \
             -e MONGODB_ROOT_ADDR=${IP_ADDR} \
             -e MONGO_INITDB_PORT=${PORT_DEFAULT_MONGO} \
+            -e IPADDR=127.0.0.1 \
+            -e DNS=valuebetsmining \
             -e PORT=${PORT_DEFAULT_SERVICE} \
             --env-file "${PWD}/secret" \
             --name ${CONTAINER_SERVICE} \

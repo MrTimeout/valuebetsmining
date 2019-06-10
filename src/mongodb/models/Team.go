@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 	"time"
-	mongo "valuebetsmining/src/src/mongodb"
-	"valuebetsmining/src/src/mongodb/entities"
+	mongo "valuebetsmining/src/mongodb"
+	"valuebetsmining/src/mongodb/entities"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
