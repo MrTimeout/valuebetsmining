@@ -26,6 +26,12 @@
   version = "v0.7.8"
 
 [[projects]]
+  name = "github.com/txn2/txeh"
+  packages = ["."]
+  revision = "4482b2f7a6cf014cc08378f06b6d7b4c31f757ce"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/xdg/scram"
   packages = ["."]
@@ -64,6 +70,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e67cabfc26751e28ce815775a28818e26eff8915d92576005638cbe0581c198d"
+  inputs-digest = "e1171316a9dee60597a5d453393be383313ccef8ad7ec9a5b937f8dd2c331acb"
   solver-name = "gps-cdcl"
   solver-version = 1
