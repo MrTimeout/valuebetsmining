@@ -18,7 +18,7 @@ func ProcessData() error {
 	if err := ios.Restart(entities.DirJSONDefault); err != nil {
 		return err
 	}
-	config, err := ios.ReadFile(entities.ConfigJSONFile)
+	config, err := entities.ReadFile(entities.DefaultFileConfig)
 	if err != nil {
 		return err
 	}

@@ -1,14 +1,15 @@
 package resolvers
 
 import (
-	mongo "valuebetsmining/src/mongodb"
+	"fmt"
+	"valuebetsmining/src/mongodb/models"
 
 	"github.com/graphql-go/graphql"
 )
 
 //Resolv ... Struct that handles mongo database
 type Resolv struct {
-	db *mongo.DriverMongo
+	db string
 }
 
 //ErrorResolv ... Struct that handles error of struct resolv
@@ -39,9 +40,9 @@ func (r *Resolv) TeamPropertiesResolv(p graphql.ResolveParams) (interface{}, err
 	if !ok {
 		return nil, ErrNil
 	}
-	where, ok := p.Args["type"].(string) //all, away, local
-	if !ok {
-		where = "all"
+	resul, err := models.GetPropertiesOfATeam(fmt.Sprintf("%s%s1019", country, division), team)
+	if err != nil {
+		return nil, err
 	}
 	return resul, nil
 }

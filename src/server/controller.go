@@ -26,6 +26,7 @@ func StablishHanlders(r *mux.Router) {
 	r.HandleFunc("/guia", Guide)
 	r.HandleFunc("/herramienta", Tool)
 	r.HandleFunc("/contacto", Contacto)
+	r.HandleFunc("/api/v1/{country}/{division}/{team}", PropertiesTeam)
 	r.PathPrefix("/recursos/").Handler(http.StripPrefix("/recursos/", http.FileServer(http.Dir(DefaultDirRecursos))))
 	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir(DefaultDirJS))))
 	r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir(DefaultDirCSS))))

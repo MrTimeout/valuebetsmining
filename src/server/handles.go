@@ -1,9 +1,13 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
+	"valuebetsmining/src/mongodb/models"
+
+	"github.com/gorilla/mux"
 )
 
 const (
@@ -55,6 +59,24 @@ func Tool(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	}
 	http.ServeFile(w, r, fileName)
+}
+
+//PropertiesTeam ... Return data that is in the database corresponding to the properties of the team
+func PropertiesTeam(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	resl, err := models.GetPropertiesOfATeam(fmt.Sprintf("%s%s%s", vars["country"], vars["division"], "1019"), vars["team"])
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+	}
+	w.WriteHeader(http.StatusOK)
+	r.Header.Set("Content-type", "application/json")
+	marshall, err := json.Marshal(resl)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+	}
+	fmt.Fprintf(w, string(marshall))
 }
 
 //Error404 ... Error not found

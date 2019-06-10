@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 	"testing"
-	"valuebetsmining/src/data/entities"
+	"valuebetsmining/data/entities"
 )
 
 //TestWriteJSONToAFile ... Write random info of the stucts team* to a file to understand how it works

@@ -6,7 +6,6 @@ import (
 
 //Shell ... Handles all params of the program
 type Shell struct {
-	fileType   string
 	yearFrom   int
 	yearTo     int
 	country    string
@@ -62,7 +61,6 @@ func NewShell() (Shell, error) {
 		return Shell{}, err
 	}
 	return Shell{
-		fileType:   DefaultExtFile,
 		yearFrom:   c.Year.From,
 		yearTo:     c.Year.To,
 		country:    "all",
@@ -73,6 +71,7 @@ func NewShell() (Shell, error) {
 	}, nil
 }
 
+/*
 //IsFileType ... Sets file type if it is correct
 func (s *Shell) IsFileType(n string) error {
 	if n == "json" || n == "csv" {
@@ -80,7 +79,7 @@ func (s *Shell) IsFileType(n string) error {
 		return nil
 	}
 	return ErrInvalidFileType
-}
+}*/
 
 //IsYearFrom ... Sets year from if it appears to look good
 func (s *Shell) IsYearFrom(n int) error {

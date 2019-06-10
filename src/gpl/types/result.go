@@ -1,4 +1,4 @@
-package gql
+package types
 
 import "github.com/graphql-go/graphql"
 
@@ -7,6 +7,18 @@ var Properties = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Team",
 		Fields: graphql.Fields{
+			"Last10GoalsTuckedAmountLocalMatchs": &graphql.Field{
+				Type: graphql.Int,
+			},
+			"Last10GoalsReceivedAmountLocalMatchs": &graphql.Field{
+				Type: graphql.Int,
+			},
+			"Last10GoalsTuckedAmountAwayMatchs": &graphql.Field{
+				Type: graphql.Int,
+			},
+			"Last10GoalsReceivedAmountAwayMatchs": &graphql.Field{
+				Type: graphql.Int,
+			},
 			"Last10WinningLocalMatchs": &graphql.Field{
 				Type: graphql.Int,
 			},
