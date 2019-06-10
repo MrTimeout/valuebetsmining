@@ -6,8 +6,18 @@ $(document).ready(function () {
     $(".oculto").removeClass();
   });
   $("#contacto").click(function () {
-    $(".login").toggleClass("visto");
+    if ($("#contacto li a img").attr("src")=="recursos/usuario.svg") {
+      $(".login").toggleClass("visto");
+    } else {
+      $(".confirmar").toggleClass("visto");
+    }
+    
   });
+
+  $("#cancelar").click(function () {
+    $(".confirmar").toggleClass("visto");
+  });
+
   $("#x").click(function () {
     $(".login").toggleClass("visto");
   });
