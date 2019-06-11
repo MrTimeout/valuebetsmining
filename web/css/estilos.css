@@ -681,6 +681,14 @@ margin-top: 61px;
  margin-right: 10%;
  margin-left: 2%;
 }
+
+#capa2{
+  display: none;
+}
+
+#capa2 section{
+  margin-top: 60px;
+}
 /*------------------------Calculo----------------------------------*/
 .zona{
   width: 60%;
