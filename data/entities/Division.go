@@ -151,7 +151,7 @@ func (d *Division) ParseEachFile(year Year, path string) error {
 
 //ParseFilesToCSV ... Parse files using a path and the struct Division creating an unique csv file
 func (d *Division) ParseFilesToCSV(year Year, country, div string) error {
-	fileCSV, err := os.Create(fmt.Sprintf("%s%s%s%d%d%s", DirCSVDefault, country, div, year.From, year.To, ExtFileCSV))
+	fileCSV, err := os.Create(fmt.Sprintf("%s%s%s%s", DirCSVDefault, country, div, ExtFileCSV))
 	if err != nil {
 		return err
 	}
@@ -279,8 +279,6 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 			str = append(str, strings.Split(target, ","))
 		}
 	}
-	d.TeamsAway = make(map[string]Team)
-	d.TeamsLocal = make(map[string]Team)
 	return str, nil
 }
 

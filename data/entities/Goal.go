@@ -22,7 +22,7 @@ type GoalError struct {
 	ErrorString string
 }
 
-const (
+var (
 	//DefaultLenGoal ... Default length of the arrays of struct goals
 	DefaultLenGoal = 10
 	//DefaultPreviousGoals ... Default number of matchs before actual one
@@ -100,6 +100,25 @@ func (g *Goal) AppendGoalsReceived(goals int) error {
 	}
 	err = g.CalculateGoalsReceivedMode()
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//CalculateProperties ... Calculate properties in general
+func (g *Goal) CalculateProperties() error {
+	g.CalculateGoalsReceivedAmount()
+	if err := g.CalculateGoalsReceivedAverage(); err != nil {
+		return err
+	}
+	if err := g.CalculateGoalsReceivedMode(); err != nil {
+		return err
+	}
+	g.CalculateGoalsTuckedAmount()
+	if err := g.CalculateGoalsTuckedAverage(); err != nil {
+		return err
+	}
+	if err := g.CalculateGoalsTuckedMode(); err != nil {
 		return err
 	}
 	return nil
@@ -187,42 +206,30 @@ func (g *Goal) PreviousNGoalsOfAMatch(n int) (Goal, error) {
 	if n == 0 {
 		n = DefaultPreviousGoals
 	}
-	diff := len(g.GoalsTucked) - n
+	if len(g.GoalsTucked) == 1 {
+		return Goal{}, ErrIndexOutOfGoal
+	}
+	diff := len(g.GoalsTucked) - n //9 - 1
 	if diff < 0 {
 		return Goal{}, ErrIndexOutOfGoal
 	}
 	var gt, gr []int
-	if diff+1 >= DefaultLenGoal {
-		gt = g.GoalsTucked[diff+1-DefaultLenGoal : diff+1]
-		gr = g.GoalsReceived[diff+1-DefaultLenGoal : diff+1]
+	if diff >= DefaultLenGoal { //1 >= 1
+		gt = g.GoalsTucked[diff-DefaultLenGoal : len(g.GoalsTucked)-DefaultPreviousGoals]
+		gr = g.GoalsReceived[diff-DefaultLenGoal : len(g.GoalsReceived)-DefaultPreviousGoals]
 	} else {
-		gt = g.GoalsTucked[:diff+1]
-		gr = g.GoalsReceived[:diff+1]
+		gt = g.GoalsTucked[0 : len(g.GoalsTucked)-DefaultPreviousGoals]
+		gr = g.GoalsReceived[0 : len(g.GoalsReceived)-DefaultPreviousGoals]
 	}
-	averageTucked, err := others.Average(gt, false)
+	gTemp := Goal{
+		GoalsTucked:   gt,
+		GoalsReceived: gr,
+	}
+	err := gTemp.CalculateProperties()
 	if err != nil {
 		return Goal{}, err
 	}
-	averageReceived, err := others.Average(gr, false)
-	if err != nil {
-		return Goal{}, err
-	}
-	modeTucked, err := others.Mode(gt...)
-	if err != nil {
-		return Goal{}, err
-	}
-	modeReceived, err := others.Mode(gr...)
-	if err != nil {
-		return Goal{}, err
-	}
-	return Goal{
-		GoalsTucked:          g.GoalsTucked[:diff+1],
-		GoalsReceived:        g.GoalsReceived[:diff+1],
-		GoalsTuckedAverage:   averageTucked,
-		GoalsReceivedAverage: averageReceived,
-		GoalsTuckedMode:      modeTucked,
-		GoalsReceivedMode:    modeReceived,
-	}, nil
+	return gTemp, nil
 }
 
 //CompareOfGoals ... Compare actual goal struct and other passed by param

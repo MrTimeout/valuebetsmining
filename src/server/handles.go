@@ -64,19 +64,80 @@ func Tool(w http.ResponseWriter, r *http.Request) {
 //PropertiesTeam ... Return data that is in the database corresponding to the properties of the team
 func PropertiesTeam(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	resl, err := models.GetPropertiesOfATeam(fmt.Sprintf("%s%s%s", vars["country"], vars["division"], "1019"), vars["team"])
+	resl, err := models.GetPropertiesOfATeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+	} else {
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-type", "application/json")
+		marshall, err := json.Marshal(resl)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+		} else {
+			fmt.Fprintf(w, string(marshall))
+		}
 	}
-	w.WriteHeader(http.StatusOK)
-	r.Header.Set("Content-type", "application/json")
-	marshall, err := json.Marshal(resl)
+}
+
+//Countries ... Return data that is in the database corresponding to the countries
+func Countries(w http.ResponseWriter, r *http.Request) {
+	resl, err := models.Countries()
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+	} else {
+		js, err := json.Marshal(resl)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+		} else {
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, string(js))
+		}
 	}
-	fmt.Fprintf(w, string(marshall))
+}
+
+//Divisions ... Return data that is in the database corresponding to the divisions
+func Divisions(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	resl, err := models.Divisions(vars["country"])
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+	} else {
+		js, err := json.Marshal(resl)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+		} else {
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, string(js))
+		}
+	}
+}
+
+//Teams ... Return data that is in the database corresponding to the teams
+func Teams(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	resl, err := models.GetAllTeamName(fmt.Sprintf("%s%s", vars["country"], vars["division"]))
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+	} else {
+		js, err := json.Marshal(resl)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+		} else {
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, string(js))
+		}
+	}
 }
 
 //Error404 ... Error not found

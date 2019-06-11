@@ -9,7 +9,7 @@ import (
 
 //Resolv ... Struct that handles mongo database
 type Resolv struct {
-	db string
+	Db string
 }
 
 //ErrorResolv ... Struct that handles error of struct resolv

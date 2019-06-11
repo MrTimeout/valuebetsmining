@@ -20,7 +20,7 @@ type ResultError struct {
 	ErrorString string
 }
 
-const (
+var (
 	//DefaultLenResult ... Default length of the arrays of struct result
 	DefaultLenResult = 10
 	//DefaultPreviousResults ... Default number of matchs before actual one
@@ -198,6 +198,7 @@ func (r *Result) WinTieLose(maxIndex int) map[string]int {
 	}
 	slices := r.Matchs[len(r.Matchs)-maxIndex:]
 	mapWTL := make(map[string]int)
+	mapWTL["lost"], mapWTL["tied"], mapWTL["won"] = 0, 0, 0
 	for _, v := range slices {
 		switch v {
 		case -1:
@@ -219,15 +220,18 @@ func (r *Result) PreviousNResultsOfAMatch(n int) (Result, error) {
 	if n == 0 {
 		n = DefaultPreviousResults
 	}
-	diff := len(r.Matchs) - n
+	if len(r.Matchs) == 1 {
+		return Result{}, ErrIndexOutOfRangeResult
+	}
+	diff := len(r.Matchs) - n //2
 	if diff < 0 {
 		return Result{}, ErrIndexOutOfResult
 	}
 	var rr []int
-	if diff+1 >= DefaultLenResult {
-		rr = r.Matchs[diff+1-DefaultLenResult : diff+1]
-	} else {
-		rr = r.Matchs[:diff+1]
+	if diff >= DefaultLenResult { //2 >= 10
+		rr = r.Matchs[diff-DefaultLenResult : len(r.Matchs)-DefaultPreviousResults]
+	} else { //2
+		rr = r.Matchs[0 : len(r.Matchs)-DefaultPreviousResults]
 	}
 	result, err := NewResultsMatchs(rr)
 	if err != nil {
@@ -237,7 +241,6 @@ func (r *Result) PreviousNResultsOfAMatch(n int) (Result, error) {
 	if err != nil {
 		return Result{}, err
 	}
-	result.Matchs = r.Matchs[:diff+1]
 	return result, nil
 }
 

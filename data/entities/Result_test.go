@@ -77,12 +77,13 @@ func TestNewResultsStringCSVAll(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	data := make([][]string, 0, 100)
+	data := make([][]string, 0, 101)
+	data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s,%d,%d", -1, 0, 1, r.StringCSV(DefaultLenResult), r.StreackWinning, r.StreackNoLosing), ","))
 	for i := 0; i < len(randGoalsLocal); i++ {
 		r.Update(randGoalsLocal[i], randsGoalsAway[i])
 		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s,%d,%d", i, randGoalsLocal[i], randsGoalsAway[i], r.StringCSV(DefaultLenResult), r.StreackWinning, r.StreackNoLosing), ","))
 	}
-	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	file, err := os.Create(fmt.Sprintf("../%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
 	if err != nil {
 		t.Error(err)
 	}
@@ -92,7 +93,42 @@ func TestNewResultsStringCSVAll(t *testing.T) {
 	defer writer.Flush()
 
 	writer.Write([]string{"Index", "goals local", "goals away", "local winnings", "local tiedings", "local losings", "local winning streack", "local no losing streack"})
+	writer.WriteAll(data)
+}
 
+func TestNewResultsPreviousStringCSVAll(t *testing.T) {
+	r, err := NewResults(0, 1)
+	if err != nil {
+		t.Error(err)
+	}
+	randGoalsLocal, err := others.RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	randsGoalsAway, err := others.RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	data := make([][]string, 0, 101)
+	data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s", -1, 0, 1, "nil nil nil nil nil"), ","))
+	for i := 0; i < len(randGoalsLocal); i++ {
+		r.Update(randGoalsLocal[i], randsGoalsAway[i])
+		previous, err := r.PreviousNResultsOfAMatch(1)
+		if err != nil {
+			t.Error(err)
+		}
+		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s,%d,%d", i, randGoalsLocal[i], randsGoalsAway[i], previous.StringCSV(DefaultLenResult), previous.StreackWinning, previous.StreackNoLosing), ","))
+	}
+	file, err := os.Create(fmt.Sprintf("../%s/%s%s_%d_%d%s", DefaultDirTestResults, DefaultNameTestResults, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	if err != nil {
+		t.Error(err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	writer.Write([]string{"Index", "goals local", "goals away", "local winnings", "local tiedings", "local losings", "local winning streack", "local no losing streack"})
 	writer.WriteAll(data)
 }
 

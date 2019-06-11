@@ -11,7 +11,7 @@ RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .
 
 EXPOSE 8080
 
-CMD ["./app"]
+CMD ["./app run --run-connection=false"]
 
 #FROM alpine:${CODE_VERSION}
 #ARG CODE_VERSION

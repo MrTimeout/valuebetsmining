@@ -1,7 +1,6 @@
 package searcher
 
 import (
-	"valuebetsmining/src/gpl/resolvers"
 	"valuebetsmining/src/gpl/types"
 	mongo "valuebetsmining/src/mongodb"
 
@@ -16,7 +15,7 @@ type Root struct {
 //NewRoot ... Return a fresh instance of an object root
 func NewRoot(db *mongo.DriverMongo) *Root {
 
-	resolv := resolvers.Resolv{db: "pepe"}
+	//resolv := resolvers.Resolv{Db: "pepe"}
 
 	root := Root{
 		Query: graphql.NewObject(
@@ -36,7 +35,7 @@ func NewRoot(db *mongo.DriverMongo) *Root {
 								Type: graphql.String,
 							},
 						},
-						Resolve: db.Client,
+						//Resolve: db.Client,
 					},
 				},
 			},

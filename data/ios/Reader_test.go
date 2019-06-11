@@ -10,7 +10,7 @@ import (
 func TestEmptyStringReadFile(t *testing.T) {
 	emptyString := ""
 	fillWhiteBackspace := "   "
-	normalString := entities.DefaultFileConfig
+	normalString := entities.DefaultFileConfigConnection
 	if _, err := entities.ReadFile(emptyString); err == nil {
 		t.Errorf("Expected-> %s\n\tGet-> %s\n\t", "Error parsing file name", err)
 	}
@@ -25,7 +25,7 @@ func TestEmptyStringReadFile(t *testing.T) {
 //TestNoExistingFileReadFile ... We are trying to test two files: the first one doesnt exists and the second one is correct
 func TestNoExistingFileReadFile(t *testing.T) {
 	noExistingFile := "abc123"
-	existingFile := entities.DefaultFileConfig
+	existingFile := entities.DefaultFileConfigConnection
 	if _, err := entities.ReadFile(noExistingFile); err == nil {
 		t.Errorf("Expected-> %s\n\tGet-> %s\n\t", "Error parsing file", err)
 	}
@@ -36,7 +36,7 @@ func TestNoExistingFileReadFile(t *testing.T) {
 
 //TestValueOfJSON ... Execute a simple Readfile testing if it trigger an error or not.
 func TestValueOfJSON(t *testing.T) {
-	_, err := entities.ReadFile(entities.DefaultFileConfig)
+	_, err := entities.ReadFile(entities.DefaultFileConfigConnection)
 	if err != nil {
 		log.Fatal(err)
 	}

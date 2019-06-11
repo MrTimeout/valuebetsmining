@@ -90,7 +90,7 @@ func TestWriteJSONToAFile(t *testing.T) {
 
 //TestProcessData ... Process data testing the func processData
 func TestProcessData(t *testing.T) {
-	err := ProcessData()
+	err := ProcessData(true, true)
 	if err != nil {
 		t.Error(err)
 	}

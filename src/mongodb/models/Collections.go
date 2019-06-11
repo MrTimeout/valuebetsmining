@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -11,6 +12,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/x/bsonx"
+)
+
+var (
+	//ErrNotFoundData ... Error not found data
+	ErrNotFoundData = errors.New("Data didnt found in the database")
 )
 
 //GetAllCollectionNames ... Get all collection names of an existing database
@@ -72,6 +78,35 @@ func CountryDiv() (map[string][]string, error) {
 		}
 	}
 	return finalMap, nil
+}
+
+//Countries ... Return countries in the database
+func Countries() ([]string, error) {
+	m, err := CountryDiv()
+	if err != nil {
+		return nil, err
+	}
+	resl := make([]string, 0, len(m))
+	for k := range m {
+		resl = append(resl, k)
+	}
+	return resl, nil
+}
+
+//Divisions ... Return all divisions of a country
+func Divisions(c string) ([]string, error) {
+	m, err := CountryDiv()
+	if err != nil {
+		return nil, err
+	}
+	resl := make([]string, 0, len(m))
+	for _, v := range m[c] {
+		resl = append(resl, v)
+	}
+	if len(resl) == 0 {
+		return nil, ErrNotFoundData
+	}
+	return resl, nil
 }
 
 //AmIHereCol ... Return true if the col exists and false otherwise
