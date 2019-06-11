@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Valuebetsmining</title>
+    <link rel="stylesheet" type="text/css" href="css/estilos.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="js/herramienta.js"></script>
+</head>
+
+<body>
+
+   
+
+    <div id="contenido" class="seleccion">
+            
+        <div>
+            <label for="Paises">Paises</label>
+            <select id="Paises" name="Paises"></select>
+        </div>
+        <div>
+            <label for="Division">Division</label>
+            <select id="Division" name="Division"></select>
+        </div>
+        <div>
+            <label for="Local">Local</label>
+            <select id="Local" name="Local"></select>
+        </div>
+        <div>
+            <label for="Visitante">Visitante</label>
+            <select id="Visitante" name="Visitante"></select>
+        </div>
+        
+        <div id="graficas"><img src="recursos/capas.svg" alt="icono capas" title="cambiar a modo lista"></div>
+    </div>
+
+    <div class="contenido" id="capa1">
+        <div class="graficas">
+            <div>
+                <h2>RESULTADOS</h2>
+                <div id="ultimos"></div>
+            </div>
+        </div>
+
+        <div class="graficas">
+            <div>
+                <h2>GOLES</h2>
+                <div id="goles"></div>
+            </div>
+        </div>
+
+        <div class="graficas">
+            <div>
+                <h2>RACHA</h2>
+                <div id="racha"></div>
+            </div>
+        </div>
+
+        <div class="graficas">
+            <div>
+                <h2>PROBABILIDAD</h2>
+                <div id="porcentaje"></div>
+            </div>
+        </div>
+    </div>
+
+            <div class="lista" id="capa2">
+                <section>
+                    
+                        <h2>RESULTADO 10 ULTIMOS PARTIDOS</h2>
+                        
+                        <ul>
+                            <li>
+                                <h3>GANADOS</h3>
+                                <h4 id="gLocal">LOCAL X</h4>
+                                <h4 id="gVisitante">VISITANTE X</h4>
+                            </li>
+                            <li>
+                                <h3>EMPATADOS</h3>
+                                <h4 id="eLocal">LOCAL X</h4>
+                                <h4 id="eVisitante">VISITANTE X</h4>
+                            </li>
+                            <li>
+                                <h3>PERDIDOS</h3>
+                                <h4 id="pLocal">LOCAL X</h4>
+                                <h4 id="pVisitante">VISITANTE X</h4>
+                            </li>
+                        
+                        </ul>
+                    
+                </section>
+                <section>
+                    
+                        <h2>GOLES</h2>
+                        <ul>
+                            <li>
+                                <h3>MARCADOS</h3>
+                                <h4 id="gmLocal">LOCAL X</h4>
+                                <h4 id="gmVisitante">VISITANTE X</h4>
+                            </li>
+                            <li>
+                                <h3>ENCAJADOS</h3>
+                                <h4 id="geLocal">LOCAL X</h4>
+                                <h4 id="geVisitante">VISITANTE X</h4>
+                            </li>
+                        </ul>
+                    
+                </section>
+                <section>
+                    
+                        <h2>RACHA</h2>
+                        <ul>
+                            <li>
+                                <h3>GANADOS</h3>
+                                <h4 id="rLocal">LOCAL X</h4>
+                                <h4 id="rVisitante">VISITANTE X</h4>
+                            </li>
+                            <li>
+                                <h3>INVICTO</h3>
+                                <h4 id="iLocal">LOCAL X</h4>
+                                <h4 id="iVisitante">VISITANTE X</h4>
+                            </li>
+                        </ul>
+                    
+                </section>
+                <section>
+                    
+                        <h2>PROBABILIDAD</h2>
+                        <ul>
+                            <li id="proLocal">LOCAL X</li>
+                            <li id="proEmpate">EMPATE X</li>
+                            <li id="proVisitante">VISITANTE X</li>
+                        </ul>
+                        
+                   
+                </section>
+        
+            </div>
+    <div class="zona">
+
+        <div class="calculo">
+          
+            <div id="cab">
+                <p><span></span></p>
+                <p><span>Probabilidad</span></p>
+                <p><span>Cuota</span></p>
+                <p><span>Valor</span></p>
+                <p><span>Kelly</span></p>
+            </div>
+
+            <div>
+                <p><span>Local</span></p>
+                <label for="localA">Probabilidad local</label>
+                <input type="text" id="localA" value="0.6" placeholder="Probabilidad local" readonly>
+                <label for="localB">Cuota Local</label>
+                <input type="text" id="localB" placeholder="Cuota Local" >
+                <label for="resultadolocal">Valor Local</label>
+                <input type="text" id="resultadolocal" placeholder="Valor Local" readonly>
+                <label for="kellylocal">Criterio Kelly Local</label>
+                <input type="text" id="kellylocal" placeholder="Criterio Kelly" readonly>
+            </div>
+
+            <div>
+                <p><span>Empate</span></p>
+                <label for="empateA">Probabilidad Empate</label>
+                <input type="text" id="empateA"  value="0.25"placeholder="Probabilidad Empate" readonly>
+                <label for="empateB">Cuota Empate</label>
+                <input type="text" id="empateB" placeholder="Cuota Empate">
+                <label for="resultadoempate">Valor Empate</label>
+                <input type="text" id="resultadoempate" placeholder="Valor Empate" readonly>
+                <label for="kellyempate">Criterio Kelly Empate</label>
+                <input type="text" id="kellyempate" placeholder="Criterio Kelly" readonly>
+            </div>
+
+            <div>
+                <p><span>Visitante</span></p>
+                <label for="visitanteA">Probabilidad Visitante</label>
+                <input type="text" id="visitanteA"  value="0.15" placeholder="Probabilidad Visitante" readonly>
+                <label for="visitanteB">Cuota Visitante</label>
+                <input type="text" id="visitanteB" placeholder="Cuota Visitante">
+                <label for="resultadovisitante">Valor Visitante</label>
+                <input type="text" id="resultadovisitante" placeholder="Valor visitante" readonly>
+                <label for="kellyvisitante">Criterio Kelly Visitante</label>
+                <input type="text" id="kellyvisitante" placeholder="Criterio Kelly" readonly>
+            </div>
+        </div>
+        <input type="submit" value="calcular" id="calcular">
+    </div>
+   
+</body>
+
+
+
+</html>
