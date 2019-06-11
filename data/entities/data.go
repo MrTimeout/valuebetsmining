@@ -47,7 +47,7 @@ var (
 
 //NewConfig ... Return an object to perform config file
 func NewConfig(countr, division string, yearFrom, yearTo int) (Config, error) {
-	c, err := ReadFile(DefaultFileConfig)
+	c, err := ReadFile(ConnectionConfigFile)
 	if err != nil {
 		return Config{}, err
 	}

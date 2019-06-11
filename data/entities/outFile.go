@@ -18,17 +18,22 @@ type ErrorConfigFile struct {
 	ErrorString string
 }
 
+const (
+	//DefaultFileConfigOutput ... Default file to use to extract all the data
+	DefaultFileConfigOutput = "config/defaultOutput.json"
+	//DefaultFileConfigOutputSchema ... Default file of config where it stored a default config file
+	DefaultFileConfigOutputSchema = "config/output.json"
+)
+
 var (
 	//DefaultsExt ... Default extension of the output file
 	DefaultsExt = []string{"json", "csv"}
-	//DefaultFileConfigFile ... Default file to use to extract all the data
-	DefaultFileConfigFile = "config/defaultOutput.json"
-	//DefaultFileConfigFileSchema ... Default file of config where it stored a default config file
-	DefaultFileConfigFileSchema = "config/file.json"
 	//MaxLines number of lines to be parsed before
 	MaxLines int
 	//ExtFile ... Extension of the output of the file
 	ExtFile string
+	//OutputConfigFile ... Output file config
+	OutputConfigFile string
 )
 
 var (
@@ -77,6 +82,11 @@ func ReadFileTakingArgs(file string) (ConfigFile, error) {
 	}
 	MaxLines, ExtFile = config.Lines, config.Extension
 	return config, nil
+}
+
+//ObtainLines ...
+func ObtainLines() int {
+	return MaxLines
 }
 
 //Error ...

@@ -23,8 +23,10 @@ type ErrorShell struct {
 const (
 	//DefaultDirConfig ... Default dir where all config files are stored
 	DefaultDirConfig = "config"
-	//DefaultFileConfig ... Default file of config json
-	DefaultFileConfig = "config/defaultConnection.json"
+	//DefaultFileConfigConnection ... Default file of config json
+	DefaultFileConfigConnection = "config/defaultConnection.json"
+	//DefaultFileConfigConnectionSchema ... Default file of config json to write data
+	DefaultFileConfigConnectionSchema = "config/connection.json"
 	//DefaultExtFile ... Default extension of the file result of the algorithm
 	DefaultExtFile = "csv"
 	//DefaultValueCountry ... Default value of the country: all
@@ -61,7 +63,7 @@ func NewShell() (Shell, error) {
 	if err != nil {
 		return Shell{}, err
 	}
-	c, err := ReadFile(DefaultFileConfig)
+	c, err := ReadFile(DefaultFileConfigConnection)
 	if err != nil {
 		return Shell{}, err
 	}
@@ -71,7 +73,7 @@ func NewShell() (Shell, error) {
 		country:    "all",
 		division:   "all",
 		skeleton:   sque,
-		configFile: DefaultFileConfig,
+		configFile: DefaultFileConfigConnection,
 		config:     c,
 	}, nil
 }
