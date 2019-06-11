@@ -22,12 +22,19 @@ func main() {
 	} else if !t {
 		panic("Please, execute me in my directory")
 	}
-	switch os.Args[1] {
-	case "output-file":
-		parsingOutputFile()
-	case "connection-config":
-		parsingConnection()
-
+	if len(os.Args) >= 1 {
+		switch os.Args[1] {
+		case "output-file":
+			parsingOutputFile()
+		case "connection-config":
+			parsingConnection()
+		case "run":
+			parsingRun()
+		default:
+			os.Exit(2)
+		}
+	} else {
+		panic("Write a command")
 	}
 }
 
@@ -41,6 +48,54 @@ func whereIAm() (bool, error) {
 		return false, nil
 	}
 	return true, nil
+}
+
+func parsingRun() {
+	run := flag.NewFlagSet("run", flag.ExitOnError)
+	outputFile := run.String("output-file", "config/defaultConnection.json", fmt.Sprintf("If you use this option, use it alone and pass a correct path to the param. By default is the %s file. Review it to know and understand how to work with it", entities.DefaultFileConfigFileSchema))
+	connectionFile := run.String("connection-file", "config/defaultOutput.json", fmt.Sprintf("If you use this option, use it alone and pass a correct path to the param. By default is the %s file. Review it to know and understand how to work with it", entities.DefaultFileConfig))
+
+	if len(os.Args) >= 2 {
+		run.Parse(os.Args[2:])
+
+		if len(strings.TrimSpace(*outputFile)) != 0 {
+			_, err := entities.ReadFileTakingArgs(*outputFile)
+			if err != nil {
+				panic(err)
+			}
+			file, err := ioutil.ReadFile(*outputFile)
+			if err != nil {
+				panic(err)
+			}
+			config := entities.ConfigFile{}
+			err = json.Unmarshal(file, &config)
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			panic("Error parsing nil string")
+		}
+
+		if len(strings.TrimSpace(*connectionFile)) != 0 {
+			_, err := entities.ReadFile(*connectionFile)
+			if err != nil {
+				panic(err)
+			}
+			file, err := ioutil.ReadFile(*connectionFile)
+			if err != nil {
+				panic(err)
+			}
+			config := entities.Config{}
+			err = json.Unmarshal(file, &config)
+			if err != nil {
+				panic(err)
+			}
+			entities.ConnectionConfigFile = *connectionFile
+		} else {
+			panic("Error parsing nil string")
+		}
+	}
+
 }
 
 func parsingOutputFile() {

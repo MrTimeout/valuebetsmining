@@ -24,7 +24,7 @@ const (
 	//DefaultDirConfig ... Default dir where all config files are stored
 	DefaultDirConfig = "config"
 	//DefaultFileConfig ... Default file of config json
-	DefaultFileConfig = "config/config.json"
+	DefaultFileConfig = "config/defaultConnection.json"
 	//DefaultExtFile ... Default extension of the file result of the algorithm
 	DefaultExtFile = "csv"
 	//DefaultValueCountry ... Default value of the country: all
@@ -35,6 +35,11 @@ const (
 	DefaultMaxYear = 19
 	//DefaultMinYear ... Default value to min year
 	DefaultMinYear = 10
+)
+
+var (
+	//ConnectionConfigFile ... Connection config file
+	ConnectionConfigFile string
 )
 
 var (
@@ -70,16 +75,6 @@ func NewShell() (Shell, error) {
 		config:     c,
 	}, nil
 }
-
-/*
-//IsFileType ... Sets file type if it is correct
-func (s *Shell) IsFileType(n string) error {
-	if n == "json" || n == "csv" {
-		s.fileType = n
-		return nil
-	}
-	return ErrInvalidFileType
-}*/
 
 //IsYearFrom ... Sets year from if it appears to look good
 func (s *Shell) IsYearFrom(n int) error {

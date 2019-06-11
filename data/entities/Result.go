@@ -20,9 +20,9 @@ type ResultError struct {
 	ErrorString string
 }
 
-const (
+var (
 	//DefaultLenResult ... Default length of the arrays of struct result
-	DefaultLenResult = 10
+	DefaultLenResult = MaxLines
 	//DefaultPreviousResults ... Default number of matchs before actual one
 	DefaultPreviousResults = 1
 )

@@ -22,9 +22,9 @@ type GoalError struct {
 	ErrorString string
 }
 
-const (
+var (
 	//DefaultLenGoal ... Default length of the arrays of struct goals
-	DefaultLenGoal = 10
+	DefaultLenGoal = MaxLines
 	//DefaultPreviousGoals ... Default number of matchs before actual one
 	DefaultPreviousGoals = 1
 )
