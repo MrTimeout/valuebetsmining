@@ -24,7 +24,7 @@ type GoalError struct {
 
 var (
 	//DefaultLenGoal ... Default length of the arrays of struct goals
-	DefaultLenGoal = 10
+	DefaultLenGoal int
 	//DefaultPreviousGoals ... Default number of matchs before actual one
 	DefaultPreviousGoals = 1
 )
