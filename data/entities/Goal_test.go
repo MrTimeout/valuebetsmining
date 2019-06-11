@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DefaultDirTestGoals  = "test/Goals"
+	DefaultDirTestGoals  = "../test/Goals"
 	DefaultNameTestGoals = "Testing"
 )
 
@@ -36,7 +36,13 @@ func TestPreviousNGoalsOfAMatch(t *testing.T) {
 		t.Error(err)
 	}
 	randsLocal, err := others.RandomArr(0, 10, 10)
+	if err != nil {
+		t.Error(err)
+	}
 	randsAway, err := others.RandomArr(0, 10, 10)
+	if err != nil {
+		t.Error(err)
+	}
 	goalsArr := []Goal{goals}
 	for i := 0; i < len(randsLocal); i++ {
 		err = goals.Update(randsLocal[i], randsAway[i])
@@ -72,10 +78,11 @@ func TestNewGoals(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	data := make([][]string, 0, 100)
+	data := make([][]string, 0, 101)
+	data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%d,%d,%s", -1, 0, 1, g.GoalsTuckedAmount, g.GoalsReceivedAmount, g.StringCSV()), ","))
 	for i := 0; i < len(randGoalsLocal); i++ {
 		g.Update(randGoalsLocal[i], randsGoalsAway[i])
-		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s", i, randGoalsLocal[i], randsGoalsAway[i], g.StringCSV()), ","))
+		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%d,%d,%s", i, randGoalsLocal[i], randsGoalsAway[i], g.GoalsTuckedAmount, g.GoalsReceivedAmount, g.StringCSV()), ","))
 	}
 	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestGoals, DefaultNameTestGoals, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
 	if err != nil {
@@ -86,7 +93,47 @@ func TestNewGoals(t *testing.T) {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	writer.Write([]string{"Index", "goals local", "goals away", "Average tucked goals local", "average received goals local"})
+	writer.Write([]string{"Index", "goals local", "goals away", "GoalsTuckedAmount", "GoalsReceivedAmount", "Average tucked goals local", "average received goals local"})
+
+	writer.WriteAll(data)
+}
+
+func TestNewPreviousGoals(t *testing.T) {
+	g, err := NewGoal(0, 1)
+	if err != nil {
+		t.Error(err)
+	}
+	randGoalsLocal, err := others.RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	randsGoalsAway, err := others.RandomArr(0, 5, 100)
+	if err != nil {
+		t.Error(err)
+	}
+	data := make([][]string, 0, 101)
+	data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%s,%s,%s", -1, 0, 1, "nil", "nil", "nil"), ","))
+	for i := 0; i < len(randGoalsLocal); i++ {
+		err = g.Update(randGoalsLocal[i], randsGoalsAway[i])
+		if err != nil {
+			t.Error(err)
+		}
+		goal, err := g.PreviousNGoalsOfAMatch(1)
+		if err != nil {
+			t.Error(err)
+		}
+		data = append(data, strings.Split(fmt.Sprintf("%d,%d,%d,%d,%d,%s", i, randGoalsLocal[i], randsGoalsAway[i], goal.GoalsTuckedAmount, goal.GoalsReceivedAmount, goal.StringCSV()), ","))
+	}
+	file, err := os.Create(fmt.Sprintf("%s/%s%s_%d_%d%s", DefaultDirTestGoals, DefaultNameTestGoals, others.FuncName(), time.Now().Hour(), time.Now().Minute(), DefaultExtensionCSV))
+	if err != nil {
+		t.Error(err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	writer.Write([]string{"Index", "goals local", "goals away", "GoalsTuckedAmount", "GoalsReceivedAmount", "Average tucked goals local", "average received goals local"})
 
 	writer.WriteAll(data)
 }
