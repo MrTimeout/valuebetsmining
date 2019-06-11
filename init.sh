@@ -112,6 +112,7 @@ if [ "$3" = true ]; then
             -e PORT=${PORT_DEFAULT_SERVICE} \
             --env-file "${PWD}/secret" \
             --name ${CONTAINER_SERVICE} \
+            --volume "${PWD}/src/web:/go/src/valuebetsmining/src/web" \
             --publish 3000-4000:${PORT_DEFAULT_SERVICE} \
             --network ${NETWORK} ${IMAGE_SERVICE}:${TAG}
     else 
