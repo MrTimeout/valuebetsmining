@@ -74,7 +74,9 @@ func CountryDiv() (map[string][]string, error) {
 	for _, val := range cols {
 		temp := re.FindAllString(val, -1)
 		if len(temp) >= 2 {
-			finalMap[temp[0]] = temp[1:]
+			for _, va := range temp[1:] {
+				finalMap[temp[0]] = append(finalMap[temp[0]], va)
+			}
 		}
 	}
 	return finalMap, nil

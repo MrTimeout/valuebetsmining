@@ -69,14 +69,16 @@ func PropertiesTeam(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	} else {
-		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-type", "application/json")
-		marshall, err := json.Marshal(resl)
+		w.Header().Set("Content-Type", "application/json")
+		if len(resl.LocalTeam) <= 2 {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+		}
+		err := json.NewEncoder(w).Encode(resl)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-		} else {
-			fmt.Fprintf(w, string(marshall))
 		}
 	}
 }
@@ -88,14 +90,16 @@ func Countries(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	} else {
-		js, err := json.Marshal(resl)
+		w.Header().Set("Content-Type", "application/json")
+		if len(resl) != 0 {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+		}
+		err := json.NewEncoder(w).Encode(resl)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-		} else {
-			w.WriteHeader(http.StatusOK)
-			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintf(w, string(js))
 		}
 	}
 }
@@ -108,14 +112,16 @@ func Divisions(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	} else {
-		js, err := json.Marshal(resl)
+		w.Header().Set("Content-Type", "application/json")
+		if len(resl) != 0 {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+		}
+		err := json.NewEncoder(w).Encode(resl)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-		} else {
-			w.WriteHeader(http.StatusOK)
-			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintf(w, string(js))
 		}
 	}
 }
@@ -128,14 +134,16 @@ func Teams(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	} else {
-		js, err := json.Marshal(resl)
+		w.Header().Set("Content-Type", "application/json")
+		if len(resl) != 0 {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+		}
+		err := json.NewEncoder(w).Encode(resl)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-		} else {
-			w.WriteHeader(http.StatusOK)
-			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintf(w, string(js))
 		}
 	}
 }
