@@ -15,12 +15,12 @@ $(document).ready(function () {
 
   /* carga de formulario inicio sesion  o carga de confirmacion cierre sesion  si esta logeado*/
   $("#contacto").click(function () {
-    if ($("#contacto li a img").attr("src")=="recursos/usuario.svg") {
+    if ($("#contacto li a img").attr("src") == "recursos/usuario.svg") {
       $(".login").toggleClass("visto");
     } else {
       $(".confirmar").toggleClass("visto");
     }
-    
+
   });
 
   /*seleccion de graficas o listas accesibles*/
@@ -34,7 +34,7 @@ $(document).ready(function () {
     $(".confirmar").toggleClass("visto");
   });
 
-  /*cerrar formulario inicio sesion*/ 
+  /*cerrar formulario inicio sesion*/
   $("#x").click(function () {
     $(".login").toggleClass("visto");
   });
@@ -48,10 +48,10 @@ $(document).ready(function () {
   $("h1").click(function () {
     var div = "div." + this.className;
     $(div).toggle();
-});
+  });
 
 
-/*--------Calcular  /Valor   /Kelly--------------------*/
+  /*--------Calcular  /Valor   /Kelly--------------------*/
 
   $('#calcular').click(function () {
     var num1 = $('#localA').val();
@@ -71,81 +71,84 @@ $(document).ready(function () {
     calcula(x, y, z, s);
   });
 
-/*-------------FormContacto---------------------*/
-  
+  /*-------------FormContacto---------------------*/
 
-  $('#btnSend').click(function(){
+
+  $('#btnSend').click(function () {
 
     var errores = '';
 
     // Validado Nombre ==============================
-    if( $('#names').val() == '' ){
-        errores += '<p>Escriba un nombre</p>';
-        $('#names').css("border-bottom-color", "#F14B4B")
-    } else{
-        $('#names').css("border-bottom-color", "#d1d1d1")
+    if ($('#names').val() == '') {
+      errores += '<p>Escriba un nombre</p>';
+      $('#names').css("border-bottom-color", "#F14B4B")
+    } else {
+      $('#names').css("border-bottom-color", "#d1d1d1")
     }
 
     // Validado Correo ==============================
-    if( $('#email').val() == '' ){
-        errores += '<p>Ingrese un correo</p>';
-        $('#email').css("border-bottom-color", "#F14B4B")
-    } else{
-        $('#email').css("border-bottom-color", "#d1d1d1")
+    if ($('#email').val() == '') {
+      errores += '<p>Ingrese un correo</p>';
+      $('#email').css("border-bottom-color", "#F14B4B")
+    } else {
+      $('#email').css("border-bottom-color", "#d1d1d1")
     }
 
     // Validado Mensaje ==============================
-    if( $('#mensaje').val() == '' ){
-        errores += '<p>Escriba un mensaje</p>';
-        $('#mensaje').css("border-bottom-color", "#F14B4B")
-    } else{
-        $('#mensaje').css("border-bottom-color", "#d1d1d1")
+    if ($('#mensaje').val() == '') {
+      errores += '<p>Escriba un mensaje</p>';
+      $('#mensaje').css("border-bottom-color", "#F14B4B")
+    } else {
+      $('#mensaje').css("border-bottom-color", "#d1d1d1")
     }
-/*
-    // ENVIANDO MENSAJE ============================
-    if( errores == '' == false){
-        var mensajeModal = '<div class="modal_wrap">'+
-                                '<div class="mensaje_modal">'+
-                                    '<h3>Errores encontrados</h3>'+
-                                    errores+
-                                    '<span id="btnClose">Cerrar</span>'+
-                                '</div>'+
-                            '</div>'
+    /*
+        // ENVIANDO MENSAJE ============================
+        if( errores == '' == false){
+            var mensajeModal = '<div class="modal_wrap">'+
+                                    '<div class="mensaje_modal">'+
+                                        '<h3>Errores encontrados</h3>'+
+                                        errores+
+                                        '<span id="btnClose">Cerrar</span>'+
+                                    '</div>'+
+                                '</div>'
 
-        $('body').append(mensajeModal);
-    }
-*/
+            $('body').append(mensajeModal);
+        }
+    */
     // CERRANDO MODAL ==============================
-    $('#btnClose').click(function(){
-        $('.modal_wrap').remove();
+    $('#btnClose').click(function () {
+      $('.modal_wrap').remove();
     });
+  });
+
+
+  /*------Seleccionar  /  ligas  /  equipos --------------------*/
+
+  $(function () {
+    recibirPaises();
+  });
+
+  $("select[name='Paises']").change(function () {
+    recibirDivisiones();
+  });
+
+  $("select[name='Division']").change(function () {
+    recibirLocales();
+
+  });
+
+  $("select[name='Local']").change(function () {
+    recibirVisitantes();
+  });
+
+  $("select[name='Visitante']").change(function () {
+    insertarAtributos();
+  });
+
 });
 
 
-/*------Seleccionar  /  ligas  /  equipos --------------------*/
 
-$(function () {
-  recibirPaises();
-});
-
-$("select[name='Paises']").change(function () {
-  recibirDivisiones();
-});
-
-$("select[name='Division']").change(function () {
-  recibirLocales();
-  
-});
-
-$("select[name='Local']").change(function () {
-  recibirVisitantes();
-});
-
-$("select[name='Visitante']").change(function () {
-  solicitarAtributos();
-});
-
-});
 
 
 
@@ -156,56 +159,72 @@ var paises = [];
 var divisiones = [];
 var locales = [];
 var visitantes = [];
-var atributos =[];
+var atributos;
 
 
 
 /*solicito paises al servidor*/
-function recibirPaises(){
-  $.ajax({url: "api/v1/countries", success: function(result){
-    paises=[];
-   for (let i = 0; i < result.length; i++) {
-     paises.push(result[i]);
-   }}});
-  
+function recibirPaises() {
+  $.ajax({
+    url: "api/v1/countries",
+    success: function (result) {
+      paises = [];
+      for (let i = 0; i < result.length; i++) {
+        paises.push(result[i]);
+      }
+    }
+  });
+
   insertarPaises();
 };
 
 /*solicito divisiones al servidor*/
-function recibirDivisiones(){
-  var pais=""+$('select[name="Paises"] option:selected').text();
-  $.ajax({url: "/api/v1/"+pais, success: function(result){
-    divisiones=[];
-    for (let i = 0; i < result.length; i++) {
-      divisiones.push(result[i]);
-    }}});
+function recibirDivisiones() {
+  var pais = "" + $('select[name="Paises"] option:selected').text();
+  $.ajax({
+    url: "/api/v1/" + pais,
+    success: function (result) {
+      divisiones = [];
+      for (let i = 0; i < result.length; i++) {
+        divisiones.push(result[i]);
+      }
+    }
+  });
   insertarDivisiones();
 };
 
 /*solicito equipos al servidor*/
-function recibirLocales(){
-  var pais=""+$('select[name="Paises"] option:selected').text();
-  var division=+$('select[name="Division"] option:selected').text();
-  $.ajax({url: "/api/v1/"+pais+"/"+division, success: function(result){
-    locales=[];
-    for (let i = 0; i < result.length; i++) {
-      locales.push(result[i]);
-    }}});
-  
+function recibirLocales() {
+  var pais = "" + $('select[name="Paises"] option:selected').text();
+  var division = +$('select[name="Division"] option:selected').text();
+  $.ajax({
+    url: "/api/v1/" + pais + "/" + division,
+    success: function (result) {
+      locales = [];
+      for (let i = 0; i < result.length; i++) {
+        locales.push(result[i]);
+      }
+    }
+  });
+
 
   insertarLocales();
 };
 
 /*solicito equipos al servidor*/
-function recibirVisitantes(){
-  var pais=""+$('select[name="Paises"] option:selected').text();
-  var division=+$('select[name="Division"] option:selected').text();
-  $.ajax({url: "/api/v1/"+pais+"/"+division, success: function(result){
-    visitantes=[];
-    for (let i = 0; i < result.length; i++) {
-      visitantes.push(result[i]);
-    }}});
-  
+function recibirVisitantes() {
+  var pais = "" + $('select[name="Paises"] option:selected').text();
+  var division = +$('select[name="Division"] option:selected').text();
+  $.ajax({
+    url: "/api/v1/" + pais + "/" + division,
+    success: function (result) {
+      visitantes = [];
+      for (let i = 0; i < result.length; i++) {
+        visitantes.push(result[i]);
+      }
+    }
+  });
+
   insertarVisitantes();
 };
 
@@ -252,23 +271,75 @@ function insertarVisitantes() {
   }
 
 };
+
+
+
+
+
+
+
+
 /*----------------------- Atributos en pagina--------------------------*/
 
-function solicitarAtributos(){
-  var pais=""+$('select[name="Paises"] option:selected').text();
-  var division=""+$('select[name="Division"] option:selected').text();
-  var local=""+$('select[name="Local"] option:selected').text();
-  var visitante=""+$('select[name="Visitante"] option:selected').text();
-  $.ajax({url: "/api/v1/"+pais+"/"+division+"/"+local+"/"+visitante, success: function(result){
-    
-  
-  console.log(result)
-
-}});
-
-function insertarAtributos(){
+function solicitarAtributos() {
+  var pais = "" + $('select[name="Paises"] option:selected').text();
+  var division = "" + $('select[name="Division"] option:selected').text();
+  var local = "" + $('select[name="Local"] option:selected').text();
+  var visitante = "" + $('select[name="Visitante"] option:selected').text();
+  $.ajax({
+    url: "/api/v1/" + pais + "/" + division + "/" + local + "/" + visitante,
+    success: function (result) {
 
 
+      console.log(result);
+
+      atributos = result;
+
+    }
+  });
+};
+
+function insertarAtributos() {
+  $("#gLocal").text();
+  $("#eLocal").text();
+  $("#pLocal").text();
+  $("#gVisitante").text();
+  $("#eVisitante").text();
+  $("#pVisitante").text();
+  $("#gmLocal").text();
+  $("#gmVisitante").text();
+  $("#geLocal").text();
+  $("#geVisitante").text();
+  $("#rLocal").text();
+  $("#rVisitante").text();
+  $("#iLocal").text();
+  $("#iVisitante").text();
+  var pro1 =
+    0.027 * ganadosLocal +
+    -0.0134 * ganadosVisitante +
+    -0.0303 * empatadosVisitante +
+    0.114 * marcadosLocal +
+    -0.0483 * recibidosLocal +
+    -0.0882 * recibidosvisitante +
+    -0.0604 * mediaMarcadosLocal +
+    0.0888 * mediaEncajadosLocal +
+    0.4706;
+  var pro2 = -0.0132 * empatadosLocal +
+    0.0358 * ganadosVisitante +
+    -0.0215 * marcadosLocal +
+    0.2181 * recibidosLocal +
+    -0.0433 * marcadosvisitante +
+    0.0226 * mediaMarcadosLocal +
+    -0.1045 * mediaEncajadosLocal +
+    0.336;
+  var proX = 1 - (pro1 + pro2);
+  $("#proLocal").text(pro1);
+  $("#proEmpate").text(proX);
+  $("#proVisitante").text(pro2);
+  $("#localA").val(pro1);
+  $("#emmpateA").val(prox);
+  $("#visitanteA").val(pro2);
+  insertarGraficas();
 }
 
 
@@ -328,11 +399,12 @@ var options2 = {
 
 
 /*---------------CREAR GRAFICAS----------------------*/
-google.charts.setOnLoadCallback(drawChart);
-google.charts.setOnLoadCallback(tablaGoles);
-google.charts.setOnLoadCallback(tablaRachaG);
-google.charts.setOnLoadCallback(tablaPorcentaje);
-
+function insertarGraficas() {
+  google.charts.setOnLoadCallback(drawChart);
+  google.charts.setOnLoadCallback(tablaGoles);
+  google.charts.setOnLoadCallback(tablaRachaG);
+  google.charts.setOnLoadCallback(tablaPorcentaje);
+};
 
 
 
@@ -340,7 +412,7 @@ google.charts.setOnLoadCallback(tablaPorcentaje);
 function drawChart() {
   var resultados = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-    ['GANADOS',2 , 2],
+    ['GANADOS', 2, 2],
     ['EMPATADOS', 2, 2],
     ['PERDIDOS', 3, 6]
   ]);
@@ -378,13 +450,14 @@ function tablaRachaG() {
 function tablaPorcentaje() {
   var posibilidades = google.visualization.arrayToDataTable([
     ['%', 'Probabilidades'],
-    ['LOCAL', 7],
-    ['EMPATE', 2],
-    ['VISITANTE', 1]
+    ['LOCAL', pro1],
+    ['EMPATE', proX],
+    ['VISITANTE', pro2]
   ]);
   var chart = new google.visualization.PieChart(document.getElementById('porcentaje'));
   chart.draw(posibilidades, options2);
 }
+
 
 
 
