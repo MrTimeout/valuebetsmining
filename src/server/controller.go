@@ -24,12 +24,13 @@ var (
 //StablishHanlders ... Stablish all the handlers to the router r
 func StablishHanlders(r *mux.Router) {
 	r.HandleFunc("/{route:[a-z]+\\.?[a-z]+}", Inicio).Methods("GET")
+	r.HandleFunc("/message", Message).Methods("POST")
 	r.HandleFunc("/login", entities.Login).Methods("POST")
 	r.HandleFunc("/logout", entities.LogOut).Methods("POST")
 	r.HandleFunc("/api/v1/countries", Countries).Methods("GET")
 	r.HandleFunc("/api/v1/{country}/divisions", Divisions).Methods("GET")
 	r.HandleFunc("/api/v1/{country}/{division}/teams", Teams).Methods("GET")
-	r.Path("/api/v1/{country}/{division}/{team}/properties").Queries("stadium", "{stadium:local|away|all}").HandlerFunc(PropertiesTeam).Methods("GET")
+	r.Path("/api/v1/{country}/{division}/{team}/properties").Queries("stadium", "{stadium:local|away}").HandlerFunc(PropertiesTeam).Methods("GET")
 	r.PathPrefix("/recursos/").Handler(http.StripPrefix("/recursos/", http.FileServer(http.Dir(DefaultDirRecursos)))).Methods("GET")
 	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir(DefaultDirJS)))).Methods("GET")
 	r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir(DefaultDirCSS)))).Methods("GET")

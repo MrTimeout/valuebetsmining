@@ -114,7 +114,7 @@ if [ "$3" = true ]; then
             --env-file "${PWD}/secret" \
             --name ${CONTAINER_SERVICE} \
             --volume "${PWD}/src/web:/go/src/valuebetsmining/src/web" \
-            --publish 3000-4000:${PORT_DEFAULT_SERVICE} \
+            --publish 3002:${PORT_DEFAULT_SERVICE} \
             --network ${NETWORK} ${IMAGE_SERVICE}:${TAG}
     else 
         echo "Problem creating the image of name ${IMAGE_SERVICE}:${TAG}"

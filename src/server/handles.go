@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"valuebetsmining/src/mongodb/models"
 	"valuebetsmining/src/server/entities"
 
@@ -124,7 +125,7 @@ func PropertiesTeam(w http.ResponseWriter, r *http.Request) {
 	case "local":
 		resl, err := models.GetPropertiesOfALocalTeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
 		if err == nil {
-			w.WriteHeader(http.StatusFound)
+			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(resl)
 			if err != nil {
 				w.WriteHeader(http.StatusNotFound)
@@ -134,7 +135,7 @@ func PropertiesTeam(w http.ResponseWriter, r *http.Request) {
 	case "away":
 		resl, err := models.GetPropertiesOfAAwayTeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
 		if err == nil {
-			w.WriteHeader(http.StatusFound)
+			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(resl)
 			if err != nil {
 				w.WriteHeader(http.StatusNotFound)
@@ -169,7 +170,7 @@ func Countries(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Set("Content-Type", "application/json")
 		if len(resl) != 0 {
-			w.WriteHeader(http.StatusFound)
+			w.WriteHeader(http.StatusOK)
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -193,7 +194,7 @@ func Divisions(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		if len(resl) != 0 {
-			w.WriteHeader(http.StatusFound)
+			w.WriteHeader(http.StatusOK)
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -217,7 +218,7 @@ func Teams(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		if len(resl) != 0 {
-			w.WriteHeader(http.StatusFound)
+			w.WriteHeader(http.StatusOK)
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -229,38 +230,28 @@ func Teams(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Message ... Receives the message of the user
+func Message(w http.ResponseWriter, r *http.Request) {
+	rePhone, reEmail := regexp.MustCompile("^[0-9]+$"), regexp.MustCompile("^\\w+@\\w+\\.\\w+$")
+	if len(strings.TrimSpace(r.FormValue("names"))) == 0 {
+		http.Redirect(w, r, "/contacto", 302)
+	} else if !rePhone.MatchString(r.FormValue("phone")) {
+		http.Redirect(w, r, "/contacto", 302)
+	} else if !reEmail.MatchString(r.FormValue("email")) {
+		http.Redirect(w, r, "/contacto", 302)
+	} else if len(r.FormValue("message")) > 300 || len(r.FormValue("message")) < 20 {
+		http.Redirect(w, r, "/contacto", 302)
+	}
+	log.Println("Message received and not saved")
+	http.Redirect(w, r, "/inicio", 200)
+}
+
 //Error404 ... Error not found
 func Error404() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var buff, buf bytes.Buffer
-		t, _ := template.ParseFiles("web/nav.html")
-		user := entities.User{Name: "", Cookie: false}
-		if err := t.Execute(&buff, user); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			tmplt, _ := template.ParseFiles(DefaultErrFile)
-			errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
-			if err == nil {
-				tmplt.Execute(w, errHTTP)
-			}
-		}
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		h := map[string]interface{}{
-			"Header": template.HTML(buff.String()),
-		}
-		log.Println(buff.String())
-		t, _ = template.ParseFiles("web/error.html")
+		t, _ := template.ParseFiles("web/error.html")
 		errHTTP, _ := entities.NewErrHTTP(entities.ErrNotFound, http.StatusNotFound)
-		t.Execute(&buf, errHTTP)
-		log.Println("asdasdasd")
-		if err := t.Execute(w, h); err != nil {
-			log.Print(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			tmplt, _ := template.ParseFiles(DefaultErrFile)
-			errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
-			if err == nil {
-				tmplt.Execute(w, errHTTP)
-			}
-		}
+		t.Execute(w, errHTTP)
 	})
 }
 

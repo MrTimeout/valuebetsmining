@@ -1,7 +1,7 @@
 /*EVENTOS CARGA DOCUMENTO*/
 $(document).ready(function () {
-  path = "http://localhost:3019/api/v1/"
-
+  path = "http://localhost:3002/api/v1/"
+  recibirPaises()
   /*desplegar menu responsive*/
   $("#menu").click(function () {
     $("nav ul li").toggleClass("oculto");
@@ -123,24 +123,24 @@ $(document).ready(function () {
 
   /*------Seleccionar  /  ligas  /  equipos --------------------*/
 
-  $(function () {
-    recibirPaises();
-  });
-
   $("select[name='Paises']").change(function () {
+    $("select#Paises option:contains('Selecciona')").remove()
     recibirDivisiones();
   });
 
   $("select[name='Division']").change(function () {
+    $("select#Division option:contains('Selecciona')").remove()
     recibirLocales();
 
   });
 
   $("select[name='Local']").change(function () {
+    $("select#Local option:contains('Selecciona')").remove()
     recibirVisitantes();
   });
 
   $("select[name='Visitante']").change(function () {
+    $("select#Visitante option:contains('Selecciona')").remove()
     solicitarAtributos()
   });
 
@@ -221,6 +221,7 @@ function insertarPaises(p) {
   $(option).html("Selecciona");
   $("select[name='Paises']").append(option);
   for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
     $(option).html(p[i]);
     $("select[name='Paises']").append(option);
   }
@@ -229,6 +230,9 @@ function insertarPaises(p) {
 /*inserto divisiones en el select divisiones*/
 function insertarDivisiones(p) {
   $("select[name='Division']").empty();
+  let option = $("<option></option>");
+  $(option).html("Selecciona");
+  $("select[name='Division']").append(option);
   for (let i = 0; i < p.length; i++) {
     let option = $("<option></option>");
     $(option).html(p[i]);
@@ -241,6 +245,9 @@ function insertarDivisiones(p) {
 /*inserto equipos en el select locales*/
 function insertarLocales(p) {
   $("select[name='Local']").empty();
+  let option = $("<option></option>");
+  $(option).html("Selecciona");
+  $("select[name='Local']").append(option);
   for (let i = 0; i < p.length; i++) {
     let option = $("<option></option>");
     $(option).html(p[i]);
@@ -252,6 +259,9 @@ function insertarLocales(p) {
 /*inserto equipos en el sele      $.ajavisitantes*/
 function insertarVisitantes(p) {
   $("select[name='Visitante']").empty();
+  let option = $("<option></option>");
+  $(option).html("Selecciona");
+  $("select[name='Visitante']").append(option);
   for (let i = 0; i < p.length; i++) {
     let option = $("<option></option>");
     $(option).html(p[i]);
