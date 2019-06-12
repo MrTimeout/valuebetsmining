@@ -1,7 +1,9 @@
 /*EVENTOS CARGA DOCUMENTO*/
 
-$(document).ready(function () {
 
+
+$(document).ready(function () {
+  path = "http://localhost:3010/api/v1/"
 
   /*desplegar menu responsive*/
   $("#menu").click(function () {
@@ -142,7 +144,7 @@ $(document).ready(function () {
   });
 
   $("select[name='Visitante']").change(function () {
-    insertarAtributos();
+    solicitarAtributos()
   });
 
 });
@@ -160,90 +162,79 @@ var divisiones = [];
 var locales = [];
 var visitantes = [];
 var atributos;
-
-
+var pro1;
+var proX;
+var pro2;
+var attHome;
+var attAway;
 
 /*solicito paises al servidor*/
 function recibirPaises() {
   $.ajax({
-    url: "api/v1/countries",
+    url: path + "countries",
+    headers: {
+      'Content-Type': 'application/json'
+    },
     success: function (result) {
-      paises = [];
-      for (let i = 0; i < result.length; i++) {
-        paises.push(result[i]);
-      }
+      insertarPaises(result);
     }
   });
-
-  insertarPaises();
 };
 
 /*solicito divisiones al servidor*/
 function recibirDivisiones() {
-  var pais = "" + $('select[name="Paises"] option:selected').text();
+  let pais = "" + $('select[name="Paises"] option:selected').text();
   $.ajax({
-    url: "/api/v1/" + pais,
+    url: path + pais + "/divisions",
     success: function (result) {
-      divisiones = [];
-      for (let i = 0; i < result.length; i++) {
-        divisiones.push(result[i]);
-      }
+      insertarDivisiones(result);
     }
   });
-  insertarDivisiones();
 };
 
 /*solicito equipos al servidor*/
 function recibirLocales() {
-  var pais = "" + $('select[name="Paises"] option:selected').text();
-  var division = +$('select[name="Division"] option:selected').text();
+  let pais = $('select[name="Paises"] option:selected').text();
+  let division = $('select[name="Division"] option:selected').text();
+  
   $.ajax({
-    url: "/api/v1/" + pais + "/" + division,
+    url: path + pais + "/" + division + "/teams",
     success: function (result) {
-      locales = [];
-      for (let i = 0; i < result.length; i++) {
-        locales.push(result[i]);
-      }
+      insertarLocales(result);
     }
   });
-
-
-  insertarLocales();
 };
 
 /*solicito equipos al servidor*/
 function recibirVisitantes() {
-  var pais = "" + $('select[name="Paises"] option:selected').text();
-  var division = +$('select[name="Division"] option:selected').text();
+  let pais = $('select[name="Paises"] option:selected').text();
+  let division = $('select[name="Division"] option:selected').text();
   $.ajax({
-    url: "/api/v1/" + pais + "/" + division,
+    url: path + pais + "/" + division + "/teams",
     success: function (result) {
-      visitantes = [];
-      for (let i = 0; i < result.length; i++) {
-        visitantes.push(result[i]);
-      }
+      insertarVisitantes(result);
     }
   });
-
-  insertarVisitantes();
 };
 
 /*inserto paises en el select paises*/
-function insertarPaises() {
+function insertarPaises(p) {
   $("select[name='Paises']").empty();
-  for (var i = 0; i < paises.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(paises[i]);
+  let option = $("<option></option>");
+  $(option).html("Selecciona");
+  $("select[name='Paises']").append(option);
+  for (let i = 0; i < p.length; i++) {
+    $(option).html(p[i]);
     $("select[name='Paises']").append(option);
   }
 };
 
 /*inserto divisiones en el select divisiones*/
-function insertarDivisiones() {
+function insertarDivisiones(p) {
   $("select[name='Division']").empty();
-  for (var i = 0; i < divisiones.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(divisiones[i]);
+  for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
+    $(option).html(p[i]);
     $("select[name='Division']").append(option);
   }
   $("select[name='Local']").empty();
@@ -251,22 +242,22 @@ function insertarDivisiones() {
 };
 
 /*inserto equipos en el select locales*/
-function insertarLocales() {
+function insertarLocales(p) {
   $("select[name='Local']").empty();
-  for (var i = 0; i < locales.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(locales[i]);
+  for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
+    $(option).html(p[i]);
     $("select[name='Local']").append(option);
   }
   $("select[name='Visitante']").empty();
 };
 
-/*inserto equipos en el select visitantes*/
-function insertarVisitantes() {
+/*inserto equipos en el sele      $.ajavisitantes*/
+function insertarVisitantes(p) {
   $("select[name='Visitante']").empty();
-  for (var i = 0; i < visitantes.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(visitantes[i]);
+  for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
+    $(option).html(p[i]);
     $("select[name='Visitante']").append(option);
   }
 
@@ -281,64 +272,77 @@ function insertarVisitantes() {
 
 /*----------------------- Atributos en pagina--------------------------*/
 
+
+//path+pais + "/" + division + "/" + local + "/properties",
 function solicitarAtributos() {
-  var pais = "" + $('select[name="Paises"] option:selected').text();
-  var division = "" + $('select[name="Division"] option:selected').text();
-  var local = "" + $('select[name="Local"] option:selected').text();
-  var visitante = "" + $('select[name="Visitante"] option:selected').text();
+  let pais = "" + $('select[name="Paises"] option:selected').text();
+  let division = "" + $('select[name="Division"] option:selected').text();
+  let local = "" + $('select[name="Local"] option:selected').text();
+  let visitante = "" + $('select[name="Visitante"] option:selected').text();
+  attHome=[];
+  attAway=[];
   $.ajax({
-    url: "/api/v1/" + pais + "/" + division + "/" + local + "/" + visitante,
-    success: function (result) {
-
-
-      console.log(result);
-
-      atributos = result;
-
+    url: path + pais + "/" + division + "/"+ local +"/properties?stadium=local",
+    success: function (home) {
+      $.ajax({
+        url: path + pais + "/" + division + "/"+ visitante +"/properties?stadium=away",
+        success: function (away) {
+          attHome = home;
+          attAway= away;
+          insertarAtributos()
+        }
+      });
     }
   });
 };
 
 function insertarAtributos() {
-  $("#gLocal").text();
-  $("#eLocal").text();
-  $("#pLocal").text();
-  $("#gVisitante").text();
-  $("#eVisitante").text();
-  $("#pVisitante").text();
-  $("#gmLocal").text();
-  $("#gmVisitante").text();
-  $("#geLocal").text();
-  $("#geVisitante").text();
-  $("#rLocal").text();
-  $("#rVisitante").text();
-  $("#iLocal").text();
-  $("#iVisitante").text();
-  var pro1 =
-    0.027 * ganadosLocal +
-    -0.0134 * ganadosVisitante +
-    -0.0303 * empatadosVisitante +
-    0.114 * marcadosLocal +
-    -0.0483 * recibidosLocal +
-    -0.0882 * recibidosvisitante +
-    -0.0604 * mediaMarcadosLocal +
-    0.0888 * mediaEncajadosLocal +
+  $("#gLocal").text(attHome.Last10WinningMatchs);
+  $("#eLocal").text(attHome.Last10TiedingMatchs);
+  $("#pLocal").text(attHome.Last10LosingMatchs);
+  $("#gVisitante").text(attAway.Last10WinningMatchs);
+  $("#eVisitante").text(attAway.Last10TiedingMatchs);
+  $("#pVisitante").text(attAway.Last10LosingMatchs);
+  $("#gmLocal").text(attHome.Last10GoalsTuckedAmount);
+  $("#gmVisitante").text(attAway.Last10GoalsTuckedAmount);
+  $("#geLocal").text(attHome.Last10GoalsReceivedAmount);
+  $("#geVisitante").text(attAway.Last10GoalsReceivedAmount);
+  $("#rLocal").text(attHome.Last10StreackWinning);
+  $("#rVisitante").text(attAway.Last10StreackWinning);
+  $("#iLocal").text(attHome.Last10StreackNoLosing);
+  $("#iVisitante").text(attAway.Last10StreackNoLosing);
+  pro1 =0.027 * attHome.Last10WinningMatchs +
+    -0.0134 * attAway.Last10WinningMatchs +
+    -0.0303 * attAway.Last10TiedingMatchs +
+     0.114 * attHome.Last10GoalsTuckedAmount +
+    -0.0483 * attHome.Last10GoalsReceivedAmount +
+    -0.0882 * attAway.Last10GoalsReceivedAmount +
+    -0.0604 * attHome.Last10AverageTuckedGoals +
+    0.0888 * attHome.Last10AverageReceivedGoals +
     0.4706;
-  var pro2 = -0.0132 * empatadosLocal +
-    0.0358 * ganadosVisitante +
-    -0.0215 * marcadosLocal +
-    0.2181 * recibidosLocal +
-    -0.0433 * marcadosvisitante +
-    0.0226 * mediaMarcadosLocal +
-    -0.1045 * mediaEncajadosLocal +
+  pro2 = -0.0132 * attHome.Last10TiedingMatchs +
+    0.0358 * attAway.Last10WinningMatchs +
+    -0.0215 * attHome.Last10GoalsTuckedAmount +
+    0.2181 * attHome.Last10GoalsReceivedAmount +
+    -0.0433 * attAway.Last10GoalsReceivedAmount +
+    0.0226 * attHome.Last10AverageTuckedGoals +
+    -0.1045 * attHome.Last10AverageReceivedGoals +
     0.336;
-  var proX = 1 - (pro1 + pro2);
-  $("#proLocal").text(pro1);
-  $("#proEmpate").text(proX);
-  $("#proVisitante").text(pro2);
-  $("#localA").val(pro1);
-  $("#emmpateA").val(prox);
-  $("#visitanteA").val(pro2);
+  proX = -0.0025 * attHome.Last10WinningMatchs +
+  0.0049 * attHome.Last10TiedingMatchs +
+ -0.0015 * attHome.Last10LosingMatchs +
+  0.0049 * attAway.Last10TiedingMatchs +
+ -0.0015 * attAway.Last10LosingMatchs +
+ -0.6136 * attHome.Last10GoalsTuckedAmount +
+  0.5644 * attAway.Last10GoalsTuckedAmount +
+ -0.0591 * attAway.Last10GoalsReceivedAmount +
+  0.3804;
+  $("#proLocal").text((pro1+pro2+proX)/pro1);
+  $("#proEmpate").text((pro1+pro2+proX)/proX);
+  $("#proVisitante").text((pro1+pro2+proX)/pro2);
+  $("#localA").val((pro1+pro2+proX)/pro1);
+  $("#emmpateA").val((pro1+pro2+proX)/proX);
+  $("#visitanteA").val((pro1+pro2+proX)/pro2);
   insertarGraficas();
 }
 
@@ -406,15 +410,15 @@ function insertarGraficas() {
   google.charts.setOnLoadCallback(tablaPorcentaje);
 };
 
-
+/****************** OBTENER GRÁFICAS******************/
 
 /*--------------Grafica RESULTADOS-------------------------*/
 function drawChart() {
   var resultados = google.visualization.arrayToDataTable([
-    ['Nº', 'Local', 'Visitante'],
-    ['GANADOS', 2, 2],
-    ['EMPATADOS', 2, 2],
-    ['PERDIDOS', 3, 6]
+    ["Nº", "Local", "Visitante"],
+    ["GANADOS", attHome.Last10WinningMatchs, attAway.Last10WinningMatchs],
+    ["EMPATADOS", attHome.Last10TiedingMatchs, attAway.Last10TiedingMatchs],
+    ["PERDIDOS", attHome.Last10LosingMatchs,attAway.Last10LosingMatchs]
   ]);
   var chart = new google.charts.Bar(document.getElementById('ultimos'));
 
@@ -426,8 +430,8 @@ function drawChart() {
 function tablaGoles() {
   var goles = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-    ['A FAVOR', 5, 2],
-    ['EN CONTRA', 8, 2]
+    ['A FAVOR', attHome.Last10GoalsTuckedAmount, attAway.Last10GoalsTuckedAmount],
+    ['EN CONTRA', attHome.Last10GoalsReceivedAmount, attAway.Last10GoalsReceivedAmount]
   ]);
   var chart = new google.charts.Bar(document.getElementById('goles'));
 
@@ -438,8 +442,8 @@ function tablaGoles() {
 function tablaRachaG() {
   var ganados = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-    ['GANADOS', 5, 4],
-    ['INVICTO', 8, 1]
+    ['GANADOS', attHome.Last10StreackWinning , attAway.Last10StreackWinning],
+    ['INVICTO', attHome.Last10StreackNoLosing , attAway.Last10StreackNoLosing]
   ]);
   var chart = new google.charts.Bar(document.getElementById('racha'));
 
@@ -450,9 +454,9 @@ function tablaRachaG() {
 function tablaPorcentaje() {
   var posibilidades = google.visualization.arrayToDataTable([
     ['%', 'Probabilidades'],
-    ['LOCAL', pro1],
-    ['EMPATE', proX],
-    ['VISITANTE', pro2]
+    ['LOCAL', (pro1+pro2+proX)/pro1],
+    ['EMPATE', (pro1+pro2+proX)/proX],
+    ['VISITANTE', (pro1+pro2+proX)/pro2]
   ]);
   var chart = new google.visualization.PieChart(document.getElementById('porcentaje'));
   chart.draw(posibilidades, options2);
