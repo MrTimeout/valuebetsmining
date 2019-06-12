@@ -1,31 +1,40 @@
 package ios
 
 import (
-	"errors"
+	"log"
 	"os"
 	"path/filepath"
 )
 
-//Restart ... Remove file if it exists and creates a new one
+//Restart ... Remove dir if it exists and creates a new one
 func Restart(name string) error {
-	src, err := os.Stat(name)
+	_, err := os.Stat(name)
 	if os.IsNotExist(err) {
-		errDir := os.Mkdir(name, 0775)
-		if errDir != nil {
-			return errDir
-		}
-	} else if !os.IsNotExist(err) {
-		err := os.Remove(name)
+		err = os.MkdirAll(name, 0755)
 		if err != nil {
-			return err
+			log.Println(err)
 		}
-		err = os.Mkdir(name, 0775)
+	} else {
+		err = os.RemoveAll(name)
+		if err != nil {
+			log.Println(err)
+		}
+		err = os.MkdirAll(name, 0755)
 		if err != nil {
 			return err
 		}
 	}
-	if src.Mode().IsRegular() {
-		return errors.New("Already exists like a file")
+	return nil
+}
+
+//RestartFile ... Remove file if it exists and creates a new one
+func RestartFile(name string) error {
+	_, err := os.Stat(name)
+	if !os.IsNotExist(err) {
+		err := os.Remove(name)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

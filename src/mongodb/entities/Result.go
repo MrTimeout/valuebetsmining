@@ -4,30 +4,32 @@ import "fmt"
 
 //Result ... Struct that handles information of the last match of each team
 type Result struct {
-	Index                                int     `bson:"Index"`
-	Division                             string  `bson:"Division"`
-	Date                                 string  `bson:"Date"`
-	LocalTeam                            string  `bson:"LocalTean"`
-	AwayTeam                             string  `bson:"AwayTeam"`
-	Result                               string  `bson:"Result"`
-	LocalGoals                           int     `bson:"LocalGoals"`
-	AwayGoals                            int     `bson:"AwayGoals"`
-	Last10WinningLocalMatchs             int     `bson:"Last10WinningLocalMatchs"`
-	Last10TiedingLocalMatchs             int     `bson:"Last10TiedingLocalMatchs"`
-	Last10LosingLocalMatchs              int     `bson:"Last10LosingLocalMatchs"`
-	Last10WinningAwayMatchs              int     `bson:"Last10WinningAwayMatchs"`
-	Last10TiedingAwayMatchs              int     `bson:"Last10TiedingAwayMatchs"`
-	Last10LosingAwayMatchs               int     `bson:"Last10LosingAwayMatchs"`
-	Last10StreackWinningLocal            int     `bson:"Last10StreackWinningLocal"`
-	Last10StreackNoLosingLocal           int     `bson:"Last10StreackNoLosingLocal"`
-	Last10StreackWinningAway             int     `bson:"Last10StreackWinningAway"`
-	Last10StreackNoLosingAway            int     `bson:"Last10StreackNoLosingAway"`
-	Last10GoalsTuckedAmountLocalMatchs   int     `bson:"Last10GoalsTuckedAmount"`
-	Last10GoalsReceivedAmountLocalMatchs int     `bson:"Last10GoalsReceivedAmount"`
-	Last10AverageTuckedGoalsLocal        float64 `bson:"Last10AverageTuckedGoalsLocal"`
-	Last10AverageReceivedGoalsLocal      float64 `bson:"Last10AverageReceivedGoalsLocal"`
-	Last10AverageTuckedGoalsAway         float64 `bson:"Last10AverageTuckedGoalsAway"`
-	Last10AverageReceivedGoalsAway       float64 `bson:"Last10AverageReceivedGoalsAway"`
+	Index                           int     `bson:"Index"`
+	Division                        string  `bson:"Division"`
+	Date                            string  `bson:"Date"`
+	LocalTeam                       string  `bson:"LocalTeam"`
+	AwayTeam                        string  `bson:"AwayTeam"`
+	LocalGoals                      int     `bson:"LocalGoals"`
+	AwayGoals                       int     `bson:"AwayGoals"`
+	Result                          string  `bson:"Result"`
+	Last10WinningLocalMatchs        int     `bson:"Last10WinningLocalMatchs"`
+	Last10TiedingLocalMatchs        int     `bson:"Last10TiedingLocalMatchs"`
+	Last10LosingLocalMatchs         int     `bson:"Last10LosingLocalMatchs"`
+	Last10WinningAwayMatchs         int     `bson:"Last10WinningAwayMatchs"`
+	Last10TiedingAwayMatchs         int     `bson:"Last10TiedingAwayMatchs"`
+	Last10LosingAwayMatchs          int     `bson:"Last10LosingAwayMatchs"`
+	Last10StreackWinningLocal       int     `bson:"Last10StreackWinningLocal"`
+	Last10StreackNoLosingLocal      int     `bson:"Last10StreackNoLosingLocal"`
+	Last10StreackWinningAway        int     `bson:"Last10StreackWinningAway"`
+	Last10StreackNoLosingAway       int     `bson:"Last10StreackNoLosingAway"`
+	Last10GoalsTuckedAmountLocal    int     `bson:"Last10GoalsTuckedAmountLocal"`
+	Last10GoalsReceivedAmountLocal  int     `bson:"Last10GoalsReceivedAmountLocal"`
+	Last10GoalsTuckedAmountAway     int     `bson:"Last10GoalsTuckedAmountAway"`
+	Last10GoalsReceivedAmountAway   int     `bson:"Last10GoalsReceivedAmountAway"`
+	Last10AverageTuckedGoalsLocal   float64 `bson:"Last10AverageTuckedGoalsLocal"`
+	Last10AverageReceivedGoalsLocal float64 `bson:"Last10AverageReceivedGoalsLocal"`
+	Last10AverageTuckedGoalsAway    float64 `bson:"Last10AverageTuckedGoalsAway"`
+	Last10AverageReceivedGoalsAway  float64 `bson:"Last10AverageReceivedGoalsAway"`
 }
 
 //String ... Return all the properties in a easy way to understand

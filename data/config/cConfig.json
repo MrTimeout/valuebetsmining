@@ -1,0 +1,39 @@
+{
+    "Path": "http://www.football-data.co.uk/mmz4281",
+    "Year": {
+        "from": 10,
+        "to": 19
+    },
+    "Endpoints": [
+        {
+            "name": "Netherlands",
+            "keys": [
+                "N1"
+            ]
+        },
+        {
+            "name": "Belgium",
+            "keys": [
+                "B1"
+            ]
+        },
+        {
+            "name": "Portugal",
+            "keys": [
+                "P1"
+            ]
+        },
+        {
+            "name": "Turkey",
+            "keys": [
+                "T1"
+            ]
+        },
+        {
+            "name": "Greece",
+            "keys": [
+                "G1"
+            ]
+        }
+    ]
+}

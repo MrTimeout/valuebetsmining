@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for f in $DEFAULT_DIR_FILES/*.csv
+for f in $DEFAULT_DIR_FILES*.csv
 do
     echo $(basename -s.csv $f)
     mongoimport --username $MONGO_INITDB_ROOT_USERNAME \

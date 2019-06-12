@@ -9,14 +9,6 @@ import (
 
 //ProcessData ... Processing all files from the path endpoints and years
 func ProcessData(runConnection, runOutput bool) error {
-	if runOutput {
-		if err := ios.RemoveContents(entities.DirCSVDefault); err != nil {
-			return err
-		}
-		if err := ios.Restart(entities.DirCSVDefault); err != nil {
-			return err
-		}
-	}
 	config, err := entities.ReadFile(entities.ConnectionConfigFile)
 	if err != nil {
 		return err
@@ -41,6 +33,9 @@ func ProcessData(runConnection, runOutput bool) error {
 					return err
 				}
 				if entities.ExtFile == "csv" {
+					if err := ios.RestartFile(fmt.Sprintf("%s%s%s%s", entities.DirCSVDefault, country.Name, key, entities.ExtFileCSV)); err != nil {
+						return err
+					}
 					err = div.ParseFilesToCSV(connection.Year, country.Name, key)
 					if err != nil {
 						return err

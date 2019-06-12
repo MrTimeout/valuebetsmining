@@ -182,7 +182,11 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 	reader := csv.NewReader(csvFile)
 	count := 1
 	reader.Read() //First line
+	var final map[string]string
 	str := make([][]string, 0, 0)
+	if year.To == DefaultMaxYear {
+		final = make(map[string]string)
+	}
 	for {
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -213,6 +217,10 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 				d.Matchs = append(d.Matchs, match)
 				d.TeamsLocal[line[2]] = match.TeamLocal
 				d.TeamsAway[line[3]] = match.TeamAway
+				if year.To == DefaultMaxYear {
+					final[match.TeamLocal.Name] = "yes"
+					final[match.TeamAway.Name] = "yes"
+				}
 				target, err := match.StringCSV(count, line, false, false)
 				if err != nil {
 					return nil, err
@@ -226,6 +234,10 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 				d.Matchs = append(d.Matchs, match)
 				d.TeamsLocal[line[2]] = match.TeamLocal
 				d.TeamsAway[line[3]] = match.TeamAway
+				if year.To == DefaultMaxYear {
+					final[match.TeamLocal.Name] = "yes"
+					final[match.TeamAway.Name] = "yes"
+				}
 				target, err := match.StringCSV(count, line, false, true)
 				if err != nil {
 					return nil, err
@@ -241,6 +253,10 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 				d.Matchs = append(d.Matchs, match)
 				d.TeamsLocal[line[2]] = match.TeamLocal
 				d.TeamsAway[line[3]] = match.TeamAway
+				if year.To == DefaultMaxYear {
+					final[match.TeamLocal.Name] = "yes"
+					final[match.TeamAway.Name] = "yes"
+				}
 				target, err := match.StringCSV(count, line, true, false)
 				if err != nil {
 					return nil, err
@@ -254,6 +270,10 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 				d.Matchs = append(d.Matchs, match)
 				d.TeamsLocal[line[2]] = match.TeamLocal
 				d.TeamsAway[line[3]] = match.TeamAway
+				if year.To == DefaultMaxYear {
+					final[match.TeamLocal.Name] = "yes"
+					final[match.TeamAway.Name] = "yes"
+				}
 				target, err := match.StringCSV(count, line, true, true)
 				if err != nil {
 					return nil, err
@@ -261,11 +281,12 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 				str = append(str, strings.Split(target, ","))
 			}
 		}
+
 		count++
 	}
 	if year.To == DefaultMaxYear {
-		for k, v := range d.TeamsLocal {
-			match, err := NewMatchReusingBoth(0, 0, 0, year.From, year.To, "test", "test", v, d.TeamsAway[k])
+		for k := range final {
+			match, err := NewMatchReusingBoth(0, 0, 0, year.From, year.To, "test", "test", d.TeamsLocal[k], d.TeamsAway[k])
 			if err != nil {
 				return nil, err
 			}

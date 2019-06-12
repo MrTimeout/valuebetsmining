@@ -64,22 +64,46 @@ func Tool(w http.ResponseWriter, r *http.Request) {
 //PropertiesTeam ... Return data that is in the database corresponding to the properties of the team
 func PropertiesTeam(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	resl, err := models.GetPropertiesOfATeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
-	if err != nil {
+	stadium := r.FormValue("stadium")
+	if stadium == "local" || stadium == "away" || stadium == "all" {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	}
+	switch stadium {
+	case "local":
+		resl, err := models.GetPropertiesOfALocalTeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
+		if err == nil {
+			w.WriteHeader(http.StatusFound)
+			err := json.NewEncoder(w).Encode(resl)
+			if err != nil {
+				w.WriteHeader(http.StatusNotFound)
+				http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+			}
+		}
+	case "away":
+		resl, err := models.GetPropertiesOfAAwayTeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
+		if err == nil {
+			w.WriteHeader(http.StatusFound)
+			err := json.NewEncoder(w).Encode(resl)
+			if err != nil {
+				w.WriteHeader(http.StatusNotFound)
+				http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+			}
+		}
+	case "all":
+		resl, err := models.GetPropertiesOfATeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
+		if err == nil {
+			w.WriteHeader(http.StatusNotFound)
+			err := json.NewEncoder(w).Encode(resl)
+			if err != nil {
+				w.WriteHeader(http.StatusNotFound)
+				http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+			}
+		}
+	default:
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-	} else {
-		w.Header().Set("Content-Type", "application/json")
-		if len(resl.LocalTeam) <= 2 {
-			w.WriteHeader(http.StatusOK)
-		} else {
-			w.WriteHeader(http.StatusNotFound)
-		}
-		err := json.NewEncoder(w).Encode(resl)
-		if err != nil {
-			w.WriteHeader(http.StatusNotFound)
-			http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-		}
 	}
 }
 
@@ -90,9 +114,11 @@ func Countries(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	} else {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Set("Content-Type", "application/json")
 		if len(resl) != 0 {
-			w.WriteHeader(http.StatusOK)
+			w.WriteHeader(http.StatusFound)
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -113,8 +139,10 @@ func Divisions(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	} else {
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		if len(resl) != 0 {
-			w.WriteHeader(http.StatusOK)
+			w.WriteHeader(http.StatusFound)
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -135,8 +163,10 @@ func Teams(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
 	} else {
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		if len(resl) != 0 {
-			w.WriteHeader(http.StatusOK)
+			w.WriteHeader(http.StatusFound)
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}

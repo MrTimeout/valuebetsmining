@@ -29,7 +29,7 @@ func StablishHanlders(r *mux.Router) {
 	r.HandleFunc("/api/v1/countries", Countries)
 	r.HandleFunc("/api/v1/{country}/divisions", Divisions)
 	r.HandleFunc("/api/v1/{country}/{division}/teams", Teams)
-	r.HandleFunc("/api/v1/{country}/{division}/{team}/properties", PropertiesTeam)
+	r.Path("/api/v1/{country}/{division}/{team}/properties").Queries("stadium", "{local|away|all}").HandlerFunc(PropertiesTeam)
 	r.PathPrefix("/recursos/").Handler(http.StripPrefix("/recursos/", http.FileServer(http.Dir(DefaultDirRecursos))))
 	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir(DefaultDirJS))))
 	r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir(DefaultDirCSS))))

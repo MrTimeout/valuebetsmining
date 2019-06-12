@@ -1,7 +1,9 @@
 /*EVENTOS CARGA DOCUMENTO*/
 
-$(document).ready(function () {
+var arr
 
+$(document).ready(function () {
+  path = "http://localhost:3010/api/v1/"
 
   /*desplegar menu responsive*/
   $("#menu").click(function () {
@@ -142,7 +144,7 @@ $(document).ready(function () {
   });
 
   $("select[name='Visitante']").change(function () {
-    insertarAtributos();
+    solicitarAtributos()
   });
 
 });
@@ -160,90 +162,76 @@ var divisiones = [];
 var locales = [];
 var visitantes = [];
 var atributos;
-
+var pro1;
+var proX;
+var pro2;
 
 
 /*solicito paises al servidor*/
 function recibirPaises() {
   $.ajax({
-    url: "api/v1/countries",
+    url: path + "countries",
+    headers: {
+      'Content-Type': 'application/json'
+    },
     success: function (result) {
-      paises = [];
-      for (let i = 0; i < result.length; i++) {
-        paises.push(result[i]);
-      }
+      insertarPaises(result);
     }
   });
-
-  insertarPaises();
 };
 
 /*solicito divisiones al servidor*/
 function recibirDivisiones() {
   var pais = "" + $('select[name="Paises"] option:selected').text();
   $.ajax({
-    url: "/api/v1/" + pais,
+    url: path + pais + "/divisions",
     success: function (result) {
-      divisiones = [];
-      for (let i = 0; i < result.length; i++) {
-        divisiones.push(result[i]);
-      }
+      insertarDivisiones(result);
     }
   });
-  insertarDivisiones();
 };
 
 /*solicito equipos al servidor*/
 function recibirLocales() {
-  var pais = "" + $('select[name="Paises"] option:selected').text();
-  var division = +$('select[name="Division"] option:selected').text();
+  var pais = $('select[name="Paises"] option:selected').text(),
+    division = $('select[name="Division"] option:selected').text();
+  console.log(pais, division)
   $.ajax({
-    url: "/api/v1/" + pais + "/" + division,
+    url: path + pais + "/" + division + "/teams",
     success: function (result) {
-      locales = [];
-      for (let i = 0; i < result.length; i++) {
-        locales.push(result[i]);
-      }
+      insertarLocales(result);
     }
   });
-
-
-  insertarLocales();
 };
 
 /*solicito equipos al servidor*/
 function recibirVisitantes() {
-  var pais = "" + $('select[name="Paises"] option:selected').text();
-  var division = +$('select[name="Division"] option:selected').text();
+  let pais = $('select[name="Paises"] option:selected').text(),
+    division = $('select[name="Division"] option:selected').text();
   $.ajax({
-    url: "/api/v1/" + pais + "/" + division,
+    url: path + pais + "/" + division + "/teams",
     success: function (result) {
-      visitantes = [];
-      for (let i = 0; i < result.length; i++) {
-        visitantes.push(result[i]);
-      }
+      insertarVisitantes(result);
     }
   });
-
-  insertarVisitantes();
 };
 
 /*inserto paises en el select paises*/
-function insertarPaises() {
+function insertarPaises(p) {
   $("select[name='Paises']").empty();
-  for (var i = 0; i < paises.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(paises[i]);
+  for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
+    $(option).html(p[i]);
     $("select[name='Paises']").append(option);
   }
 };
 
 /*inserto divisiones en el select divisiones*/
-function insertarDivisiones() {
+function insertarDivisiones(p) {
   $("select[name='Division']").empty();
-  for (var i = 0; i < divisiones.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(divisiones[i]);
+  for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
+    $(option).html(p[i]);
     $("select[name='Division']").append(option);
   }
   $("select[name='Local']").empty();
@@ -251,22 +239,22 @@ function insertarDivisiones() {
 };
 
 /*inserto equipos en el select locales*/
-function insertarLocales() {
+function insertarLocales(p) {
   $("select[name='Local']").empty();
-  for (var i = 0; i < locales.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(locales[i]);
+  for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
+    $(option).html(p[i]);
     $("select[name='Local']").append(option);
   }
   $("select[name='Visitante']").empty();
 };
 
-/*inserto equipos en el select visitantes*/
-function insertarVisitantes() {
+/*inserto equipos en el sele      $.ajavisitantes*/
+function insertarVisitantes(p) {
   $("select[name='Visitante']").empty();
-  for (var i = 0; i < visitantes.length; i++) {
-    var option = $("<option></option>");
-    $(option).html(visitantes[i]);
+  for (let i = 0; i < p.length; i++) {
+    let option = $("<option></option>");
+    $(option).html(p[i]);
     $("select[name='Visitante']").append(option);
   }
 
@@ -281,63 +269,70 @@ function insertarVisitantes() {
 
 /*----------------------- Atributos en pagina--------------------------*/
 
+
+//path+pais + "/" + division + "/" + local + "/properties",
 function solicitarAtributos() {
   var pais = "" + $('select[name="Paises"] option:selected').text();
   var division = "" + $('select[name="Division"] option:selected').text();
   var local = "" + $('select[name="Local"] option:selected').text();
   var visitante = "" + $('select[name="Visitante"] option:selected').text();
+  arr = []
   $.ajax({
-    url: "/api/v1/" + pais + "/" + division + "/" + local + "/" + visitante,
-    success: function (result) {
-
-
-      console.log(result);
-
-      atributos = result;
-
+    url: "http://localhost:3010/api/v1/Spain/SP1/Girona/properties",
+    success: function (home) {
+      console.log(home)
+      $.ajax({
+        url: "http://localhost:3010/api/v1/Spain/SP1/Girona/properties",
+        success: function (away) {
+          console.log(away)
+          arr["home"] = home
+          arr["away"] = away
+          console.log(arr.home)
+          insertarAtributos()
+        }
+      });
     }
   });
 };
 
 function insertarAtributos() {
-  $("#gLocal").text();
-  $("#eLocal").text();
-  $("#pLocal").text();
-  $("#gVisitante").text();
-  $("#eVisitante").text();
-  $("#pVisitante").text();
-  $("#gmLocal").text();
-  $("#gmVisitante").text();
-  $("#geLocal").text();
-  $("#geVisitante").text();
-  $("#rLocal").text();
-  $("#rVisitante").text();
-  $("#iLocal").text();
-  $("#iVisitante").text();
-  var pro1 =
-    0.027 * ganadosLocal +
-    -0.0134 * ganadosVisitante +
-    -0.0303 * empatadosVisitante +
-    0.114 * marcadosLocal +
-    -0.0483 * recibidosLocal +
-    -0.0882 * recibidosvisitante +
-    -0.0604 * mediaMarcadosLocal +
-    0.0888 * mediaEncajadosLocal +
+  $("#gLocal").text(arr.home.Last10WinningLocalMatchs);
+  $("#eLocal").text(arr.home.Last10TiedingLocalMatchs);
+  $("#pLocal").text(arr.home.Last10LosingLocalMatchs);
+  $("#gVisitante").text(arr.away.Last10WinningAwayMatchs);
+  $("#eVisitante").text(arr.away.Last10TiedingAwayMatchs);
+  $("#pVisitante").text(arr.away.Last10LosingAwayMatchs);
+  $("#gmLocal").text(arr.home.Last10GoalsTuckedAmountLocalMatchs);
+  $("#gmVisitante").text(arr.away.Last10GoalsTuckedAmountLocalMatchs);
+  $("#geLocal").text(arr.home.Last10GoalsReceivedAmountLocalMatchs);
+  $("#geVisitante").text(arr.away.Last10GoalsReceivedAmountLocalMatchs);
+  $("#rLocal").text(arr.home.Last10StreackWinningLocal);
+  $("#rVisitante").text(arr.away.Last10StreackWinningAway);
+  $("#iLocal").text(arr.home.Last10LosingLocalMatchs);
+  $("#iVisitante").text(arr.away.Last10StreackNoLosingLocal);
+  pro1 =0.027 * arr.home.Last10WinningLocalMatchs +
+    -0.0134 * arr.away.Last10WinningAwayMatchs +
+    -0.0303 * arr.away.Last10TiedingAwayMatchs+
+     0.114 * arr.home.Last10GoalsTuckedAmountLocalMatchs +
+    -0.0483 * arr.home.Last10GoalsReceivedAmountLocalMatchsl +
+    -0.0882 * arr.away.Last10GoalsReceivedAmountLocalMatchs +
+    -0.0604 * arr.home.Last10AverageTuckedGoalsLocal +
+    0.0888 * arr.home.Last10AverageReceivedGoalsLocal +
     0.4706;
-  var pro2 = -0.0132 * empatadosLocal +
-    0.0358 * ganadosVisitante +
-    -0.0215 * marcadosLocal +
-    0.2181 * recibidosLocal +
-    -0.0433 * marcadosvisitante +
-    0.0226 * mediaMarcadosLocal +
-    -0.1045 * mediaEncajadosLocal +
+  pro2 = -0.0132 * arr.home.Last10TiedingLocalMatchs +
+    0.0358 * arr.away.Last10WinningAwayMatchs +
+    -0.0215 * arr.home.Last10GoalsTuckedAmountLocalMatchs +
+    0.2181 * arr.home.Last10GoalsReceivedAmountLocalMatchs +
+    -0.0433 * arr.away.Last10GoalsTuckedAmountLocalMatchs +
+    0.0226 * arr.home.Last10AverageTuckedGoalsLocal +
+    -0.1045 * arr.home.Last10AverageReceivedGoalsLocal +
     0.336;
-  var proX = 1 - (pro1 + pro2);
+  proX = 1 - (pro1 + pro2);
   $("#proLocal").text(pro1);
   $("#proEmpate").text(proX);
   $("#proVisitante").text(pro2);
   $("#localA").val(pro1);
-  $("#emmpateA").val(prox);
+  $("#emmpateA").val(proX);
   $("#visitanteA").val(pro2);
   insertarGraficas();
 }
@@ -406,15 +401,15 @@ function insertarGraficas() {
   google.charts.setOnLoadCallback(tablaPorcentaje);
 };
 
-
+/****************** OBTENER GRÁFICAS******************/
 
 /*--------------Grafica RESULTADOS-------------------------*/
 function drawChart() {
   var resultados = google.visualization.arrayToDataTable([
-    ['Nº', 'Local', 'Visitante'],
-    ['GANADOS', 2, 2],
-    ['EMPATADOS', 2, 2],
-    ['PERDIDOS', 3, 6]
+    ["Nº", "Local", "Visitante"],
+    ["GANADOS", arr.home.Last10WinningLocalMatchs, arr.away.Last10WinningAwayMatchs],
+    ["EMPATADOS", arr.home.Last10TiedingLocalMatchs, arr.away.Last10TiedingAwayMatchs],
+    ["PERDIDOS", arr.home.Last10LosingLocalMatchs,arr.away.Last10LosingAwayMatchs]
   ]);
   var chart = new google.charts.Bar(document.getElementById('ultimos'));
 
@@ -426,8 +421,8 @@ function drawChart() {
 function tablaGoles() {
   var goles = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-    ['A FAVOR', 5, 2],
-    ['EN CONTRA', 8, 2]
+    ['A FAVOR', arr.home.Last10GoalsTuckedAmountLocalMatchs, arr.away.Last10GoalsTuckedAmountLocalMatchs],
+    ['EN CONTRA', arr.home.Last10GoalsReceivedAmountLocalMatchs, arr.away.Last10GoalsReceivedAmountLocalMatchs]
   ]);
   var chart = new google.charts.Bar(document.getElementById('goles'));
 
@@ -438,8 +433,8 @@ function tablaGoles() {
 function tablaRachaG() {
   var ganados = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-    ['GANADOS', 5, 4],
-    ['INVICTO', 8, 1]
+    ['GANADOS', arr.home.Last10StreackWinningLocal , arr.away.Last10StreackWinningAway ],
+    ['INVICTO', arr.home.Last10StreackNoLosingLocal , arr.away.Last10StreackNoLosingLocal ]
   ]);
   var chart = new google.charts.Bar(document.getElementById('racha'));
 

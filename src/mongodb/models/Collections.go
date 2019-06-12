@@ -166,3 +166,27 @@ func AmIHereDB(db string) (bool, error) {
 	}
 	return len(dbs) == 1, nil
 }
+
+//IsDBCOl ... Test if db exists and col
+func IsDBCOl(codiv string) (mongo.DriverMongo, error) {
+	if strings.Trim(mongo.DBDbase, " ") == "" || len(strings.Trim(mongo.DBDbase, " ")) == 0 {
+		return mongo.DriverMongo{}, mongo.ErrEmptyString
+	}
+	driver, err := mongo.ConnectDB()
+	if err != nil {
+		return mongo.DriverMongo{}, err
+	}
+	t, err := AmIHereDB(mongo.DBDbase)
+	if err != nil {
+		return mongo.DriverMongo{}, err
+	} else if !t {
+		return mongo.DriverMongo{}, mongo.ErrNotExistDB
+	}
+	t, err = AmIHereCol(codiv)
+	if err != nil {
+		return mongo.DriverMongo{}, err
+	} else if !t {
+		return mongo.DriverMongo{}, mongo.ErrNotExistCOL
+	}
+	return driver, nil
+}
