@@ -32,7 +32,7 @@
 
     h1:before,
     h1:after {
-      content: "No Encontrado";
+      content: "{{.Content}}";
       background-color: #f6d200;
       color: #181617;
       border-radius: 10px;
@@ -70,7 +70,7 @@
 
 <body>
   <div class="error">
-    <h1 class="text"><span>404</span></h1>
+    <h1 class="text"><span>{{.Num}}</span></h1>
   </div>
 </body>
 

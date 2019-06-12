@@ -12,7 +12,7 @@
   <nav>
     <a id="menu" href="#"><img src="recursos/menu.svg" alt="menu" /></a>
     <ul>
-      <li><a href="index.html">Inicio</a></li>
+      <li><a href="inicio.html">Inicio</a></li>
       <li><a href="herramienta.html">Herramienta</a></li>
       <li><a href="guia.html">Guia</a></li>
       <li><a href="contacto.html">Contacto</a></li>
@@ -22,12 +22,16 @@
   <!-- Usuario -->
   <ul id="contacto">
     <li>
-      <a href="#"><img src="recursos/usuario.svg" alt="icono usuario" title="sesión" /></a>
+      {{ if not .Cookie }}
+        <a href="#"><img src="recursos/usuario.svg" alt="icono usuario" title="sesión" /></a>
+      {{ else }}
+      <a href="#"><img src="recursos/registrado.svg" alt="icono usuario" title="sesión" /></a>
+      {{ end }}
     </li>
   </ul>
 </header>
 
-
+{{ if not .Cookie }}
 <!-- formulario login -->
 <div class="login">
   <img id="x" src="recursos/x.svg" alt="cerrar">
@@ -35,23 +39,26 @@
     <div class="fondoform">
       <h1>LOG IN</h1>
       <p>Inicia sesion con tu cuenta de usuario</p>
-      <form class="form" method="post" action="yourpage.html">
+      <form class="form" method="post" action="/login">
         <label for="user">Usuario</label>
-        <input type="text" id="user" class="name" placeholder="NOMBRE O EMAIL">
+        <input type="text" id="user" name="user" class="name" placeholder="NOMBRE O EMAIL">
         <label for="password">Contraseña</label>
-        <input type="password" id="password" class="password" placeholder="PASS">
+        <input type="password" id="password" name="password" class="password" placeholder="PASS">
         <input type="submit" class="submit" value="INICIO">
       </form>
     </div>
   </div>
 </div>
-
+{{else}}
 <!-- Confirmar cierre sesion -->
 <div class="confirmar">
   <div class="wrapper">
     <div class="fondoform">
       <p>Deseas realmente salir ?</p>
       <a class="button" href="#" id="cancelar">No</a>
-      <a class="button" href="/cierraSesion">Yes</a>
+      <a class="button" href="/logout">Yes</a>
     </div>
   </div>
+</div>
+
+{{end}}

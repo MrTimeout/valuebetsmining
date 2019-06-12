@@ -1,59 +1,114 @@
 package server
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"valuebetsmining/src/mongodb/models"
+	"valuebetsmining/src/server/entities"
 
 	"github.com/gorilla/mux"
 )
 
 const (
-	//DefaultBegin ... Default file of begin
-	DefaultBegin = "index.html"
-	//DefaultContact ... Default file of contact
-	DefaultContact = "contacto.html"
-	//DefaultGuide ... Default file of guide
-	DefaultGuide = "guia.html"
-	//DefaultTool ... Default file of tool
-	DefaultTool = "herramienta.html"
+	//DefaultExtHTML ... Default extension of html files
+	DefaultExtHTML = "html"
 )
 
 //Inicio ... Handler that return the page index.html
 func Inicio(w http.ResponseWriter, r *http.Request) {
-	fileName := fmt.Sprintf("%s/%s", DefaultDirWEB, DefaultBegin)
-	if _, err := os.Stat(fileName); err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+	ree, path := regexp.MustCompile(`^/?(inicio|guia|contacto|herramienta)(\.htm(l)?)?$`), mux.Vars(r)
+	if str := ree.FindAllStringSubmatch(path["route"], -1); len(str) == 1 && (len(str[0]) >= 2 || len(str[0]) <= 3) {
+		fileName := fmt.Sprintf("%s/%s.%s", DefaultDirWEB, str[0][1], DefaultExtHTML)
+		log.Print(fileName)
+		if _, err := os.Stat(fileName); err != nil {
+			log.Print("Error")
+			// w.WriteHeader(http.StatusInternalServerError)
+			tmplt := template.New("Error")
+			tmplt, _ = tmplt.ParseFiles(DefaultErrFile)
+			errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
+			if err == nil {
+				tmplt.Execute(w, errHTTP)
+			}
+		} else {
+			log.Print("hola")
+			session, _ := entities.Store.Get(r, "X-auttentication")
+			if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+				if str[0][1] == "herramienta" {
+					// w.WriteHeader(http.StatusInternalServerError)
+					tmplt := template.New("Error")
+					tmplt, _ = tmplt.ParseFiles(DefaultErrFile)
+					errHTTP, err := entities.NewErrHTTP(entities.ErrForbidden, http.StatusForbidden)
+					if err == nil {
+						tmplt.Execute(w, errHTTP)
+					}
+				} else {
+					var buff bytes.Buffer
+					t, _ := template.ParseFiles("web/nav.html")
+					user := entities.User{Name: "", Cookie: false}
+					if err := t.Execute(&buff, user); err != nil {
+						w.WriteHeader(http.StatusInternalServerError)
+						tmplt, _ := template.ParseFiles(DefaultErrFile)
+						errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
+						if err == nil {
+							tmplt.Execute(w, errHTTP)
+						}
+					}
+					w.WriteHeader(http.StatusOK)
+					w.Header().Set("Content-Type", "text/html; charset=utf-8")
+					h := map[string]interface{}{
+						"Header": template.HTML(buff.String()),
+					}
+					t, _ = template.ParseFiles(fileName)
+					if err := t.Execute(w, h); err != nil {
+						w.WriteHeader(http.StatusInternalServerError)
+						tmplt := template.New("Error")
+						tmplt, _ = tmplt.ParseFiles(DefaultErrFile)
+						errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
+						if err == nil {
+							tmplt.Execute(w, errHTTP)
+						}
+					}
+				}
+			} else {
+				var buff bytes.Buffer
+				t, _ := template.ParseFiles("web/nav.html")
+				user := entities.User{Name: session.Values["name"].(string), Cookie: session.Values["authenticated"].(bool)}
+				if err := t.Execute(&buff, user); err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					tmplt, _ := template.ParseFiles(DefaultErrFile)
+					errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
+					if err == nil {
+						tmplt.Execute(w, errHTTP)
+					}
+				}
+				w.WriteHeader(http.StatusOK)
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				h := map[string]interface{}{
+					"Header": template.HTML(buff.String()),
+				}
+				t, _ = template.ParseFiles(fileName)
+				if err := t.Execute(w, h); err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					tmplt, _ := template.ParseFiles(DefaultErrFile)
+					errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
+					if err == nil {
+						tmplt.Execute(w, errHTTP)
+					}
+				}
+			}
+		}
 	}
-	http.ServeFile(w, r, fileName)
-}
-
-//Contacto ... Handler that return the page contacto.html
-func Contacto(w http.ResponseWriter, r *http.Request) {
-	fileName := fmt.Sprintf("%s/%s", DefaultDirWEB, DefaultContact)
-	if _, err := os.Stat(fileName); err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-	}
-	http.ServeFile(w, r, fileName)
-}
-
-//Guide ... Handler that return the page guia.html
-func Guide(w http.ResponseWriter, r *http.Request) {
-	fileName := fmt.Sprintf("%s/%s", DefaultDirWEB, DefaultGuide)
-	if _, err := os.Stat(fileName); err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
-	}
-	http.ServeFile(w, r, fileName)
 }
 
 //Tool ... Handler that return the page herramienta.html
 func Tool(w http.ResponseWriter, r *http.Request) {
-	fileName := fmt.Sprintf("%s/%s", DefaultDirWEB, DefaultTool)
+	fileName := fmt.Sprintf("%s/%s", DefaultDirWEB, "herramienta.html")
 	if _, err := os.Stat(fileName); err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
@@ -182,8 +237,9 @@ func Teams(w http.ResponseWriter, r *http.Request) {
 //Error404 ... Error not found
 func Error404() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusNotFound)
-		http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "404.html"))
+		tmplt, _ := template.ParseFiles(DefaultErrFile)
+		errHTTP, _ := entities.NewErrHTTP(entities.ErrNotFound, http.StatusNotFound)
+		tmplt.Execute(w, errHTTP)
 	})
 }
 

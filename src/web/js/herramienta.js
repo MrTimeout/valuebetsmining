@@ -1,15 +1,6 @@
 /*EVENTOS CARGA DOCUMENTO*/
-
-<<<<<<< HEAD:src/web/js/herramienta.js
-var arr
-=======
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
-
 $(document).ready(function () {
-  path = "http://localhost:3010/api/v1/"
-
-$(document).ready(function () {
-  path = "http://localhost:3010/api/v1/"
+  path = "http://localhost:3019/api/v1/"
 
   /*desplegar menu responsive*/
   $("#menu").click(function () {
@@ -171,12 +162,8 @@ var atributos;
 var pro1;
 var proX;
 var pro2;
-<<<<<<< HEAD:src/web/js/herramienta.js
-
-=======
 var attHome;
 var attAway;
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
 
 /*solicito paises al servidor*/
 function recibirPaises() {
@@ -204,15 +191,9 @@ function recibirDivisiones() {
 
 /*solicito equipos al servidor*/
 function recibirLocales() {
-<<<<<<< HEAD:src/web/js/herramienta.js
-  var pais = $('select[name="Paises"] option:selected').text(),
-    division = $('select[name="Division"] option:selected').text();
-  console.log(pais, division)
-=======
   let pais = $('select[name="Paises"] option:selected').text();
   let division = $('select[name="Division"] option:selected').text();
   
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
   $.ajax({
     url: path + pais + "/" + division + "/teams",
     success: function (result) {
@@ -223,13 +204,8 @@ function recibirLocales() {
 
 /*solicito equipos al servidor*/
 function recibirVisitantes() {
-<<<<<<< HEAD:src/web/js/herramienta.js
-  let pais = $('select[name="Paises"] option:selected').text(),
-    division = $('select[name="Division"] option:selected').text();
-=======
   let pais = $('select[name="Paises"] option:selected').text();
   let division = $('select[name="Division"] option:selected').text();
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
   $.ajax({
     url: path + pais + "/" + division + "/teams",
     success: function (result) {
@@ -241,15 +217,10 @@ function recibirVisitantes() {
 /*inserto paises en el select paises*/
 function insertarPaises(p) {
   $("select[name='Paises']").empty();
-<<<<<<< HEAD:src/web/js/herramienta.js
-  for (let i = 0; i < p.length; i++) {
-    let option = $("<option></option>");
-=======
   let option = $("<option></option>");
   $(option).html("Selecciona");
   $("select[name='Paises']").append(option);
   for (let i = 0; i < p.length; i++) {
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
     $(option).html(p[i]);
     $("select[name='Paises']").append(option);
   }
@@ -442,15 +413,9 @@ function insertarGraficas() {
 function drawChart() {
   var resultados = google.visualization.arrayToDataTable([
     ["Nº", "Local", "Visitante"],
-<<<<<<< HEAD:src/web/js/herramienta.js
-    ["GANADOS", arr.home.Last10WinningLocalMatchs, arr.away.Last10WinningAwayMatchs],
-    ["EMPATADOS", arr.home.Last10TiedingLocalMatchs, arr.away.Last10TiedingAwayMatchs],
-    ["PERDIDOS", arr.home.Last10LosingLocalMatchs,arr.away.Last10LosingAwayMatchs]
-=======
     ["GANADOS", attHome.Last10WinningMatchs, attAway.Last10WinningMatchs],
     ["EMPATADOS", attHome.Last10TiedingMatchs, attAway.Last10TiedingMatchs],
     ["PERDIDOS", attHome.Last10LosingMatchs,attAway.Last10LosingMatchs]
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
   ]);
   var chart = new google.charts.Bar(document.getElementById('ultimos'));
 
@@ -462,13 +427,8 @@ function drawChart() {
 function tablaGoles() {
   var goles = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-<<<<<<< HEAD:src/web/js/herramienta.js
-    ['A FAVOR', arr.home.Last10GoalsTuckedAmountLocalMatchs, arr.away.Last10GoalsTuckedAmountLocalMatchs],
-    ['EN CONTRA', arr.home.Last10GoalsReceivedAmountLocalMatchs, arr.away.Last10GoalsReceivedAmountLocalMatchs]
-=======
     ['A FAVOR', attHome.Last10GoalsTuckedAmount, attAway.Last10GoalsTuckedAmount],
     ['EN CONTRA', attHome.Last10GoalsReceivedAmount, attAway.Last10GoalsReceivedAmount]
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
   ]);
   var chart = new google.charts.Bar(document.getElementById('goles'));
 
@@ -479,13 +439,8 @@ function tablaGoles() {
 function tablaRachaG() {
   var ganados = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-<<<<<<< HEAD:src/web/js/herramienta.js
-    ['GANADOS', arr.home.Last10StreackWinningLocal , arr.away.Last10StreackWinningAway ],
-    ['INVICTO', arr.home.Last10StreackNoLosingLocal , arr.away.Last10StreackNoLosingLocal ]
-=======
     ['GANADOS', attHome.Last10StreackWinning , attAway.Last10StreackWinning],
     ['INVICTO', attHome.Last10StreackNoLosing , attAway.Last10StreackNoLosing]
->>>>>>> 22498e035d03900e91a251108494da3d8de28d6e:web/js/herramienta.js
   ]);
   var chart = new google.charts.Bar(document.getElementById('racha'));
 
