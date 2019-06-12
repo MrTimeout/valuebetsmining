@@ -133,7 +133,6 @@ func AmIHereCol(col string) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-
 		elem, err := next.LookupErr("name")
 		if err != nil {
 			return false, err

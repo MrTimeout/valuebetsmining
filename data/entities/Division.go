@@ -293,7 +293,7 @@ func (d *Division) ParseEachFileToCSV(year Year, path string) ([][]string, error
 			d.Matchs = append(d.Matchs, match)
 			d.TeamsLocal[k] = match.TeamLocal
 			d.TeamsAway[k] = match.TeamAway
-			target, err := match.StringCSV(0, []string{"test", "test", k, k, "test", "test", "test"}, true, true)
+			target, err := match.StringCSV(0, []string{"test", "test", k, k, "-1", "-1", "test"}, true, true)
 			if err != nil {
 				return nil, err
 			}

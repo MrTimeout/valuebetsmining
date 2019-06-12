@@ -103,6 +103,7 @@ func parsingRun() {
 		} else {
 			panic("Error parsing nil string")
 		}
+		log.Println("Executing")
 		err := logic.ProcessData(*connection, *output)
 		if err != nil {
 			panic(err)

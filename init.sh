@@ -46,11 +46,12 @@ if [ "$1" = true ]; then
     docker build --file ${PWD}/Dockerfile \
                  --tag ${IMAGE_GO}:${TAG} \
                  --rm \
+                 --no-cache \
                  .
 
     if [ $(docker image ls --format "{{.Repository}}" | grep -w -c ${IMAGE_GO}) -eq 1 ]; then
         docker run --detach \
-            --volume "${PWD}/data/leagues:/go/src/leagues" \
+            --volume "${PWD}/data/leagues:/go/src/valuebetsmining/data/leagues" \
             --name ${CONTAINER_GO} \
             --publish 3000-4000:${PORT_DEFAULT_GO} \
             --network ${NETWORK} ${IMAGE_GO}:${TAG}

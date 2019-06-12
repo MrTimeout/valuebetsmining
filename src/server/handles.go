@@ -93,6 +93,7 @@ func PropertiesTeam(w http.ResponseWriter, r *http.Request) {
 		}
 	case "all":
 		resl, err := models.GetPropertiesOfATeam(fmt.Sprintf("%s%s", vars["country"], vars["division"]), vars["team"])
+		fmt.Fprintf(w, "%+q, %v", err, resl)
 		if err == nil {
 			w.WriteHeader(http.StatusNotFound)
 			err := json.NewEncoder(w).Encode(resl)
