@@ -14,10 +14,12 @@
 
 <body>
 
-   
+    <!-- Contenido pagina -->
 
+
+    <!-- Seleccion pais liga equipos -->
     <div id="contenido" class="seleccion">
-            
+
         <div>
             <label for="Paises">Paises</label>
             <select id="Paises" name="Paises"></select>
@@ -34,9 +36,13 @@
             <label for="Visitante">Visitante</label>
             <select id="Visitante" name="Visitante"></select>
         </div>
-        
+        <!-- boton cambio capas  -->
         <div id="graficas"><img src="recursos/capas.svg" alt="icono capas" title="cambiar a modo lista"></div>
     </div>
+
+
+
+    <!-- zona graficas -->
 
     <div class="contenido" id="capa1">
         <div class="graficas">
@@ -68,82 +74,89 @@
         </div>
     </div>
 
-            <div class="lista" id="capa2">
-                <section>
-                    
-                        <h2>RESULTADO 10 ULTIMOS PARTIDOS</h2>
-                        
-                        <ul>
-                            <li>
-                                <h3>GANADOS</h3>
-                                <h4 id="gLocal">LOCAL X</h4>
-                                <h4 id="gVisitante">VISITANTE X</h4>
-                            </li>
-                            <li>
-                                <h3>EMPATADOS</h3>
-                                <h4 id="eLocal">LOCAL X</h4>
-                                <h4 id="eVisitante">VISITANTE X</h4>
-                            </li>
-                            <li>
-                                <h3>PERDIDOS</h3>
-                                <h4 id="pLocal">LOCAL X</h4>
-                                <h4 id="pVisitante">VISITANTE X</h4>
-                            </li>
-                        
-                        </ul>
-                    
-                </section>
-                <section>
-                    
-                        <h2>GOLES</h2>
-                        <ul>
-                            <li>
-                                <h3>MARCADOS</h3>
-                                <h4 id="gmLocal">LOCAL X</h4>
-                                <h4 id="gmVisitante">VISITANTE X</h4>
-                            </li>
-                            <li>
-                                <h3>ENCAJADOS</h3>
-                                <h4 id="geLocal">LOCAL X</h4>
-                                <h4 id="geVisitante">VISITANTE X</h4>
-                            </li>
-                        </ul>
-                    
-                </section>
-                <section>
-                    
-                        <h2>RACHA</h2>
-                        <ul>
-                            <li>
-                                <h3>GANADOS</h3>
-                                <h4 id="rLocal">LOCAL X</h4>
-                                <h4 id="rVisitante">VISITANTE X</h4>
-                            </li>
-                            <li>
-                                <h3>INVICTO</h3>
-                                <h4 id="iLocal">LOCAL X</h4>
-                                <h4 id="iVisitante">VISITANTE X</h4>
-                            </li>
-                        </ul>
-                    
-                </section>
-                <section>
-                    
-                        <h2>PROBABILIDAD</h2>
-                        <ul>
-                            <li id="proLocal">LOCAL X</li>
-                            <li id="proEmpate">EMPATE X</li>
-                            <li id="proVisitante">VISITANTE X</li>
-                        </ul>
-                        
-                   
-                </section>
-        
-            </div>
+
+
+    <!-- listas datos equipos (capa graficas accesibles) -->
+    <div class="lista" id="capa2">
+        <section>
+
+            <h2>RESULTADO 10 ULTIMOS PARTIDOS</h2>
+
+            <ul>
+                <li>
+                    <h3>GANADOS</h3>
+                    <h4 id="gLocal">LOCAL X</h4>
+                    <h4 id="gVisitante">VISITANTE X</h4>
+                </li>
+                <li>
+                    <h3>EMPATADOS</h3>
+                    <h4 id="eLocal">LOCAL X</h4>
+                    <h4 id="eVisitante">VISITANTE X</h4>
+                </li>
+                <li>
+                    <h3>PERDIDOS</h3>
+                    <h4 id="pLocal">LOCAL X</h4>
+                    <h4 id="pVisitante">VISITANTE X</h4>
+                </li>
+
+            </ul>
+
+        </section>
+        <section>
+
+            <h2>GOLES</h2>
+            <ul>
+                <li>
+                    <h3>MARCADOS</h3>
+                    <h4 id="gmLocal">LOCAL X</h4>
+                    <h4 id="gmVisitante">VISITANTE X</h4>
+                </li>
+                <li>
+                    <h3>ENCAJADOS</h3>
+                    <h4 id="geLocal">LOCAL X</h4>
+                    <h4 id="geVisitante">VISITANTE X</h4>
+                </li>
+            </ul>
+
+        </section>
+        <section>
+
+            <h2>RACHA</h2>
+            <ul>
+                <li>
+                    <h3>GANADOS</h3>
+                    <h4 id="rLocal">LOCAL X</h4>
+                    <h4 id="rVisitante">VISITANTE X</h4>
+                </li>
+                <li>
+                    <h3>INVICTO</h3>
+                    <h4 id="iLocal">LOCAL X</h4>
+                    <h4 id="iVisitante">VISITANTE X</h4>
+                </li>
+            </ul>
+
+        </section>
+        <section>
+
+            <h2>PROBABILIDAD</h2>
+            <ul>
+                <li id="proLocal">LOCAL X</li>
+                <li id="proEmpate">EMPATE X</li>
+                <li id="proVisitante">VISITANTE X</li>
+            </ul>
+
+
+        </section>
+
+    </div>
+
+
+
+    <!-- Zona calculo -->
     <div class="zona">
 
         <div class="calculo">
-          
+
             <div id="cab">
                 <p><span></span></p>
                 <p><span>Probabilidad</span></p>
@@ -157,7 +170,7 @@
                 <label for="localA">Probabilidad local</label>
                 <input type="text" id="localA" value="0.6" placeholder="Probabilidad local" readonly>
                 <label for="localB">Cuota Local</label>
-                <input type="text" id="localB" placeholder="Cuota Local" >
+                <input type="text" id="localB" placeholder="Cuota Local">
                 <label for="resultadolocal">Valor Local</label>
                 <input type="text" id="resultadolocal" placeholder="Valor Local" readonly>
                 <label for="kellylocal">Criterio Kelly Local</label>
@@ -167,7 +180,7 @@
             <div>
                 <p><span>Empate</span></p>
                 <label for="empateA">Probabilidad Empate</label>
-                <input type="text" id="empateA"  value="0.25"placeholder="Probabilidad Empate" readonly>
+                <input type="text" id="empateA" value="0.25" placeholder="Probabilidad Empate" readonly>
                 <label for="empateB">Cuota Empate</label>
                 <input type="text" id="empateB" placeholder="Cuota Empate">
                 <label for="resultadoempate">Valor Empate</label>
@@ -179,7 +192,7 @@
             <div>
                 <p><span>Visitante</span></p>
                 <label for="visitanteA">Probabilidad Visitante</label>
-                <input type="text" id="visitanteA"  value="0.15" placeholder="Probabilidad Visitante" readonly>
+                <input type="text" id="visitanteA" value="0.15" placeholder="Probabilidad Visitante" readonly>
                 <label for="visitanteB">Cuota Visitante</label>
                 <input type="text" id="visitanteB" placeholder="Cuota Visitante">
                 <label for="resultadovisitante">Valor Visitante</label>
@@ -190,7 +203,7 @@
         </div>
         <input type="submit" value="calcular" id="calcular">
     </div>
-   
+
 </body>
 
 
