@@ -25,9 +25,7 @@ func Inicio(w http.ResponseWriter, r *http.Request) {
 	ree, path := regexp.MustCompile(`^/?(inicio|guia|contacto|herramienta)(\.htm(l)?)?$`), mux.Vars(r)
 	if str := ree.FindAllStringSubmatch(path["route"], -1); len(str) == 1 && (len(str[0]) >= 2 || len(str[0]) <= 3) {
 		fileName := fmt.Sprintf("%s/%s.%s", DefaultDirWEB, str[0][1], DefaultExtHTML)
-		log.Print(fileName)
 		if _, err := os.Stat(fileName); err != nil {
-			log.Print("Error")
 			// w.WriteHeader(http.StatusInternalServerError)
 			tmplt := template.New("Error")
 			tmplt, _ = tmplt.ParseFiles(DefaultErrFile)
@@ -36,13 +34,10 @@ func Inicio(w http.ResponseWriter, r *http.Request) {
 				tmplt.Execute(w, errHTTP)
 			}
 		} else {
-			log.Print("hola")
 			session, _ := entities.Store.Get(r, "X-auttentication")
 			if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
 				if str[0][1] == "herramienta" {
-					// w.WriteHeader(http.StatusInternalServerError)
-					tmplt := template.New("Error")
-					tmplt, _ = tmplt.ParseFiles(DefaultErrFile)
+					tmplt, _ := template.ParseFiles(DefaultErrFile)
 					errHTTP, err := entities.NewErrHTTP(entities.ErrForbidden, http.StatusForbidden)
 					if err == nil {
 						tmplt.Execute(w, errHTTP)
@@ -237,14 +232,42 @@ func Teams(w http.ResponseWriter, r *http.Request) {
 //Error404 ... Error not found
 func Error404() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		tmplt, _ := template.ParseFiles(DefaultErrFile)
+		var buff, buf bytes.Buffer
+		t, _ := template.ParseFiles("web/nav.html")
+		user := entities.User{Name: "", Cookie: false}
+		if err := t.Execute(&buff, user); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			tmplt, _ := template.ParseFiles(DefaultErrFile)
+			errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
+			if err == nil {
+				tmplt.Execute(w, errHTTP)
+			}
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		h := map[string]interface{}{
+			"Header": template.HTML(buff.String()),
+		}
+		log.Println(buff.String())
+		t, _ = template.ParseFiles("web/error.html")
 		errHTTP, _ := entities.NewErrHTTP(entities.ErrNotFound, http.StatusNotFound)
-		tmplt.Execute(w, errHTTP)
+		t.Execute(&buf, errHTTP)
+		log.Println("asdasdasd")
+		if err := t.Execute(w, h); err != nil {
+			log.Print(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			tmplt, _ := template.ParseFiles(DefaultErrFile)
+			errHTTP, err := entities.NewErrHTTP(entities.ErrInternalServerError, http.StatusInternalServerError)
+			if err == nil {
+				tmplt.Execute(w, errHTTP)
+			}
+		}
 	})
 }
 
 //Error403 ... Error forbidden
 func Error403(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotFound)
-	http.ServeFile(w, r, fmt.Sprintf("%s/%s", DefaultDirWEB, "403.html"))
+	w.WriteHeader(http.StatusForbidden)
+	tmplt, _ := template.ParseFiles(DefaultErrFile)
+	errHTTP, _ := entities.NewErrHTTP(entities.ErrForbidden, http.StatusForbidden)
+	tmplt.Execute(w, errHTTP)
 }

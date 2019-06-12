@@ -54,9 +54,10 @@
 <div class="confirmar">
   <div class="wrapper">
     <div class="fondoform">
-      <p>Deseas realmente salir ?</p>
-      <a class="button" href="#" id="cancelar">No</a>
-      <a class="button" href="/logout">Yes</a>
+      <form action="/logout" method="post">
+        <h1>¿DESEA REALMENTE SALIR?</h1>
+        <input type="submit" class="submit" value="OK">
+      </form>
     </div>
   </div>
 </div>

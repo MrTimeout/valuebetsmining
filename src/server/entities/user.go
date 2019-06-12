@@ -29,15 +29,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		session.Values["authenticated"] = true
 		session.Values["name"] = r.FormValue("username")
 		session.Save(r, w)
-		http.Redirect(w, r, r.URL.EscapedPath(), 302)
+		http.Redirect(w, r, "/herramienta", 302)
 	} else {
-		w.WriteHeader(http.StatusInternalServerError)
-		tmplt := template.New("Error")
-		tmplt, _ = tmplt.ParseFiles("web/errors.html")
-		errHTTP, err := NewErrHTTP(ErrInternalServerError, http.StatusInternalServerError)
-		if err == nil {
-			tmplt.Execute(w, errHTTP)
-		}
+		w.WriteHeader(http.StatusForbidden)
+		tmplt, _ := template.ParseFiles("web/error.html")
+		errHTTP, _ := NewErrHTTP(ErrForbidden, http.StatusForbidden)
+		tmplt.Execute(w, errHTTP)
 	}
 
 }
