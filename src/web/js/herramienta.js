@@ -1,6 +1,6 @@
 /*EVENTOS CARGA DOCUMENTO*/
 $(document).ready(function () {
-  path = "http://localhost:3002/api/v1/"
+  path = "http://10.10.33.9:3002/api/v1/"
   recibirPaises()
   /*desplegar menu responsive*/
   $("#menu").click(function () {
@@ -318,7 +318,7 @@ function insertarAtributos() {
   $("#rVisitante").text(attAway.Last10StreackWinning);
   $("#iLocal").text(attHome.Last10StreackNoLosing);
   $("#iVisitante").text(attAway.Last10StreackNoLosing);
-  pro1 =0.027 * attHome.Last10WinningMatchs +
+  pro1 = 0.027 * attHome.Last10WinningMatchs +
     -0.0134 * attAway.Last10WinningMatchs +
     -0.0303 * attAway.Last10TiedingMatchs +
      0.114 * attHome.Last10GoalsTuckedAmount +
@@ -344,16 +344,57 @@ function insertarAtributos() {
   0.5644 * attAway.Last10GoalsTuckedAmount +
  -0.0591 * attAway.Last10GoalsReceivedAmount +
   0.3804;
-  $("#proLocal").text((pro1+pro2+proX)/pro1);
-  $("#proEmpate").text((pro1+pro2+proX)/proX);
-  $("#proVisitante").text((pro1+pro2+proX)/pro2);
-  $("#localA").val((pro1+pro2+proX)/pro1);
-  $("#emmpateA").val((pro1+pro2+proX)/proX);
-  $("#visitanteA").val((pro1+pro2+proX)/pro2);
+  console.log(pro1, pro2, proX)
+  final = resolv([pro1, pro2, proX])
+  console.log(final)
+  pro1 = Math.abs(final[0])
+  pro2 = Math.abs(final[1])
+  proX = Math.abs(final[2])
+  console.log(pro1, proX, pro2)
+  $("#proLocal").text(final[0]);
+  $("#proEmpate").text(final[2]);
+  $("#proVisitante").text(final[1]);
+  $("#localA").val(final[0]);
+  $("#empateA").val(final[2]);
+  $("#visitanteA").val(final[1]);
+
   insertarGraficas();
 }
 
+const resolv = (a) => {
+  let sum = 0
+  a.forEach((i) => sum += Math.abs(i))
+  r = a.map((v) => {
+    return Math.abs(v) / sum
+  })
+  let final = new Array(3).fill(-10)
+      ca = Array.from(a)
+  Array.from(Array(a.length).keys()).forEach((_i) => {
+    let mi  = maxIndex(a.slice(0)),
+        mii = maxIndex(r.slice(0))
+    console.log(mi, mii, r[mii])
+    final[where(ca, a[mi])] = r[mii]
+    a.splice(mi, 1)
+    r.splice(mii, 1)
+  })
+  return final
+}
 
+const where = (a, v) => {
+  return a.findIndex((l) => v == l)
+}
+
+const maxIndex = (a) => {
+  var mi = Number.MIN_SAFE_INTEGER,
+      i = -1
+  a.forEach((v, index) => { 
+    if(v > mi) {
+      mi = v
+      i = index
+    } 
+   })
+   return i
+}
 
 
 /*----------------------GRAFICAS-----------------------------*/
@@ -461,9 +502,9 @@ function tablaRachaG() {
 function tablaPorcentaje() {
   var posibilidades = google.visualization.arrayToDataTable([
     ['%', 'Probabilidades'],
-    ['LOCAL', (pro1+pro2+proX)/pro1],
-    ['EMPATE', (pro1+pro2+proX)/proX],
-    ['VISITANTE', (pro1+pro2+proX)/pro2]
+    ['LOCAL', pro1],
+    ['EMPATE', proX],
+    ['VISITANTE', pro2]
   ]);
   var chart = new google.visualization.PieChart(document.getElementById('porcentaje'));
   chart.draw(posibilidades, options2);

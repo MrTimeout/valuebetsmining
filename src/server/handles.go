@@ -99,6 +99,11 @@ func Inicio(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		t, _ := template.ParseFiles("web/error.html")
+		errHTTP, _ := entities.NewErrHTTP(entities.ErrNotFound, http.StatusNotFound)
+		t.Execute(w, errHTTP)
 	}
 }
 
@@ -243,7 +248,7 @@ func Message(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/contacto", 302)
 	}
 	log.Println("Message received and not saved")
-	http.Redirect(w, r, "/inicio", 200)
+	http.Redirect(w, r, "/inicio", 302)
 }
 
 //Error404 ... Error not found

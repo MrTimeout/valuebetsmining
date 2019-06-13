@@ -36,7 +36,7 @@ func GetAllTeamName(codiv string) ([]interface{}, error) {
 		return nil, mongo.ErrNotExistCOL
 	}
 	filter := bson.D{
-		primitive.E{Key: "Date", Value: primitive.Regex{Pattern: `^[0-9]{2}\/[0-9]{2}\/(18|19)$`, Options: ""}},
+		primitive.E{Key: "Date", Value: "test"},
 	}
 	collections, err := driver.Client.Database(mongo.DBDbase).Collection(codiv).Distinct(ctx, "LocalTeam", filter)
 	if err != nil {
