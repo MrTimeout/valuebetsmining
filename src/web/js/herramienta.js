@@ -303,20 +303,20 @@ function solicitarAtributos() {
 };
 
 function insertarAtributos() {
-  $("#gLocal").text(attHome.Last10WinningMatchs);
-  $("#eLocal").text(attHome.Last10TiedingMatchs);
-  $("#pLocal").text(attHome.Last10LosingMatchs);
-  $("#gVisitante").text(attAway.Last10WinningMatchs);
-  $("#eVisitante").text(attAway.Last10TiedingMatchs);
-  $("#pVisitante").text(attAway.Last10LosingMatchs);
-  $("#gmLocal").text(attHome.Last10GoalsTuckedAmount);
-  $("#gmVisitante").text(attAway.Last10GoalsTuckedAmount);
-  $("#geLocal").text(attHome.Last10GoalsReceivedAmount);
-  $("#geVisitante").text(attAway.Last10GoalsReceivedAmount);
-  $("#rLocal").text(attHome.Last10StreackWinning);
-  $("#rVisitante").text(attAway.Last10StreackWinning);
-  $("#iLocal").text(attHome.Last10StreackNoLosing);
-  $("#iVisitante").text(attAway.Last10StreackNoLosing);
+  $("#gLocal").text("Local"+attHome.Last10WinningMatchs);
+  $("#eLocal").text("Local"+attHome.Last10TiedingMatchs);
+  $("#pLocal").text("Local"+attHome.Last10LosingMatchs);
+  $("#gVisitante").text("Visitante"+attAway.Last10WinningMatchs);
+  $("#eVisitante").text("Visitante"+attAway.Last10TiedingMatchs);
+  $("#pVisitante").text("Visitante"+attAway.Last10LosingMatchs);
+  $("#gmLocal").text("Local"+attHome.Last10GoalsTuckedAmount);
+  $("#gmVisitante").text("Visitante"+attAway.Last10GoalsTuckedAmount);
+  $("#geLocal").text("Local"+attHome.Last10GoalsReceivedAmount);
+  $("#geVisitante").text("Visitante"+attAway.Last10GoalsReceivedAmount);
+  $("#rLocal").text("Local"+attHome.Last10StreackWinning);
+  $("#rVisitante").text("Visitante"+attAway.Last10StreackWinning);
+  $("#iLocal").text("Local"+attHome.Last10StreackNoLosing);
+  $("#iVisitante").text("Visitante"+attAway.Last10StreackNoLosing);
   pro1 = 0.027 * attHome.Last10WinningMatchs +
     -0.0134 * attAway.Last10WinningMatchs +
     -0.0303 * attAway.Last10TiedingMatchs +
