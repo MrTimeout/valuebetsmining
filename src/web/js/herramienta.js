@@ -1,6 +1,6 @@
 /*EVENTOS CARGA DOCUMENTO*/
 $(document).ready(function () {
-  path = "http://10.10.33.9:3002/api/v1/"
+  path = "http://192.168.1.105:3002/api/v1/"
   recibirPaises()
   /*desplegar menu responsive*/
   $("#menu").click(function () {
@@ -36,6 +36,7 @@ $(document).ready(function () {
   /*cerrar formulario inicio sesion*/
   $("#x").click(function () {
     $(".login").toggleClass("visto");
+    
   });
 
   /*cerrar registro si cambia resolucion de pantalla*/
@@ -343,7 +344,8 @@ function insertarAtributos() {
     0.5644 * attAway.Last10GoalsTuckedAmount +
     -0.0591 * attAway.Last10GoalsReceivedAmount +
     0.3804;
-
+  proX = 0.19
+  console.log(pro1, proX, pro2)
   function menor(lista) {
     var menor = lista[0];
     for (i = 1; i < lista.length; i++) {
@@ -366,7 +368,7 @@ function insertarAtributos() {
       total = total + num;
     }
     for (let index = 0; index < lista.length; index++) {
-      coe[index] = 100 / total * trasladados[index];
+      coe[index] = trasladados[index] / total;
     }
   }
 
@@ -377,16 +379,16 @@ function insertarAtributos() {
   var suma = 1 - (menor);
   trasladar(arr, suma);
   devolverCoe(trasladados);
-  pro1 = trasaladados[0];
-  proX = trasaladados[1];
-  pro2 = trasaladados[2];
-
+  pro1 = coe[0];
+  proX = coe[1];
+  pro2 = coe[2];
+  
 
   $("#proLocal").text(pro1);
   $("#proEmpate").text(proX);
   $("#proVisitante").text(pro2);
   $("#localA").val(pro1);
-  $("#emmpateA").val(proX);
+  $("#empateA").val(proX);
   $("#visitanteA").val(pro2);
   insertarGraficas();
 }

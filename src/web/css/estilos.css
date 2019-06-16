@@ -188,6 +188,11 @@ a {
   display: none;
 }
 
+#cancelar {
+  width: 3%;
+  margin: 2%;
+  cursor: pointer;
+}
 
 .visto {
   display: block;
