@@ -110,7 +110,6 @@ $(document).ready(function () {
                                         '<span id="btnClose">Cerrar</span>'+
                                     '</div>'+
                                 '</div>'
-
             $('body').append(mensajeModal);
         }
     */
@@ -193,7 +192,7 @@ function recibirDivisiones() {
 function recibirLocales() {
   let pais = $('select[name="Paises"] option:selected').text();
   let division = $('select[name="Division"] option:selected').text();
-  
+
   $.ajax({
     url: path + pais + "/" + division + "/teams",
     success: function (result) {
@@ -286,16 +285,16 @@ function solicitarAtributos() {
   let division = "" + $('select[name="Division"] option:selected').text();
   let local = "" + $('select[name="Local"] option:selected').text();
   let visitante = "" + $('select[name="Visitante"] option:selected').text();
-  attHome=[];
-  attAway=[];
+  attHome = [];
+  attAway = [];
   $.ajax({
-    url: path + pais + "/" + division + "/"+ local +"/properties?stadium=local",
+    url: path + pais + "/" + division + "/" + local + "/properties?stadium=local",
     success: function (home) {
       $.ajax({
-        url: path + pais + "/" + division + "/"+ visitante +"/properties?stadium=away",
+        url: path + pais + "/" + division + "/" + visitante + "/properties?stadium=away",
         success: function (away) {
           attHome = home;
-          attAway= away;
+          attAway = away;
           insertarAtributos()
         }
       });
@@ -321,7 +320,7 @@ function insertarAtributos() {
   pro1 = 0.027 * attHome.Last10WinningMatchs +
     -0.0134 * attAway.Last10WinningMatchs +
     -0.0303 * attAway.Last10TiedingMatchs +
-     0.114 * attHome.Last10GoalsTuckedAmount +
+    0.114 * attHome.Last10GoalsTuckedAmount +
     -0.0483 * attHome.Last10GoalsReceivedAmount +
     -0.0882 * attAway.Last10GoalsReceivedAmount +
     -0.0604 * attHome.Last10AverageTuckedGoals +
@@ -336,28 +335,59 @@ function insertarAtributos() {
     -0.1045 * attHome.Last10AverageReceivedGoals +
     0.336;
   proX = -0.0025 * attHome.Last10WinningMatchs +
-  0.0049 * attHome.Last10TiedingMatchs +
- -0.0015 * attHome.Last10LosingMatchs +
-  0.0049 * attAway.Last10TiedingMatchs +
- -0.0015 * attAway.Last10LosingMatchs +
- -0.6136 * attHome.Last10GoalsTuckedAmount +
-  0.5644 * attAway.Last10GoalsTuckedAmount +
- -0.0591 * attAway.Last10GoalsReceivedAmount +
-  0.3804;
-  console.log(pro1, pro2, proX)
-  final = resolv([pro1, pro2, proX])
-  console.log(final)
-  pro1 = Math.abs(final[0])
-  pro2 = Math.abs(final[1])
-  proX = Math.abs(final[2])
-  console.log(pro1, proX, pro2)
-  $("#proLocal").text(final[0]);
-  $("#proEmpate").text(final[2]);
-  $("#proVisitante").text(final[1]);
-  $("#localA").val(final[0]);
-  $("#empateA").val(final[2]);
-  $("#visitanteA").val(final[1]);
+    0.0049 * attHome.Last10TiedingMatchs +
+    -0.0015 * attHome.Last10LosingMatchs +
+    0.0049 * attAway.Last10TiedingMatchs +
+    -0.0015 * attAway.Last10LosingMatchs +
+    -0.6136 * attHome.Last10GoalsTuckedAmount +
+    0.5644 * attAway.Last10GoalsTuckedAmount +
+    -0.0591 * attAway.Last10GoalsReceivedAmount +
+    0.3804;
 
+  function menor(lista) {
+    var menor = lista[0];
+    for (i = 1; i < lista.length; i++) {
+      if (lista[i] < menor)
+        menor = lista[i];
+    }
+    return menor;
+  }
+
+  function trasladar(lista, n) {
+    for (let index = 0; index < lista.length; index++) {
+      trasladados[index] = lista[index] + n;
+    }
+  }
+
+  function devolverCoe(lista) {
+    let total = 0;
+    for (let index = 0; index < lista.length; index++) {
+      let num = lista[index];
+      total = total + num;
+    }
+    for (let index = 0; index < lista.length; index++) {
+      coe[index] = 100 / total * trasladados[index];
+    }
+  }
+
+  var arr = [pro1, proX, pro2];
+  var trasladados = [];
+  var coe = [];
+  var menor = menor(arr);
+  var suma = 1 - (menor);
+  trasladar(arr, suma);
+  devolverCoe(trasladados);
+  pro1 = trasaladados[0];
+  proX = trasaladados[1];
+  pro2 = trasaladados[2];
+
+
+  $("#proLocal").text(pro1);
+  $("#proEmpate").text(proX);
+  $("#proVisitante").text(pro2);
+  $("#localA").val(pro1);
+  $("#emmpateA").val(proX);
+  $("#visitanteA").val(pro2);
   insertarGraficas();
 }
 
@@ -466,7 +496,7 @@ function drawChart() {
     ["Nº", "Local", "Visitante"],
     ["GANADOS", attHome.Last10WinningMatchs, attAway.Last10WinningMatchs],
     ["EMPATADOS", attHome.Last10TiedingMatchs, attAway.Last10TiedingMatchs],
-    ["PERDIDOS", attHome.Last10LosingMatchs,attAway.Last10LosingMatchs]
+    ["PERDIDOS", attHome.Last10LosingMatchs, attAway.Last10LosingMatchs]
   ]);
   var chart = new google.charts.Bar(document.getElementById('ultimos'));
 
@@ -490,8 +520,8 @@ function tablaGoles() {
 function tablaRachaG() {
   var ganados = google.visualization.arrayToDataTable([
     ['Nº', 'Local', 'Visitante'],
-    ['GANADOS', attHome.Last10StreackWinning , attAway.Last10StreackWinning],
-    ['INVICTO', attHome.Last10StreackNoLosing , attAway.Last10StreackNoLosing]
+    ['GANADOS', attHome.Last10StreackWinning, attAway.Last10StreackWinning],
+    ['INVICTO', attHome.Last10StreackNoLosing, attAway.Last10StreackNoLosing]
   ]);
   var chart = new google.charts.Bar(document.getElementById('racha'));
 
