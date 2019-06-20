@@ -11,9 +11,9 @@ import (
 
 var (
 	//PORT ... Port of the golang program
-	PORT = os.Getenv("PORT")
+	PORT = "8080"
 	//IPADDR ... ip addr to connect
-	IPADDR = os.Getenv("IPADDR")
+	IPADDR = "127.0.0.1"
 	//DNS ... Name of the host
 	DNS = os.Getenv("DNS")
 )

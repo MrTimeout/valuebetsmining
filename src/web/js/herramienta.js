@@ -1,6 +1,6 @@
 /*EVENTOS CARGA DOCUMENTO*/
 $(document).ready(function () {
-  path = "http://192.168.1.105:3002/api/v1/"
+  path = "http://127.0.0.1:8080/api/v1/"
   recibirPaises()
   /*desplegar menu responsive*/
   $("#menu").click(function () {

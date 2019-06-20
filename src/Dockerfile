@@ -5,12 +5,24 @@ ARG CODE_VERSION
 RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of golang"]
 
 WORKDIR $GOPATH/src/valuebetsmining/src/
-COPY src ./
+COPY . .
 
 RUN go get -u github.com/golang/dep/cmd/dep
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -installsuffix cgo -o app .
+
+FROM alpine:${CODE_VERSION}
+ARG CODE_VERSION
+
+RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of alpine"]
+
+RUN apk --no-cache add ca-certificates
+
+#ENV 
+
+WORKDIR /my
+COPY --from=golang go/src/valuebetsmining/src/ .
 
 EXPOSE 8080
 
-CMD ["./app"]
+CMD ["/my/app"]

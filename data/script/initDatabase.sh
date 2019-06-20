@@ -12,5 +12,3 @@ do
                 --headerline \
                 --file $f
 done
-
-# db.getCollection("SpainSP11019").find({"LocalTeam": "Ath Madrid", "Date": { $regex: /^[0-9]{2}\/[0-9]{2}\/(18|19)$/ } }).sort({"Index":-1}).limit(1).pretty()

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"log"
 	"valuebetsmining/data/entities"
 	"valuebetsmining/data/ios"
 	"valuebetsmining/data/network"
@@ -9,6 +10,7 @@ import (
 
 //ProcessData ... Processing all files from the path endpoints and years
 func ProcessData(runConnection, runOutput bool) error {
+	log.Println("asdasasd")
 	config, err := entities.ReadFile(entities.ConnectionConfigFile)
 	if err != nil {
 		return err

@@ -7,25 +7,30 @@ RUN ["/bin/sh", "-c", "echo We are using the $CODE_VERSION of golang"]
 WORKDIR $GOPATH/src/valuebetsmining/data/
 COPY data ./
 
-RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app .
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -installsuffix cgo -o app .
 
-EXPOSE 8080
+FROM alpine:${CODE_VERSION} AS alpine
+ARG CODE_VERSION
 
-CMD ["./app", "run", "--run-connection=false"]
+RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of alpine"]
 
-#FROM alpine:${CODE_VERSION}
-#ARG CODE_VERSION
+RUN apk --no-cache add ca-certificates
 
-#RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of alpine"]
+WORKDIR /data
 
-#RUN apk --no-cache add ca-certificates
+RUN mkdir -p leagues/CSV/
+COPY --from=golang go/src/valuebetsmining/data/ .
 
-#WORKDIR /my
-#COPY --from=golang /go/src/ .
+RUN /data/app run --run-connection=true --run-output=true
 
-#RUN ["/bin/sh", "-c", "ls -al"]
-#RUN ["/bin/sh", "-c", "chmod +x app"]
+FROM mongo:${CODE_VERSION}
+ARG CODE_VERSION
 
-#EXPOSE 8080
+#ENV 
 
-#CMD ["/bin/sh", "-c", "./app"]
+RUN ["/bin/sh", "-c", "echo We are using the ${CODE_VERSION} of mongoDB"]
+
+EXPOSE 27017
+
+COPY --from=alpine /data/leagues /leagues
+COPY ./data/script /docker-entrypoint-initdb.d

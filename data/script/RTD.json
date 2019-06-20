@@ -1,0 +1,212 @@
+{
+    "containerDefinitions": [
+        {
+            "command": [
+                "string"
+            ],
+            "cpu": "number",
+            "dependsOn": [
+                {
+                    "condition": "string",
+                    "containerName": "string"
+                }
+            ],
+            "disableNetworking": "boolean",
+            "dnsSearchDomains": [
+                "string"
+            ],
+            "dnsServers": [
+                "string"
+            ],
+            "dockerLabels": {
+                "string": "string"
+            },
+            "dockerSecurityOptions": [
+                "string"
+            ],
+            "entryPoint": [
+                "string"
+            ],
+            "environment": [
+                {
+                    "name": "string",
+                    "value": "string"
+                }
+            ],
+            "essential": "boolean",
+            "extraHosts": [
+                {
+                    "hostname": "string",
+                    "ipAddress": "string"
+                }
+            ],
+            "healthCheck": {
+                "command": [
+                    "string"
+                ],
+                "interval": "number",
+                "retries": "number",
+                "startPeriod": "number",
+                "timeout": "number"
+            },
+            "hostname": "string",
+            "image": "string",
+            "interactive": "boolean",
+            "links": [
+                "string"
+            ],
+            "linuxParameters": {
+                "capabilities": {
+                    "add": [
+                        "string"
+                    ],
+                    "drop": [
+                        "string"
+                    ]
+                },
+                "devices": [
+                    {
+                        "containerPath": "string",
+                        "hostPath": "string",
+                        "permissions": [
+                            "string"
+                        ]
+                    }
+                ],
+                "initProcessEnabled": "boolean",
+                "sharedMemorySize": "number",
+                "tmpfs": [
+                    {
+                        "containerPath": "string",
+                        "mountOptions": [
+                            "string"
+                        ],
+                        "size": "number"
+                    }
+                ]
+            },
+            "logConfiguration": {
+                "logDriver": "string",
+                "options": {
+                    "string": "string"
+                },
+                "secretOptions": [
+                    {
+                        "name": "string",
+                        "valueFrom": "string"
+                    }
+                ]
+            },
+            "memory": "number",
+            "memoryReservation": "number",
+            "mountPoints": [
+                {
+                    "containerPath": "string",
+                    "readOnly": "boolean",
+                    "sourceVolume": "string"
+                }
+            ],
+            "name": "string",
+            "portMappings": [
+                {
+                    "containerPort": "number",
+                    "hostPort": "number",
+                    "protocol": "string"
+                }
+            ],
+            "privileged": "boolean",
+            "pseudoTerminal": "boolean",
+            "readonlyRootFilesystem": "boolean",
+            "repositoryCredentials": {
+                "credentialsParameter": "string"
+            },
+            "resourceRequirements": [
+                {
+                    "type": "string",
+                    "value": "string"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "string",
+                    "valueFrom": "string"
+                }
+            ],
+            "startTimeout": "number",
+            "stopTimeout": "number",
+            "systemControls": [
+                {
+                    "namespace": "string",
+                    "value": "string"
+                }
+            ],
+            "ulimits": [
+                {
+                    "hardLimit": "number",
+                    "name": "string",
+                    "softLimit": "number"
+                }
+            ],
+            "user": "string",
+            "volumesFrom": [
+                {
+                    "readOnly": "boolean",
+                    "sourceContainer": "string"
+                }
+            ],
+            "workingDirectory": "string"
+        }
+    ],
+    "cpu": "string",
+    "executionRoleArn": "string",
+    "family": "string",
+    "ipcMode": "string",
+    "memory": "string",
+    "networkMode": "string",
+    "pidMode": "string",
+    "placementConstraints": [
+        {
+            "expression": "string",
+            "type": "string"
+        }
+    ],
+    "proxyConfiguration": {
+        "containerName": "string",
+        "properties": [
+            {
+                "name": "string",
+                "value": "string"
+            }
+        ],
+        "type": "string"
+    },
+    "requiresCompatibilities": [
+        "string"
+    ],
+    "tags": [
+        {
+            "key": "string",
+            "value": "string"
+        }
+    ],
+    "taskRoleArn": "string",
+    "volumes": [
+        {
+            "dockerVolumeConfiguration": {
+                "autoprovision": "boolean",
+                "driver": "string",
+                "driverOpts": {
+                    "string": "string"
+                },
+                "labels": {
+                    "string": "string"
+                },
+                "scope": "string"
+            },
+            "host": {
+                "sourcePath": "string"
+            },
+            "name": "string"
+        }
+    ]
+}
